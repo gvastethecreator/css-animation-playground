@@ -1,0 +1,76 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "🚀 Dev Server",
+            "type": "npm",
+            "script": "dev",
+            "problemMatcher": [],
+            "isBackground": true,
+            "group": "build"
+        },
+        {
+            "label": "📦 Build",
+            "type": "npm",
+            "script": "build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$tsc"
+            ]
+        },
+        {
+            "label": "✅ Type Check",
+            "type": "npm",
+            "script": "typecheck",
+            "problemMatcher": [
+                "$tsc"
+            ]
+        },
+        {
+            "label": "🔍 Lint",
+            "type": "npm",
+            "script": "lint",
+            "problemMatcher": []
+        },
+        {
+            "label": "🎨 Format",
+            "type": "npm",
+            "script": "format",
+            "problemMatcher": []
+        },
+        {
+            "label": "🧪 Test",
+            "type": "npm",
+            "script": "test",
+            "problemMatcher": []
+        },
+        {
+            "label": "🧪 Test Watch",
+            "type": "npm",
+            "script": "test:watch",
+            "problemMatcher": [],
+            "isBackground": true
+        },
+        {
+            "label": "📊 Coverage",
+            "type": "npm",
+            "script": "test:coverage",
+            "problemMatcher": []
+        },
+        {
+            "label": "🧹 Clean",
+            "type": "npm",
+            "script": "clean",
+            "problemMatcher": []
+        },
+        {
+            "label": "👁️ Preview",
+            "type": "npm",
+            "script": "preview",
+            "problemMatcher": []
+        }
+    ]
+}
