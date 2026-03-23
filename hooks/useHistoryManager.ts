@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useReducer } from 'react';
 import { TransformState, AnimationData, defaultTransformState, TrackControlState, AnimationDirection, EasingName, EngineConfig } from '../types';
 
 export interface HistoryState {
@@ -62,12 +62,50 @@ const getInitialState = (): HistoryState => {
     return defaultHistoryState;
 };
 
+const MAX_HISTORY = 50;
+
+type HistoryAction =
+    | { type: 'PUSH'; state: HistoryState }
+    | { type: 'UNDO' }
+    | { type: 'REDO' }
+    | { type: 'RESET' };
+
+interface HistoryStack {
+    entries: HistoryState[];
+    index: number;
+}
+
+function historyReducer(stack: HistoryStack, action: HistoryAction): HistoryStack {
+    switch (action.type) {
+        case 'PUSH': {
+            const entries = stack.entries.slice(0, stack.index + 1);
+            entries.push(action.state);
+            if (entries.length > MAX_HISTORY) entries.shift();
+            return { entries, index: entries.length - 1 };
+        }
+        case 'UNDO':
+            return stack.index > 0
+                ? { ...stack, index: stack.index - 1 }
+                : stack;
+        case 'REDO':
+            return stack.index < stack.entries.length - 1
+                ? { ...stack, index: stack.index + 1 }
+                : stack;
+        case 'RESET': {
+            const fresh = { ...defaultHistoryState, transforms: { ...defaultTransformState }, engineConfig: { ...defaultEngineConfig } };
+            return { entries: [fresh], index: 0 };
+        }
+    }
+}
+
 export function useHistoryManager() {
-    const [history, setHistory] = useState<HistoryState[]>([getInitialState()]);
-    const [historyIndex, setHistoryIndex] = useState(0);
+    const [stack, dispatch] = useReducer(historyReducer, undefined, () => ({
+        entries: [getInitialState()],
+        index: 0,
+    }));
     const isRestoringHistoryRef = useRef(false);
 
-    const currentState = history[historyIndex];
+    const currentState = stack.entries[stack.index];
 
     useEffect(() => {
         try {
@@ -78,44 +116,30 @@ export function useHistoryManager() {
     }, [currentState]);
 
     const saveStateToHistory = useCallback((newState: HistoryState) => {
-        if (isRestoringHistoryRef.current) return;
-        
-        const newHistory = history.slice(0, historyIndex + 1);
-        newHistory.push(newState);
-        
-        // Limit history size to 50 to prevent memory leaks
-        if (newHistory.length > 50) {
-            newHistory.shift();
-        }
-        
-        setHistory(newHistory);
-        setHistoryIndex(newHistory.length - 1);
-    }, [history, historyIndex]);
-    
-    const restoreStateFromHistory = useCallback((index: number): HistoryState | null => {
-        const stateToRestore = history[index];
-        if (!stateToRestore) return null;
-        
+        dispatch({ type: 'PUSH', state: newState });
+    }, []);
+
+    const handleUndo = useCallback((): HistoryState | null => {
+        if (stack.index <= 0) return null;
         isRestoringHistoryRef.current = true;
-        setHistoryIndex(index);
-        
-        setTimeout(() => { isRestoringHistoryRef.current = false; }, 0);
-        return stateToRestore;
-    }, [history]);
+        dispatch({ type: 'UNDO' });
+        const restored = stack.entries[stack.index - 1];
+        requestAnimationFrame(() => { isRestoringHistoryRef.current = false; });
+        return restored;
+    }, [stack.index, stack.entries]);
 
-    const handleUndo = useCallback(() => {
-        return historyIndex > 0 ? restoreStateFromHistory(historyIndex - 1) : null;
-    }, [historyIndex, restoreStateFromHistory]);
-
-    const handleRedo = useCallback(() => {
-        return historyIndex < history.length - 1 ? restoreStateFromHistory(historyIndex + 1) : null;
-    }, [historyIndex, history.length, restoreStateFromHistory]);
+    const handleRedo = useCallback((): HistoryState | null => {
+        if (stack.index >= stack.entries.length - 1) return null;
+        isRestoringHistoryRef.current = true;
+        dispatch({ type: 'REDO' });
+        const restored = stack.entries[stack.index + 1];
+        requestAnimationFrame(() => { isRestoringHistoryRef.current = false; });
+        return restored;
+    }, [stack.index, stack.entries]);
 
     const resetHistory = useCallback(() => {
-        const newState = { ...defaultHistoryState, transforms: { ...defaultTransformState }, engineConfig: { ...defaultEngineConfig }};
-        setHistory([newState]);
-        setHistoryIndex(0);
-        return newState;
+        dispatch({ type: 'RESET' });
+        return { ...defaultHistoryState, transforms: { ...defaultTransformState }, engineConfig: { ...defaultEngineConfig } };
     }, []);
 
     return {
@@ -124,8 +148,8 @@ export function useHistoryManager() {
         handleUndo,
         handleRedo,
         resetHistory,
-        canUndo: historyIndex > 0,
-        canRedo: historyIndex < history.length - 1,
+        canUndo: stack.index > 0,
+        canRedo: stack.index < stack.entries.length - 1,
         isRestoring: isRestoringHistoryRef,
     };
 }

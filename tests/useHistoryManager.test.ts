@@ -84,10 +84,29 @@ describe('useHistoryManager', () => {
     expect(result.current.canRedo).toBe(false);
   });
 
-  // Note: "discards redo branch on new save after undo" is skipped because
-  // saveStateToHistory captures stale `history`/`historyIndex` closures after
-  // undo, so the truncation doesn't work correctly. This is a known bug that
-  // should be fixed by switching to useReducer or a ref-based approach.
+  it('discards redo branch when saving new state after undo', () => {
+    const { result } = renderHook(() => useHistoryManager());
+
+    const state1 = makeState({ transforms: { ...defaultTransformState, translateX: 10 } });
+    const state2 = makeState({ transforms: { ...defaultTransformState, translateX: 20 } });
+
+    act(() => { result.current.saveStateToHistory(state1); });
+    act(() => { result.current.saveStateToHistory(state2); });
+    act(() => { result.current.handleUndo(); });
+
+    expect(result.current.currentState.transforms.translateX).toBe(10);
+    expect(result.current.canRedo).toBe(true);
+
+    const state3 = makeState({ transforms: { ...defaultTransformState, translateX: 30 } });
+    act(() => { result.current.saveStateToHistory(state3); });
+
+    expect(result.current.currentState.transforms.translateX).toBe(30);
+    expect(result.current.canRedo).toBe(false);
+
+    // Undo goes to state1, not state2 (state2 was discarded)
+    act(() => { result.current.handleUndo(); });
+    expect(result.current.currentState.transforms.translateX).toBe(10);
+  });
 
   it('limits history to 50 entries', () => {
     const { result } = renderHook(() => useHistoryManager());

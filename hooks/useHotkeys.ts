@@ -33,7 +33,7 @@ export function useHotkeys(hotkeyMap: HotkeyMap, deps: unknown[] = []) {
         const alt = parts.includes('alt');
 
         if (meta === (event.metaKey || event.ctrlKey) &&
-            ctrl === event.ctrlKey &&
+            (meta || ctrl === event.ctrlKey) &&
             shift === event.shiftKey &&
             alt === event.altKey) {
           

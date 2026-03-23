@@ -345,7 +345,7 @@ ${keyframesCSS}
             // Ensure track starts at time 0
             let fullTrack = [...track];
             if (fullTrack[0].time !== 0) {
-                fullTrack.unshift({ id: 'gen-start', time: 0, value: (calculateAnimatedValues(0)[key] ?? transforms[key]) });
+                fullTrack.unshift({ id: 'gen-start', time: 0, value: (calculateAnimatedValues(0)[key] ?? transforms[key]), easing: 'linear' });
             }
 
             const keyframes = fullTrack.map((kf, i) => {
@@ -549,4 +549,4 @@ const CodeOutputPanel: React.FC<CodeOutputPanelProps> = ({ transforms, height, o
     );
 };
 
-export default CodeOutputPanel;
+export default React.memo(CodeOutputPanel);

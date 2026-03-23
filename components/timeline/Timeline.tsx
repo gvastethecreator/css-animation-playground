@@ -39,7 +39,7 @@ interface TimelineProps {
 
 const formatTime = (ms: number) => (ms / 1000).toFixed(2) + 's';
 
-export default function Timeline({
+function Timeline({
     height, onHeightChange, onToggle, animationData, timelineState, onTimelineStateChange,
     onCurrentTimeChange, onStop, onDeleteKeyframe, onUpdateKeyframe, onUpdateMultipleKeyframes,
     trackControls, onTrackControlChange, selectedKeyframeIds, onSelectedKeyframeIdsChange,
@@ -430,7 +430,7 @@ export default function Timeline({
                 {activeKeyframe && (
                     <EasingEditor
                         key={activeKeyframe.keyframe.id}
-                        easing={activeKeyframe.keyframe.easing ?? 'linear'}
+                        easing={activeKeyframe.keyframe.easing}
                         onEasingChange={(newEasing) => onUpdateKeyframe(activeKeyframe.property, activeKeyframe.keyframe.id, { easing: newEasing })}
                         color={PROPERTY_COLORS[activeKeyframe.property] || '#fff'}
                         onClose={handleCloseEditor}
@@ -441,3 +441,5 @@ export default function Timeline({
         </div>
     );
 }
+
+export default React.memo(Timeline);

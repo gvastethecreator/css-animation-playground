@@ -177,7 +177,7 @@ export interface Keyframe {
     id: string; // Unique ID, e.g., timestamp + random
     time: number; // in milliseconds
     value: number | string | boolean; // Allow string for colors and boolean for toggles
-    easing?: EasingName | string; // Allow for custom cubic-bezier strings
+    easing: EasingName | string; // easing function or custom cubic-bezier string
 }
 
 export type AnimationTrack = Keyframe[];
@@ -313,11 +313,11 @@ interface AnimationPreset {
     initialTransforms?: Partial<TransformState>;
 }
 
-const createKeyframe = (time: number, value: number | string | boolean, easing?: EasingName | string): Keyframe => ({
+const createKeyframe = (time: number, value: number | string | boolean, easing: EasingName | string = 'linear'): Keyframe => ({
     id: `preset-${time}-${value}-${Math.random()}`,
     time,
     value,
-    ...(easing && { easing }),
+    easing,
 });
 
 
