@@ -25,6 +25,7 @@ export interface ThreeSceneRefs {
   offsetGroup: React.RefObject<THREE.Group>;
   gridContainer: React.RefObject<THREE.Group>;
   transformControls: React.RefObject<TransformControls | null>;
+  transformControlsHelper: React.RefObject<THREE.Object3D | null>;
   object: React.MutableRefObject<THREE.Object3D | null>;
   dimensions: React.MutableRefObject<{ width: number; height: number; depth: number }>;
 }
@@ -56,6 +57,7 @@ export function useThreeSetup(
   const gridContainerRef = useRef<THREE.Group>(new THREE.Group());
   const objectRef = useRef<THREE.Object3D | null>(null);
   const transformControlsRef = useRef<TransformControls | null>(null);
+  const transformControlsHelperRef = useRef<THREE.Object3D | null>(null);
   const dimensionsRef = useRef({ width: 0, height: 0, depth: 0 });
 
   // Keep callback refs in sync without re-running the setup effect.
@@ -141,7 +143,9 @@ export function useThreeSetup(
     // Transform controls
     const transformControls = new TransformControls(camera, renderer.domElement);
     transformControlsRef.current = transformControls;
-    safeAdd(scene, transformControls);
+    const transformControlsHelper = transformControls.getHelper();
+    transformControlsHelperRef.current = transformControlsHelper;
+    safeAdd(scene, transformControlsHelper);
 
     const onDraggingChanged = (event: any) => {
       if (event.value) onAdjustStartRef.current();
@@ -231,7 +235,9 @@ export function useThreeSetup(
       transformControls.removeEventListener('dragging-changed', onDraggingChanged);
       transformControls.removeEventListener('change', onObjectChange);
       transformControls.dispose();
-      scene.remove(transformControls as unknown as THREE.Object3D);
+      if (transformControlsHelperRef.current) {
+        scene.remove(transformControlsHelperRef.current);
+      }
       scene.remove(mainObjectContainerRef.current);
       scene.remove(gridContainerRef.current);
       scene.remove(ambientLight, dirLight, fillLight);
@@ -255,6 +261,7 @@ export function useThreeSetup(
       rendererRef.current?.dispose();
       rendererRef.current = null;
       cameraRef.current = null;
+      transformControlsHelperRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -268,6 +275,7 @@ export function useThreeSetup(
     offsetGroup: offsetGroupRef,
     gridContainer: gridContainerRef,
     transformControls: transformControlsRef,
+    transformControlsHelper: transformControlsHelperRef,
     object: objectRef,
     dimensions: dimensionsRef,
   } satisfies ThreeSceneRefs;

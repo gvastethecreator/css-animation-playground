@@ -1,9 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { TransformControls } from 'three/addons/controls/TransformControls.js';
 import { StageElement } from '../types';
-import { createTextTexture } from '../utils/textureUtils';
 import { safeAdd, type ThreeSceneRefs } from './useThreeSetup';
 
 const textureLoader = new THREE.TextureLoader();

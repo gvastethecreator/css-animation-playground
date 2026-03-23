@@ -144,6 +144,7 @@ const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
         // Config GIZMO
         if (refs.transformControls.current) {
             const controls = refs.transformControls.current;
+            const controlsHelper = refs.transformControlsHelper.current;
             // Three.js TransformControls only supports translate/rotate/scale — skip 'skew'
             const effectiveMode = gizmoMode === 'skew' ? 'translate' : gizmoMode;
             if (object) {
@@ -154,10 +155,10 @@ const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
                     if (controls.object !== pivotGroup) controls.attach(pivotGroup);
                 }
                 controls.enabled = true;
-                (controls as unknown as THREE.Object3D).visible = true;
+                if (controlsHelper) controlsHelper.visible = true;
             } else {
                 controls.detach();
-                (controls as unknown as THREE.Object3D).visible = false;
+                if (controlsHelper) controlsHelper.visible = false;
                 controls.enabled = false;
             }
         }
