@@ -12,8 +12,13 @@ interface AnimationPresetPopoverProps {
   anchorEl: HTMLButtonElement | null;
 }
 
-const AnimationPresetPopover: React.FC<AnimationPresetPopoverProps> = ({ 
-    isOpen, onClose, onPresetClick, onPresetHover, onPresetLeave, anchorEl 
+const AnimationPresetPopover: React.FC<AnimationPresetPopoverProps> = ({
+  isOpen,
+  onClose,
+  onPresetClick,
+  onPresetHover,
+  onPresetLeave,
+  anchorEl,
 }) => {
   const popoverRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState({ top: 0, left: 0 });
@@ -34,13 +39,13 @@ const AnimationPresetPopover: React.FC<AnimationPresetPopoverProps> = ({
         top = anchorRect.top - popoverRect.height - gap;
         origin = 'bottom left';
       }
-      
+
       // Horizontal placement
       if (left + popoverRect.width > window.innerWidth - gap) {
-          left = window.innerWidth - popoverRect.width - gap;
+        left = window.innerWidth - popoverRect.width - gap;
       }
       if (left < gap) {
-          left = gap;
+        left = gap;
       }
 
       setPosition({ top, left });
@@ -63,7 +68,12 @@ const AnimationPresetPopover: React.FC<AnimationPresetPopoverProps> = ({
     };
 
     const handleClickOutside = (event: MouseEvent) => {
-      if (popoverRef.current && !popoverRef.current.contains(event.target as Node) && anchorEl && !anchorEl.contains(event.target as Node)) {
+      if (
+        popoverRef.current &&
+        !popoverRef.current.contains(event.target as Node) &&
+        anchorEl &&
+        !anchorEl.contains(event.target as Node)
+      ) {
         onClose();
       }
     };
@@ -75,7 +85,7 @@ const AnimationPresetPopover: React.FC<AnimationPresetPopoverProps> = ({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isOpen, onClose, anchorEl]);
-  
+
   if (!isOpen) {
     return null;
   }
@@ -89,11 +99,11 @@ const AnimationPresetPopover: React.FC<AnimationPresetPopoverProps> = ({
         left: `${position.left}px`,
         transformOrigin: 'top left',
       }}
-      onMouseDown={e => e.stopPropagation()}
+      onMouseDown={(e) => e.stopPropagation()}
       onMouseLeave={onPresetLeave}
     >
       <div className="grid grid-cols-5 gap-2">
-        {(Object.keys(ANIMATION_PRESETS) as PresetAnimationName[]).map(name => {
+        {(Object.keys(ANIMATION_PRESETS) as PresetAnimationName[]).map((name) => {
           const preset = ANIMATION_PRESETS[name];
           return (
             <Tooltip content={name} key={name}>
@@ -102,14 +112,19 @@ const AnimationPresetPopover: React.FC<AnimationPresetPopoverProps> = ({
                 onMouseEnter={() => onPresetHover(name)}
                 className="flex flex-col items-center justify-center gap-1.5 p-2 rounded-lg bg-zinc-800 hover:bg-indigo-600/50 transition-colors aspect-square group"
               >
-                <preset.icon size={28} strokeWidth={1.5} color={preset.iconColor} className="transition-transform group-hover:scale-110" />
+                <preset.icon
+                  size={28}
+                  strokeWidth={1.5}
+                  color={preset.iconColor}
+                  className="transition-transform group-hover:scale-110"
+                />
               </button>
             </Tooltip>
           );
         })}
       </div>
     </div>,
-    document.body
+    document.body,
   );
 };
 

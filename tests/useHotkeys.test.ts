@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vite-plus/test';
+import { renderHook } from '@testing-library/react';
 import { useHotkeys } from '../hooks/useHotkeys';
 
 describe('useHotkeys', () => {
@@ -66,7 +66,7 @@ describe('useHotkeys', () => {
   it('calls preventDefault on matched key', () => {
     const handler = vi.fn();
     renderHook(() => useHotkeys({ ' ': handler }));
-    const event = fireKey(' ');
+    fireKey(' ');
     expect(handler).toHaveBeenCalledOnce();
     // Note: preventDefault is called inside the handler
   });

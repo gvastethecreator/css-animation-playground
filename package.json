@@ -1,23 +1,25 @@
 {
   "name": "css-3d-animator",
-  "private": true,
   "version": "0.2.0",
+  "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc --noEmit && vite build",
-    "preview": "vite preview",
-    "typecheck": "tsc --noEmit",
-    "lint": "oxlint --deny-warnings",
-    "lint:fix": "oxlint --fix",
-    "format": "oxfmt --write .",
-    "format:check": "oxfmt --check .",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage",
-    "clean": "node -e \"const fs=require('fs');['dist','logs'].forEach(d=>{if(fs.existsSync(d))fs.rmSync(d,{recursive:true})})\""
+    "dev": "vp dev",
+    "build": "bun run ./scripts/run-with-log.mjs build \"vp build\"",
+    "preview": "vp preview",
+    "check": "bun run ./scripts/run-with-log.mjs check \"bun run ./scripts/run-vp-check.mjs\"",
+    "typecheck": "bun run ./scripts/run-with-log.mjs typecheck \"tsc --noEmit\"",
+    "lint": "bun run ./scripts/run-with-log.mjs lint \"oxlint --deny-warnings\"",
+    "lint:fix": "bun run ./scripts/run-with-log.mjs lint-fix \"oxlint --fix\"",
+    "format": "bun run ./scripts/run-with-log.mjs format \"oxfmt --write .\"",
+    "format:check": "bun run ./scripts/run-with-log.mjs format-check \"oxfmt --check .\"",
+    "test": "bun run ./scripts/run-with-log.mjs test \"vp test\"",
+    "test:watch": "vp test watch",
+    "test:coverage": "bun run ./scripts/run-with-log.mjs coverage \"vp test run --coverage\"",
+    "clean": "bun run ./scripts/run-with-log.mjs clean \"bun -e \\\"import { existsSync, rmSync } from 'node:fs'; for (const dir of ['dist', 'coverage', 'logs']) { if (existsSync(dir)) rmSync(dir, { recursive: true, force: true }); }\\\"\""
   },
   "dependencies": {
+    "gsap": "^3.14.2",
     "lucide-react": "^0.553.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -28,17 +30,23 @@
     "@tailwindcss/vite": "^4.2.1",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
-    "@types/node": "^22.14.0",
+    "@types/node": "25.5.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/three": "^0.181.0",
-    "@vitejs/plugin-react": "^5.0.0",
-    "jsdom": "^26.1.0",
-    "oxfmt": "latest",
-    "oxlint": "latest",
+    "@vitejs/plugin-react": "6.0.1",
+    "jsdom": "29.0.1",
+    "oxfmt": "0.42.0",
+    "oxlint": "1.57.0",
     "tailwindcss": "^4.2.1",
     "typescript": "~5.8.2",
-    "vite": "^6.2.0",
-    "vitest": "^3.1.1"
-  }
+    "vite": "8.0.2",
+    "vite-plus": "^0.1.14",
+    "vitest": "4.1.1"
+  },
+  "engines": {
+    "bun": ">=1.3.11",
+    "node": ">=20.0.0"
+  },
+  "packageManager": "bun@1.3.11"
 }

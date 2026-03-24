@@ -1,7 +1,10 @@
-import path from 'path';
-import { defineConfig } from 'vite';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { defineConfig } from 'vite-plus';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
+
+const rootDir = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   server: {
@@ -11,18 +14,44 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, '.'),
+      '@': path.resolve(rootDir, '.'),
+    },
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./tests/setup.ts'],
+    include: ['tests/**/*.test.{ts,tsx}'],
+    coverage: {
+      reporter: ['text', 'json', 'html'],
+      include: ['utils/**', 'hooks/**', 'store/**', 'easing.ts', 'components/**'],
+      reportsDirectory: './coverage',
+    },
+  },
+  lint: {
+    options: {
+      typeAware: true,
+      typeCheck: true,
     },
   },
   build: {
     target: 'es2022',
     sourcemap: true,
-    chunkSizeWarningLimit: 600,
+    chunkSizeWarningLimit: 650,
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vendor-three': ['three'],
-          'vendor-react': ['react', 'react-dom'],
+        manualChunks(id) {
+          const normalizedId = id.replace(/\\/g, '/');
+
+          if (normalizedId.includes('/node_modules/react/') || normalizedId.includes('/node_modules/react-dom/')) {
+            return 'vendor-react';
+          }
+
+          if (normalizedId.includes('/node_modules/three/')) {
+            return 'vendor-three';
+          }
+
+          return undefined;
         },
       },
     },

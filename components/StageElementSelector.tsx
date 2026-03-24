@@ -9,7 +9,7 @@ interface StageElementSelectorProps {
   hasMedia: boolean;
 }
 
-const elements: { id: StageElement, icon: React.ElementType, label: string }[] = [
+const elements: { id: StageElement; icon: React.ElementType; label: string }[] = [
   { id: 'card', icon: GalleryVertical, label: 'Card' },
   { id: 'cube', icon: Square, label: 'Cube' },
   { id: 'text', icon: Type, label: 'Text' },
@@ -17,7 +17,11 @@ const elements: { id: StageElement, icon: React.ElementType, label: string }[] =
   { id: 'model', icon: VenetianMask, label: '3D Model' },
 ];
 
-export default function StageElementSelector({ selectedElement, onElementChange, hasMedia }: StageElementSelectorProps) {
+export default function StageElementSelector({
+  selectedElement,
+  onElementChange,
+  hasMedia: _hasMedia,
+}: StageElementSelectorProps) {
   return (
     <div className="flex items-center gap-1 p-1 bg-zinc-900/80 backdrop-blur-sm rounded-lg shadow-lg">
       {elements.map(({ id, icon: Icon, label }) => {
@@ -25,11 +29,10 @@ export default function StageElementSelector({ selectedElement, onElementChange,
           <Tooltip key={id} content={`Animate a ${label}`}>
             <button
               onClick={() => onElementChange(id)}
-              className={`w-7 h-7 flex items-center justify-center rounded-md transition-colors ${
-                selectedElement === id 
-                  ? 'bg-indigo-500/30 text-indigo-300' 
+              className={`w-7 h-7 flex items-center justify-center rounded-md transition-colors ${selectedElement === id
+                  ? 'bg-indigo-500/30 text-indigo-300'
                   : 'text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
-              }`}
+                }`}
             >
               <Icon size={18} strokeWidth={2} />
             </button>

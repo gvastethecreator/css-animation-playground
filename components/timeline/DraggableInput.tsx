@@ -34,7 +34,7 @@ const DraggableInput: React.FC<DraggableInputProps> = ({
       setInputValue(value.toFixed(precision));
     }
   }, [value, isEditing, step]);
-  
+
   useEffect(() => {
     if (isEditing) {
       inputRef.current?.focus();
@@ -68,7 +68,7 @@ const DraggableInput: React.FC<DraggableInputProps> = ({
     e.preventDefault();
     const startX = e.clientX;
     const startValue = value;
-    
+
     document.body.style.cursor = 'ew-resize';
 
     const handleMouseMove = (moveEvent: MouseEvent) => {
@@ -91,36 +91,36 @@ const DraggableInput: React.FC<DraggableInputProps> = ({
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseup', handleMouseUp);
   };
-  
+
   const precision = getPrecision(step);
 
   return (
     <Tooltip content={title}>
-        <div 
-          className={`relative flex items-center group cursor-ew-resize ${className}`}
-          onMouseDown={handleDragMouseDown}
-          onDoubleClick={() => setIsEditing(true)}
-        >
-          {children}
-          {isEditing ? (
-            <input
-              ref={inputRef}
-              type="number"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onBlur={handleCommit}
-              onKeyDown={handleKeyDown}
-              min={min}
-              max={max}
-              step={step}
-              className="w-full h-full bg-zinc-800 text-center font-mono text-zinc-300 rounded p-0.5 border border-indigo-500 outline-none pl-7 pr-2"
-            />
-          ) : (
-            <span className="w-full text-center font-mono text-zinc-400 select-none group-hover:text-white py-0.5 pl-7 pr-2">
-              {value.toFixed(precision)}
-            </span>
-          )}
-        </div>
+      <div
+        className={`relative flex items-center group cursor-ew-resize ${className}`}
+        onMouseDown={handleDragMouseDown}
+        onDoubleClick={() => setIsEditing(true)}
+      >
+        {children}
+        {isEditing ? (
+          <input
+            ref={inputRef}
+            type="number"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onBlur={handleCommit}
+            onKeyDown={handleKeyDown}
+            min={min}
+            max={max}
+            step={step}
+            className="w-full h-full bg-zinc-800 text-center font-mono text-zinc-300 rounded p-0.5 border border-indigo-500 outline-none pl-7 pr-2"
+          />
+        ) : (
+          <span className="w-full text-center font-mono text-zinc-400 select-none group-hover:text-white py-0.5 pl-7 pr-2">
+            {value.toFixed(precision)}
+          </span>
+        )}
+      </div>
     </Tooltip>
   );
 };

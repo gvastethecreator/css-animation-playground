@@ -16,8 +16,10 @@ function FrameCounter({ currentTime, fps }: FrameCounterProps) {
         <h3 className="font-bold text-zinc-300 uppercase tracking-wider text-[12px]">Playback</h3>
       </div>
       <div className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-right">
-        <span>FRAME:</span><span>{frame}</span>
-        <span>FPS:</span><span>{fps}</span>
+        <span>FRAME:</span>
+        <span>{frame}</span>
+        <span>FPS:</span>
+        <span>{fps}</span>
       </div>
     </div>
   );

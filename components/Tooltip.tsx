@@ -1,13 +1,21 @@
-
 import React, { useState, useRef, useLayoutEffect, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 
 type TooltipPosition = `${'top' | 'bottom' | 'left' | 'right'}-${'start' | 'center' | 'end'}`;
 
 const PLACEMENT_ORDER: TooltipPosition[] = [
-  'top-center', 'bottom-center', 'right-center', 'left-center',
-  'top-start', 'top-end', 'bottom-start', 'bottom-end',
-  'right-start', 'right-end', 'left-start', 'left-end',
+  'top-center',
+  'bottom-center',
+  'right-center',
+  'left-center',
+  'top-start',
+  'top-end',
+  'bottom-start',
+  'bottom-end',
+  'right-start',
+  'right-end',
+  'left-start',
+  'left-end',
 ];
 
 interface TooltipProps {
@@ -101,8 +109,7 @@ const Tooltip: React.FC<TooltipProps> = ({ content, children, delay = 200 }) => 
     return () => {
       window.removeEventListener('resize', updatePosition);
       window.removeEventListener('scroll', updatePosition);
-    }
-
+    };
   }, [isVisible]);
 
   // Usamos un wrapper div (con display: contents para no afectar layout) en lugar de cloneElement
@@ -119,18 +126,19 @@ const Tooltip: React.FC<TooltipProps> = ({ content, children, delay = 200 }) => 
       >
         {children}
       </div>
-      {isVisible && ReactDOM.createPortal(
-        <div
-          role="tooltip"
-          ref={tooltipRef}
-          className={`tooltip-content ${isVisible ? 'visible' : ''}`}
-          style={{ top: `${position.top}px`, left: `${position.left}px` }}
-          data-pos={dataPos}
-        >
-          {content}
-        </div>,
-        document.body
-      )}
+      {isVisible &&
+        ReactDOM.createPortal(
+          <div
+            role="tooltip"
+            ref={tooltipRef}
+            className={`tooltip-content ${isVisible ? 'visible' : ''}`}
+            style={{ top: `${position.top}px`, left: `${position.left}px` }}
+            data-pos={dataPos}
+          >
+            {content}
+          </div>,
+          document.body,
+        )}
     </>
   );
 };

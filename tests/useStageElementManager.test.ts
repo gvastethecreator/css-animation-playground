@@ -1,11 +1,27 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vite-plus/test';
 import { renderHook, act } from '@testing-library/react';
 import { useStageElementManager } from '../hooks/useStageElementManager';
+
+function mockFileReader() {
+  const reader = {
+    readAsDataURL: vi.fn(),
+    onload: null as ((e: ProgressEvent<FileReader>) => void) | null,
+  };
+
+  const FileReaderMock = vi.fn(function MockFileReader() {
+    return reader as unknown as FileReader;
+  });
+
+  vi.stubGlobal('FileReader', FileReaderMock as unknown as typeof FileReader);
+
+  return reader;
+}
 
 describe('useStageElementManager', () => {
   beforeEach(() => {
     localStorage.clear();
     vi.restoreAllMocks();
+    vi.unstubAllGlobals();
   });
 
   it('returns default stage element as card', () => {
@@ -31,14 +47,7 @@ describe('useStageElementManager', () => {
     const fakeDataUrl = 'data:image/png;base64,fakedata';
     const file = new File(['test'], 'test.png', { type: 'image/png' });
 
-    // Mock FileReader
-    const readAsDataURLMock = vi.fn();
-    const mockFileReader = {
-      readAsDataURL: readAsDataURLMock,
-      onload: null as ((e: any) => void) | null,
-      result: fakeDataUrl,
-    };
-    vi.spyOn(globalThis, 'FileReader').mockImplementation(() => mockFileReader as unknown as FileReader);
+    const reader = mockFileReader();
 
     act(() => {
       result.current.handleFileChange(file);
@@ -46,7 +55,7 @@ describe('useStageElementManager', () => {
 
     // Simulate the FileReader onload callback
     act(() => {
-      mockFileReader.onload?.({ target: { result: fakeDataUrl } } as any);
+      reader.onload?.({ target: { result: fakeDataUrl } } as ProgressEvent<FileReader>);
     });
 
     expect(result.current.imageDataUrl).toBe(fakeDataUrl);
@@ -60,18 +69,14 @@ describe('useStageElementManager', () => {
     const fakeDataUrl = 'data:application/octet-stream;base64,fakemodel';
     const file = new File(['model'], 'model.glb', { type: 'application/octet-stream' });
 
-    const mockFileReader = {
-      readAsDataURL: vi.fn(),
-      onload: null as ((e: any) => void) | null,
-    };
-    vi.spyOn(globalThis, 'FileReader').mockImplementation(() => mockFileReader as unknown as FileReader);
+    const reader = mockFileReader();
 
     act(() => {
       result.current.handleFileChange(file);
     });
 
     act(() => {
-      mockFileReader.onload?.({ target: { result: fakeDataUrl } } as any);
+      reader.onload?.({ target: { result: fakeDataUrl } } as ProgressEvent<FileReader>);
     });
 
     expect(result.current.modelDataUrl).toBe(fakeDataUrl);
@@ -105,18 +110,14 @@ describe('useStageElementManager', () => {
     const fakeDataUrl = 'data:image/png;base64,test';
     const file = new File(['test'], 'test.png', { type: 'image/png' });
 
-    const mockFileReader = {
-      readAsDataURL: vi.fn(),
-      onload: null as ((e: any) => void) | null,
-    };
-    vi.spyOn(globalThis, 'FileReader').mockImplementation(() => mockFileReader as unknown as FileReader);
+    const reader = mockFileReader();
 
     act(() => {
       result.current.handleFileChange(file);
     });
 
     act(() => {
-      mockFileReader.onload?.({ target: { result: fakeDataUrl } } as any);
+      reader.onload?.({ target: { result: fakeDataUrl } } as ProgressEvent<FileReader>);
     });
 
     const stored = JSON.parse(localStorage.getItem('userUploadedMedia')!);
@@ -126,10 +127,7 @@ describe('useStageElementManager', () => {
 
   it('restores image from localStorage on mount', () => {
     const fakeDataUrl = 'data:image/png;base64,restored';
-    localStorage.setItem(
-      'userUploadedMedia',
-      JSON.stringify({ type: 'image', dataUrl: fakeDataUrl }),
-    );
+    localStorage.setItem('userUploadedMedia', JSON.stringify({ type: 'image', dataUrl: fakeDataUrl }));
 
     const { result } = renderHook(() => useStageElementManager());
 
@@ -139,10 +137,7 @@ describe('useStageElementManager', () => {
 
   it('restores model from localStorage on mount', () => {
     const fakeDataUrl = 'data:application/octet-stream;base64,modeldata';
-    localStorage.setItem(
-      'userUploadedMedia',
-      JSON.stringify({ type: 'model', dataUrl: fakeDataUrl }),
-    );
+    localStorage.setItem('userUploadedMedia', JSON.stringify({ type: 'model', dataUrl: fakeDataUrl }));
 
     const { result } = renderHook(() => useStageElementManager());
 

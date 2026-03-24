@@ -5,13 +5,13 @@ export const getTransformString = (t: TransformState): string => {
 };
 
 export const getFilterString = (t: TransformState): string => {
-    const filters = [];
-    if (t.dropShadowEnabled) {
-        const dropShadow = `drop-shadow(${t.dropShadowX.toFixed(3)}px ${t.dropShadowY.toFixed(3)}px ${t.dropShadowBlur.toFixed(3)}px ${t.dropShadowColor})`;
-        filters.push(dropShadow);
-    }
-    if (t.blurEnabled) filters.push(`blur(${t.blur.toFixed(3)}px)`);
-    if (t.brightnessEnabled) filters.push(`brightness(${(t.brightness / 100).toFixed(3)})`);
-    if (t.contrastEnabled) filters.push(`contrast(${(t.contrast / 100).toFixed(3)})`);
-    return filters.join(' ') || 'none';
+  const filters = [];
+  if (t.dropShadowEnabled) {
+    const dropShadow = `drop-shadow(${t.dropShadowX.toFixed(3)}px ${t.dropShadowY.toFixed(3)}px ${t.dropShadowBlur.toFixed(3)}px ${t.dropShadowColor})`;
+    filters.push(dropShadow);
+  }
+  if (t.blurEnabled) filters.push(`blur(${t.blur.toFixed(3)}px)`);
+  if (t.brightnessEnabled) filters.push(`brightness(${(t.brightness / 100).toFixed(3)})`);
+  if (t.contrastEnabled) filters.push(`contrast(${(t.contrast / 100).toFixed(3)})`);
+  return filters.join(' ') || 'none';
 };

@@ -1,19 +1,21 @@
 /**
  * @vitest-environment jsdom
  */
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vite-plus/test';
 import { renderHook } from '@testing-library/react';
 import { useAnimationPlayer } from '../hooks/useAnimationPlayer';
 import { defaultTransformState, type AnimationData, type TrackControlState } from '../types';
 
-const makeTimelineState = (overrides: Partial<{
-  currentTime: number;
-  duration: number;
-  isPlaying: boolean;
-  isLooping: boolean;
-  direction: 'normal' | 'alternate';
-  easing: string;
-}> = {}) => ({
+const makeTimelineState = (
+  overrides: Partial<{
+    currentTime: number;
+    duration: number;
+    isPlaying: boolean;
+    isLooping: boolean;
+    direction: 'normal' | 'alternate';
+    easing: string;
+  }> = {},
+) => ({
   currentTime: 0,
   duration: 1000,
   isPlaying: false,
@@ -40,13 +42,15 @@ describe('useAnimationPlayer', () => {
       ],
     };
 
-    const { result } = renderHook(() => useAnimationPlayer(
-      defaultTransformState,
-      animationData,
-      makeTimelineState({ currentTime: 500, isPlaying: false }),
-      vi.fn(),
-      {},
-    ));
+    const { result } = renderHook(() =>
+      useAnimationPlayer(
+        defaultTransformState,
+        animationData,
+        makeTimelineState({ currentTime: 500, isPlaying: false }),
+        vi.fn(),
+        {},
+      ),
+    );
 
     expect(result.current.calculateAnimatedValues(500).translateX).toBe(50);
     expect(result.current.animatedTransforms.translateX).toBe(50);
@@ -70,13 +74,15 @@ describe('useAnimationPlayer', () => {
       rotateZ: { mute: false, solo: false },
     };
 
-    const { result: mutedResult } = renderHook(() => useAnimationPlayer(
-      defaultTransformState,
-      animationData,
-      makeTimelineState({ currentTime: 500 }),
-      vi.fn(),
-      mutedControls,
-    ));
+    const { result: mutedResult } = renderHook(() =>
+      useAnimationPlayer(
+        defaultTransformState,
+        animationData,
+        makeTimelineState({ currentTime: 500 }),
+        vi.fn(),
+        mutedControls,
+      ),
+    );
 
     expect(mutedResult.current.calculateAnimatedValues(500).translateX).toBeUndefined();
     expect(mutedResult.current.calculateAnimatedValues(500).rotateZ).toBe(45);
@@ -86,16 +92,17 @@ describe('useAnimationPlayer', () => {
       rotateZ: { mute: false, solo: false },
     };
 
-    const { result: soloResult } = renderHook(() => useAnimationPlayer(
-      defaultTransformState,
-      animationData,
-      makeTimelineState({ currentTime: 500 }),
-      vi.fn(),
-      soloControls,
-    ));
+    const { result: soloResult } = renderHook(() =>
+      useAnimationPlayer(
+        defaultTransformState,
+        animationData,
+        makeTimelineState({ currentTime: 500 }),
+        vi.fn(),
+        soloControls,
+      ),
+    );
 
     expect(soloResult.current.calculateAnimatedValues(500).translateX).toBe(50);
     expect(soloResult.current.calculateAnimatedValues(500).rotateZ).toBeUndefined();
   });
-
 });

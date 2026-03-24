@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from 'vite-plus/test';
 import { getTransformString, getFilterString } from '../utils/styleUtils';
 import { defaultTransformState } from '../types';
 
@@ -6,7 +6,7 @@ describe('getTransformString', () => {
   it('returns correct CSS transform for default state', () => {
     const result = getTransformString(defaultTransformState);
     expect(result).toContain('translate3d(0.000px, 0.000px, 0.000px)');
-    expect(result).toContain('rotateX(10.000deg)');  // default has slight tilt
+    expect(result).toContain('rotateX(10.000deg)'); // default has slight tilt
     expect(result).toContain('rotateY(-20.000deg)'); // default has slight rotation
     expect(result).toContain('rotateZ(0.000deg)');
     expect(result).toContain('scale3d(1.000, 1.000, 1.000)');
@@ -47,7 +47,14 @@ describe('getFilterString', () => {
   });
 
   it('includes drop-shadow when enabled', () => {
-    const state = { ...defaultTransformState, dropShadowEnabled: true, dropShadowX: 5, dropShadowY: 10, dropShadowBlur: 15, dropShadowColor: 'rgba(0,0,0,0.5)' };
+    const state = {
+      ...defaultTransformState,
+      dropShadowEnabled: true,
+      dropShadowX: 5,
+      dropShadowY: 10,
+      dropShadowBlur: 15,
+      dropShadowColor: 'rgba(0,0,0,0.5)',
+    };
     const result = getFilterString(state);
     expect(result).toContain('drop-shadow(');
     expect(result).toContain('5.000px');

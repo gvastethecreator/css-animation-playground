@@ -15,9 +15,12 @@ export default function CameraInfo({ translateX, translateY, translateZ }: Camer
         <h3 className="font-bold text-zinc-300 uppercase tracking-wider text-[12px]">Camera Offset</h3>
       </div>
       <div className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-right">
-        <span>X:</span><span>{translateX.toFixed(1)}px</span>
-        <span>Y:</span><span>{translateY.toFixed(1)}px</span>
-        <span>Z:</span><span>{translateZ.toFixed(1)}px</span>
+        <span>X:</span>
+        <span>{translateX.toFixed(1)}px</span>
+        <span>Y:</span>
+        <span>{translateY.toFixed(1)}px</span>
+        <span>Z:</span>
+        <span>{translateZ.toFixed(1)}px</span>
       </div>
     </div>
   );

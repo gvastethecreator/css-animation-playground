@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback } from 'react';
 import { PresetAnimationName, AnimationEngine } from '../types';
 import AnimationPresetPopover from './AnimationPresetPopover';
@@ -26,19 +25,34 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({
-  onUndo, canUndo, onRedo, canRedo, onReset, onShowHelp,
-  onAnimationPresetClick, onPresetHoverStart, onPresetHoverEnd,
-  onFileChange, onFileRemove, onLoadRandomModel, hasMedia, isLoadingModel,
-  animationEngine, onAnimationEngineChange
+  onUndo,
+  canUndo,
+  onRedo,
+  canRedo,
+  onReset,
+  onShowHelp,
+  onAnimationPresetClick,
+  onPresetHoverStart,
+  onPresetHoverEnd,
+  onFileChange,
+  onFileRemove,
+  onLoadRandomModel,
+  hasMedia,
+  isLoadingModel,
+  animationEngine,
+  onAnimationEngineChange,
 }) => {
   const [isPresetPopoverOpen, setIsPresetPopoverOpen] = useState(false);
   const [popoverAnchorEl, setPopoverAnchorEl] = useState<HTMLButtonElement | null>(null);
 
-  const handlePresetClick = useCallback((preset: PresetAnimationName) => {
-    onAnimationPresetClick(preset);
-    setIsPresetPopoverOpen(false);
-    setPopoverAnchorEl(null);
-  }, [onAnimationPresetClick]);
+  const handlePresetClick = useCallback(
+    (preset: PresetAnimationName) => {
+      onAnimationPresetClick(preset);
+      setIsPresetPopoverOpen(false);
+      setPopoverAnchorEl(null);
+    },
+    [onAnimationPresetClick],
+  );
 
   const handleOpenPresets = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
     setPopoverAnchorEl(event.currentTarget);
@@ -50,22 +64,30 @@ const Header: React.FC<HeaderProps> = ({
     setPopoverAnchorEl(null);
   }, []);
 
-  const handleFileChangeEvent = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      onFileChange(e.target.files[0]);
-    }
-  }, [onFileChange]);
+  const handleFileChangeEvent = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files && e.target.files[0]) {
+        onFileChange(e.target.files[0]);
+      }
+    },
+    [onFileChange],
+  );
 
-  const btnClass = "p-2 rounded-lg text-zinc-400 hover:text-zinc-100 btn-tactile disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:transform-none disabled:hover:bg-transparent";
+  const btnClass =
+    'p-2 rounded-lg text-zinc-400 hover:text-zinc-100 btn-tactile disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:transform-none disabled:hover:bg-transparent';
 
   return (
     <header className="flex items-center justify-between px-4 py-2 glass-panel border-b border-zinc-700/50 shrink-0 h-16 z-30">
       {/* Left Section */}
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2 mr-2">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-xs shadow-glow bg-linear-to-br from-indigo-500 to-purple-600 border border-white/10">3D</div>
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-xs shadow-glow bg-linear-to-br from-indigo-500 to-purple-600 border border-white/10">
+            3D
+          </div>
           <div>
-            <h1 className="text-sm font-bold text-transparent bg-clip-text bg-linear-to-r from-zinc-100 to-zinc-400 tracking-tight leading-none">CSS</h1>
+            <h1 className="text-sm font-bold text-transparent bg-clip-text bg-linear-to-r from-zinc-100 to-zinc-400 tracking-tight leading-none">
+              CSS
+            </h1>
             <h1 className="text-xs font-semibold text-zinc-500 tracking-wider leading-none">PLAYGROUND</h1>
           </div>
         </div>
@@ -113,13 +135,20 @@ const Header: React.FC<HeaderProps> = ({
               disabled={isLoadingModel}
               className="btn-tactile px-3 py-1.5 rounded-lg flex items-center gap-2 text-xs font-medium text-zinc-300 disabled:opacity-50"
             >
-              {isLoadingModel ? (<Loader size={14} strokeWidth={2} className="animate-spin" />) : (<Dices size={14} strokeWidth={2} />)}
+              {isLoadingModel ? (
+                <Loader size={14} strokeWidth={2} className="animate-spin" />
+              ) : (
+                <Dices size={14} strokeWidth={2} />
+              )}
               {isLoadingModel ? 'Loading...' : 'Sample'}
             </button>
           </Tooltip>
           {hasMedia && (
             <Tooltip content="Remove uploaded media">
-              <button onClick={onFileRemove} className="btn-tactile w-8 h-8 flex items-center justify-center rounded-lg text-red-400 hover:text-red-300">
+              <button
+                onClick={onFileRemove}
+                className="btn-tactile w-8 h-8 flex items-center justify-center rounded-lg text-red-400 hover:text-red-300"
+              >
                 <Trash2 size={14} strokeWidth={2} />
               </button>
             </Tooltip>
@@ -136,23 +165,46 @@ const Header: React.FC<HeaderProps> = ({
       <div className="flex items-center gap-2">
         <div className="flex items-center gap-1 bg-zinc-900/50 p-1 rounded-lg border border-white/5 shadow-inner-depth">
           <Tooltip content="Undo (⌘Z)">
-            <button onClick={onUndo} disabled={!canUndo} className="p-1.5 rounded hover:bg-white/5 text-zinc-400 hover:text-zinc-100 transition-colors disabled:opacity-30"><CornerUpLeft size={16} strokeWidth={2} /></button>
+            <button
+              onClick={onUndo}
+              disabled={!canUndo}
+              className="p-1.5 rounded hover:bg-white/5 text-zinc-400 hover:text-zinc-100 transition-colors disabled:opacity-30"
+            >
+              <CornerUpLeft size={16} strokeWidth={2} />
+            </button>
           </Tooltip>
           <Tooltip content="Redo (⌘⇧Z)">
-            <button onClick={onRedo} disabled={!canRedo} className="p-1.5 rounded hover:bg-white/5 text-zinc-400 hover:text-zinc-100 transition-colors disabled:opacity-30"><CornerUpRight size={16} strokeWidth={2} /></button>
+            <button
+              onClick={onRedo}
+              disabled={!canRedo}
+              className="p-1.5 rounded hover:bg-white/5 text-zinc-400 hover:text-zinc-100 transition-colors disabled:opacity-30"
+            >
+              <CornerUpRight size={16} strokeWidth={2} />
+            </button>
           </Tooltip>
         </div>
 
         <div className="h-6 w-px bg-zinc-700/50 mx-1" />
 
         <Tooltip content="Reset Scene">
-          <button onClick={onReset} className={btnClass}><Trash2 size={16} strokeWidth={2} /></button>
+          <button onClick={onReset} className={btnClass}>
+            <Trash2 size={16} strokeWidth={2} />
+          </button>
         </Tooltip>
         <Tooltip content="Keyboard Shortcuts">
-          <button onClick={onShowHelp} className={btnClass}><HelpCircle size={16} strokeWidth={2} /></button>
+          <button onClick={onShowHelp} className={btnClass}>
+            <HelpCircle size={16} strokeWidth={2} />
+          </button>
         </Tooltip>
         <Tooltip content="View on GitHub">
-          <a href="https://github.com/gvastethecreator/css-animation-playground" target="_blank" rel="noopener noreferrer" className={btnClass}><Github size={16} strokeWidth={2} /></a>
+          <a
+            href="https://github.com/<owner>/<repo>"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={btnClass}
+          >
+            <Github size={16} strokeWidth={2} />
+          </a>
         </Tooltip>
       </div>
     </header>

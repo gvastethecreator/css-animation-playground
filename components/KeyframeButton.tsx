@@ -8,30 +8,33 @@ interface KeyframeButtonProps {
   color?: string;
 }
 
-export default function KeyframeButton({ onClick, isAnimated, hasKeyframeAtCurrentTime, color = '#818cf8' /* indigo-400 */ }: KeyframeButtonProps) {
-    const title = hasKeyframeAtCurrentTime ? 'Remove keyframe at this time' : 'Add keyframe at this time';
+export default function KeyframeButton({
+  onClick,
+  isAnimated,
+  hasKeyframeAtCurrentTime,
+  color = '#818cf8' /* indigo-400 */,
+}: KeyframeButtonProps) {
+  const title = hasKeyframeAtCurrentTime ? 'Remove keyframe at this time' : 'Add keyframe at this time';
 
-    const baseClasses = "w-2.5 h-2.5 rounded-sm transition-all transform rotate-45";
-    let style: React.CSSProperties = {
-      backgroundColor: '#3f3f46', // zinc-700
-      transition: 'all 150ms ease-in-out',
-    };
+  const baseClasses = 'w-2.5 h-2.5 rounded-sm transition-all transform rotate-45';
+  const style: React.CSSProperties = {
+    backgroundColor: '#3f3f46', // zinc-700
+    transition: 'all 150ms ease-in-out',
+    ['--keyframe-button-color' as string]: color,
+  };
 
-    if (isAnimated) {
-        style.backgroundColor = `${color}66`; // color with 40% opacity
-    }
-    if (hasKeyframeAtCurrentTime) {
-        style.backgroundColor = color;
-        style.transform = 'rotate(45deg) scale(1.1)';
-    }
+  if (isAnimated) {
+    style.backgroundColor = `${color}66`; // color with 40% opacity
+  }
+  if (hasKeyframeAtCurrentTime) {
+    style.backgroundColor = color;
+    style.transform = 'rotate(45deg) scale(1.1)';
+  }
 
   return (
     <Tooltip content={title}>
       <button onClick={onClick} className="flex items-center justify-center w-4 h-4 rounded-full group">
-          <div 
-              className={`${baseClasses} group-hover:!bg-[${color}]`}
-              style={style} 
-          />
+        <div className={`${baseClasses} group-hover:bg-[var(--keyframe-button-color)]`} style={style} />
       </button>
     </Tooltip>
   );

@@ -25,10 +25,7 @@ const ControlButton: React.FC<ControlButtonProps> = ({ onClick, children }) => (
 
 export default function CameraControls({ onResetView, onFocusTO, onFocusPO, onResetZoom }: CameraControlsProps) {
   return (
-    <div 
-        className="absolute bottom-4 left-4 flex flex-col gap-2 z-20"
-        onMouseDown={e => e.stopPropagation()}
-    >
+    <div className="absolute bottom-4 left-4 flex flex-col gap-2 z-20" onMouseDown={(e) => e.stopPropagation()}>
       <Tooltip content="Reset View">
         <ControlButton onClick={onResetView}>
           <Monitor size={18} strokeWidth={2} />

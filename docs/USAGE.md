@@ -1,0 +1,65 @@
+# Guía de uso
+
+## Flujo de producto
+
+1. Elegí el elemento del escenario.
+2. Ajustá transforms, filtros y apariencia en el sidebar.
+3. Agregá keyframes desde los controles de propiedad.
+4. Editá easing, duración y reproducción en la timeline.
+5. Probá el resultado en CSS o Three.js.
+6. Exportá el código desde el panel inferior.
+
+## Flujo de desarrollo local
+
+### Instalar
+
+```bash
+bun install
+```
+
+### Desarrollo
+
+```bash
+bun run dev
+```
+
+### Validación rápida
+
+```bash
+bun run typecheck
+bun run lint
+bun run test
+bun run build
+```
+
+## Logs
+
+Los scripts principales escriben salidas en `logs/`:
+
+- `typecheck.latest.log`
+- `lint.latest.log`
+- `test.latest.log`
+- `build.latest.log`
+
+También se guardan versiones con timestamp para auditoría local.
+
+## Tareas de VS Code
+
+El workspace incluye tareas cortas con emojis para:
+
+- desarrollo
+- build
+- check
+- typecheck
+- lint
+- format
+- test
+- coverage
+- clean
+- preview
+
+## Notas de operación
+
+- El modo Three.js se carga de forma diferida.
+- Los modelos 3D sólo se visualizan correctamente en el modo Three.js.
+- La persistencia local guarda historial, configuración y media seleccionada.

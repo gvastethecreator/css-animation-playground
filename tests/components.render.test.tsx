@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import React from 'react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vite-plus/test';
 import { fireEvent, render, screen } from '@testing-library/react';
 import ActivationSwitch from '../components/ActivationSwitch';
 import ToggleControl from '../components/ToggleControl';
@@ -68,13 +68,7 @@ describe('small component render coverage', () => {
 
     it('StageElementSelector emits the selected stage element', () => {
         const onElementChange = vi.fn();
-        render(
-            <StageElementSelector
-                selectedElement="card"
-                onElementChange={onElementChange}
-                hasMedia={false}
-            />,
-        );
+        render(<StageElementSelector selectedElement="card" onElementChange={onElementChange} hasMedia={false} />);
 
         const buttons = screen.getAllByRole('button');
         expect(buttons).toHaveLength(5);
@@ -195,9 +189,7 @@ describe('RangeControl', () => {
     });
 
     it('is disabled when isActivatable is true and isEnabled is false', () => {
-        const { container } = render(
-            <RangeControl {...baseProps} isActivatable isEnabled={false} />,
-        );
+        const { container } = render(<RangeControl {...baseProps} isActivatable isEnabled={false} />);
         expect(container.firstElementChild!.className).toContain('pointer-events-none');
     });
 });
@@ -221,9 +213,7 @@ describe('ColorControl', () => {
         render(<ColorControl {...baseProps} />);
         expect(screen.getByText('Shadow Color')).toBeInTheDocument();
         // The color swatch button should exist
-        const swatchBtn = screen.getAllByRole('button').find(
-            b => b.style.backgroundColor === 'rgba(0, 0, 0, 0.5)',
-        );
+        const swatchBtn = screen.getAllByRole('button').find((b) => b.style.backgroundColor === 'rgba(0, 0, 0, 0.5)');
         expect(swatchBtn).toBeDefined();
     });
 
@@ -241,8 +231,8 @@ describe('EngineSelector', () => {
         render(<EngineSelector engine="css" onEngineChange={onChange} />);
         expect(screen.getByText('css')).toBeInTheDocument();
         expect(screen.getByText('gsap')).toBeInTheDocument();
-        expect(screen.getByText('motion')).toBeInTheDocument();
         expect(screen.getByText('animejs')).toBeInTheDocument();
+        expect(screen.getByText('three.js')).toBeInTheDocument();
     });
 
     it('calls onEngineChange when a different engine is clicked', () => {
@@ -286,7 +276,7 @@ describe('PositionGrid', () => {
             />,
         );
         // First grid button = top-left (0,0)
-        const gridButtons = screen.getAllByRole('button').filter(b => b.getAttribute('aria-label') !== 'toggle-keyframe');
+        const gridButtons = screen.getAllByRole('button').filter((b) => b.getAttribute('aria-label') !== 'toggle-keyframe');
         fireEvent.click(gridButtons[0]);
         expect(onChange).toHaveBeenCalledWith(0, 0);
     });

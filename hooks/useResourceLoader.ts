@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { StageElement } from '../types';
 import { safeAdd, type ThreeSceneRefs } from './useThreeSetup';
+import { reportRuntimeIssue } from '../utils/runtimeDiagnostics.ts';
 
 const textureLoader = new THREE.TextureLoader();
 const gltfLoader = new GLTFLoader();
@@ -41,12 +42,7 @@ export function useResourceLoader(
       });
     };
 
-    const applyObject = (
-      obj: THREE.Object3D | null,
-      w: number,
-      h: number,
-      d: number,
-    ) => {
+    const applyObject = (obj: THREE.Object3D | null, w: number, h: number, d: number) => {
       if (isCancelled) return;
       cleanup(refs.object.current);
       container.clear();
@@ -112,10 +108,7 @@ export function useResourceLoader(
               transparent: true,
               opacity: 0.9,
             });
-            const imagePlane = new THREE.Mesh(
-              new THREE.PlaneGeometry(w, h * 0.6),
-              imageMat,
-            );
+            const imagePlane = new THREE.Mesh(new THREE.PlaneGeometry(w, h * 0.6), imageMat);
             imagePlane.name = 'card-image';
             imagePlane.position.y = h * 0.2;
             imagePlane.position.z = 0.5;
@@ -185,20 +178,14 @@ export function useResourceLoader(
               wrapper.userData = { originalSize: size.clone() };
 
               const maxDim = Math.max(size.x, size.y, size.z);
-              const scale =
-                isFinite(maxDim) && maxDim > 0 ? 200 / maxDim : 1;
+              const scale = isFinite(maxDim) && maxDim > 0 ? 200 / maxDim : 1;
               model.scale.setScalar(scale);
 
-              applyObject(
-                wrapper,
-                size.x * scale,
-                size.y * scale,
-                size.z * scale,
-              );
+              applyObject(wrapper, size.x * scale, size.y * scale, size.z * scale);
             },
             undefined,
             (error) => {
-              console.error('Error loading model:', error);
+              reportRuntimeIssue('three.model.load', error, 'Error loading model.');
             },
           );
         }

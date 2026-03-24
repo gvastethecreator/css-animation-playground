@@ -1,7 +1,7 @@
 /**
  * @vitest-environment jsdom
  */
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vite-plus/test';
 import { act, renderHook } from '@testing-library/react';
 import { usePreviewAnimator } from '../hooks/usePreviewAnimator';
 import { defaultTransformState, type PresetAnimationName } from '../types';
@@ -72,7 +72,8 @@ describe('usePreviewAnimator', () => {
 
   it('cancels the scheduled frame when preset is cleared', () => {
     const { result, rerender } = renderHook(
-      ({ presetName }: { presetName: PresetAnimationName | null }) => usePreviewAnimator(presetName, defaultTransformState),
+      ({ presetName }: { presetName: PresetAnimationName | null }) =>
+        usePreviewAnimator(presetName, defaultTransformState),
       { initialProps: { presetName: 'Grow' as PresetAnimationName | null } },
     );
 

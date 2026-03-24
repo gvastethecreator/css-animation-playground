@@ -1,31 +1,44 @@
 import React, { useRef, useState, useEffect, useLayoutEffect, memo } from 'react';
 import ReactDOM from 'react-dom';
-import { EasingName, PROPERTY_COLORS } from '../../types';
+import { EasingName, EasingValue } from '../../types';
 import { Spline } from 'lucide-react';
 import EasingCurve from './EasingCurve';
 import BezierEditor from './BezierEditor';
 
 const easingGroups: Record<string, EasingName[]> = {
-    'Standard': ['linear', 'ease', 'easeIn', 'easeOut', 'easeInOut'],
-    'Sine': ['easeInSine', 'easeOutSine', 'easeInOutSine'],
-    'Quad': ['easeInQuad', 'easeOutQuad', 'easeInOutQuad'],
-    'Cubic': ['easeInCubic', 'easeOutCubic', 'easeInOutCubic'],
-    'Quart': ['easeInQuart', 'easeOutQuart', 'easeInOutQuart'],
-    'Quint': ['easeInQuint', 'easeOutQuint', 'easeInOutQuint'],
-    'Expo': ['easeInExpo', 'easeOutExpo', 'easeInOutExpo'],
-    'Circ': ['easeInCirc', 'easeOutCirc', 'easeInOutCirc'],
-    'Dynamic': [
-        'easeInBack', 'easeOutBack', 'easeInOutBack', 'easeOutBackSoft',
-        'easeInElastic', 'easeOutElastic', 'easeInOutElastic',
-        'easeInBounce', 'easeOutBounce', 'easeInOutBounce',
-        'spring', 'springy', 'snappy', 'snap', 'bouncy', 'anticipateOvershoot',
-        'materialAccelerate', 'materialDecelerate'
+    Standard: ['linear', 'ease', 'easeIn', 'easeOut', 'easeInOut'],
+    Sine: ['easeInSine', 'easeOutSine', 'easeInOutSine'],
+    Quad: ['easeInQuad', 'easeOutQuad', 'easeInOutQuad'],
+    Cubic: ['easeInCubic', 'easeOutCubic', 'easeInOutCubic'],
+    Quart: ['easeInQuart', 'easeOutQuart', 'easeInOutQuart'],
+    Quint: ['easeInQuint', 'easeOutQuint', 'easeInOutQuint'],
+    Expo: ['easeInExpo', 'easeOutExpo', 'easeInOutExpo'],
+    Circ: ['easeInCirc', 'easeOutCirc', 'easeInOutCirc'],
+    Dynamic: [
+        'easeInBack',
+        'easeOutBack',
+        'easeInOutBack',
+        'easeOutBackSoft',
+        'easeInElastic',
+        'easeOutElastic',
+        'easeInOutElastic',
+        'easeInBounce',
+        'easeOutBounce',
+        'easeInOutBounce',
+        'spring',
+        'springy',
+        'snappy',
+        'snap',
+        'bouncy',
+        'anticipateOvershoot',
+        'materialAccelerate',
+        'materialDecelerate',
     ],
 };
 
 interface EasingEditorProps {
-    easing: EasingName | string;
-    onEasingChange: (newEasing: EasingName | string) => void;
+    easing: EasingValue;
+    onEasingChange: (newEasing: EasingValue) => void;
     color: string;
     onClose: () => void;
     anchorEl: HTMLButtonElement | null;
@@ -80,7 +93,12 @@ const EasingEditor = memo(({ easing, onEasingChange, color, onClose, anchorEl }:
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (popoverRef.current && !popoverRef.current.contains(event.target as Node) && anchorEl && !anchorEl.contains(event.target as Node)) {
+            if (
+                popoverRef.current &&
+                !popoverRef.current.contains(event.target as Node) &&
+                anchorEl &&
+                !anchorEl.contains(event.target as Node)
+            ) {
                 onClose();
             }
         };
@@ -101,7 +119,7 @@ const EasingEditor = memo(({ easing, onEasingChange, color, onClose, anchorEl }:
     return ReactDOM.createPortal(
         <div
             ref={popoverRef}
-            className={`absolute z-[1001] bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl w-64 backdrop-blur-sm bg-opacity-80 flex flex-col transition-all duration-150 ease-out ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+            className={`absolute z-1001 bg-zinc-900 border border-zinc-700 rounded-lg shadow-xl w-64 backdrop-blur-sm bg-opacity-80 flex flex-col transition-all duration-150 ease-out ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}`}
             style={{
                 top: `${position.top}px`,
                 left: `${position.left}px`,
@@ -109,8 +127,16 @@ const EasingEditor = memo(({ easing, onEasingChange, color, onClose, anchorEl }:
             }}
         >
             <div className="flex items-center border-b border-zinc-800 shrink-0">
-                <button onClick={() => setActiveTab('presets')} className={`flex-1 text-center text-[13px] p-2 ${activeTab === 'presets' ? 'bg-zinc-800 text-white' : 'text-zinc-400 hover:bg-zinc-800/50'}`}>Presets</button>
-                <button onClick={() => setActiveTab('custom')} className={`flex-1 text-center text-[13px] p-2 flex items-center justify-center gap-1 ${activeTab === 'custom' ? 'bg-zinc-800 text-white' : 'text-zinc-400 hover:bg-zinc-800/50'}`}>
+                <button
+                    onClick={() => setActiveTab('presets')}
+                    className={`flex-1 text-center text-[13px] p-2 ${activeTab === 'presets' ? 'bg-zinc-800 text-white' : 'text-zinc-400 hover:bg-zinc-800/50'}`}
+                >
+                    Presets
+                </button>
+                <button
+                    onClick={() => setActiveTab('custom')}
+                    className={`flex-1 text-center text-[13px] p-2 flex items-center justify-center gap-1 ${activeTab === 'custom' ? 'bg-zinc-800 text-white' : 'text-zinc-400 hover:bg-zinc-800/50'}`}
+                >
                     <Spline size={16} strokeWidth={2} /> Custom
                 </button>
             </div>
@@ -119,7 +145,7 @@ const EasingEditor = memo(({ easing, onEasingChange, color, onClose, anchorEl }:
                     {Object.entries(easingGroups).map(([groupName, easings]) => (
                         <div key={groupName}>
                             <h5 className="text-zinc-500 text-[10px] font-bold uppercase px-1 mt-1.5 first:mt-0">{groupName}</h5>
-                            {easings.map(e => (
+                            {easings.map((e) => (
                                 <button
                                     key={e}
                                     onClick={() => onEasingChange(e)}
@@ -137,15 +163,11 @@ const EasingEditor = memo(({ easing, onEasingChange, color, onClose, anchorEl }:
             )}
             {activeTab === 'custom' && (
                 <div className="p-2">
-                    <BezierEditor
-                        easing={easing}
-                        onChange={onEasingChange}
-                        color={color}
-                    />
+                    <BezierEditor easing={easing} onChange={onEasingChange} color={color} />
                 </div>
             )}
         </div>,
-        document.body
+        document.body,
     );
 });
 

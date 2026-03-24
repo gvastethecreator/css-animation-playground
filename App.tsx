@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import Sidebar from './components/Sidebar';
 import Stage from './components/Stage';
@@ -12,13 +11,56 @@ import { useStageElementManager } from './hooks/useStageElementManager';
 import { useHotkeys } from './hooks/useHotkeys';
 import { usePreviewAnimator } from './hooks/usePreviewAnimator';
 import { useAppStore } from './store/useAppStore';
-import { TransformState, AnimationData, Keyframe, PresetName, PresetAnimationName, ANIMATION_PRESETS, VIEW_PRESETS, StageStyleName, STAGE_STYLES, TrackControlState, AnimationDirection, EasingName, StageElement, AnimationEngine, EngineConfig, GizmoMode } from './types';
+import {
+    TransformState,
+    Keyframe,
+    PresetName,
+    PresetAnimationName,
+    ANIMATION_PRESETS,
+    VIEW_PRESETS,
+    STAGE_STYLES,
+    EngineConfig,
+} from './types';
 
 export default function App() {
-    const { currentState, saveStateToHistory, handleUndo, handleRedo, resetHistory, canUndo, canRedo, isRestoring } = useHistoryManager();
-    const { transforms, animationData, timelineDuration, timelineIsLooping, timelineDirection, timelineEasing, trackControls, engineConfig, timelinePlayOnClick } = currentState;
-    const { stageElement, setStageElement, imageDataUrl, modelDataUrl, handleFileChange, handleFileRemove, handleLoadRandomModel, hasMedia, isLoadingModel } = useStageElementManager();
-    const { uiState, setUiState, scene, setScene, stageStyle, setStageStyle, animationEngine, setAnimationEngine, gizmoMode, setGizmoMode, timelineState, setTimelineState } = useAppStore();
+    const { currentState, saveStateToHistory, handleUndo, handleRedo, resetHistory, canUndo, canRedo, isRestoring } =
+        useHistoryManager();
+    const {
+        transforms,
+        animationData,
+        timelineDuration,
+        timelineIsLooping,
+        timelineDirection,
+        timelineEasing,
+        trackControls,
+        engineConfig,
+        timelinePlayOnClick,
+    } = currentState;
+    const {
+        stageElement,
+        setStageElement,
+        imageDataUrl,
+        modelDataUrl,
+        handleFileChange,
+        handleFileRemove,
+        handleLoadRandomModel,
+        hasMedia,
+        isLoadingModel,
+    } = useStageElementManager();
+    const {
+        uiState,
+        setUiState,
+        scene,
+        setScene,
+        stageStyle,
+        setStageStyle,
+        animationEngine,
+        setAnimationEngine,
+        gizmoMode,
+        setGizmoMode,
+        timelineState,
+        setTimelineState,
+    } = useAppStore();
 
     // Sync initial timeline state from history manager on load
     useEffect(() => {
@@ -45,35 +87,50 @@ export default function App() {
     const handleMouseDown = useCallback((e: React.MouseEvent) => {
         if ((e.target as HTMLElement).id !== 'stage-root' && (e.target as HTMLElement).tagName !== 'CANVAS') return;
         setIsDragging(true);
-        dragStartPos.current = { x: e.clientX, y: e.clientY, sceneX: sceneRef.current.translateX, sceneY: sceneRef.current.translateY };
+        dragStartPos.current = {
+            x: e.clientX,
+            y: e.clientY,
+            sceneX: sceneRef.current.translateX,
+            sceneY: sceneRef.current.translateY,
+        };
     }, []);
 
-    const handleMouseMove = useCallback((e: React.MouseEvent) => {
-        if (!isDragging) return;
-        const dx = e.clientX - dragStartPos.current.x;
-        const dy = e.clientY - dragStartPos.current.y;
-        setScene(prev => ({ ...prev, translateX: dragStartPos.current.sceneX + dx, translateY: dragStartPos.current.sceneY + dy }));
-    }, [isDragging, setScene]);
+    const handleMouseMove = useCallback(
+        (e: React.MouseEvent) => {
+            if (!isDragging) return;
+            const dx = e.clientX - dragStartPos.current.x;
+            const dy = e.clientY - dragStartPos.current.y;
+            setScene((prev) => ({
+                ...prev,
+                translateX: dragStartPos.current.sceneX + dx,
+                translateY: dragStartPos.current.sceneY + dy,
+            }));
+        },
+        [isDragging, setScene],
+    );
 
     const handleMouseUp = useCallback(() => {
         setIsDragging(false);
     }, []);
 
-    const handleWheel = useCallback((e: React.WheelEvent) => {
-        setScene(prev => ({ ...prev, translateZ: Math.max(-1000, Math.min(2000, prev.translateZ - e.deltaY)) }));
-    }, [setScene]);
+    const handleWheel = useCallback(
+        (e: React.WheelEvent) => {
+            setScene((prev) => ({ ...prev, translateZ: Math.max(-1000, Math.min(2000, prev.translateZ - e.deltaY)) }));
+        },
+        [setScene],
+    );
 
     const resetView = useCallback(() => setScene({ translateX: 0, translateY: 0, translateZ: 0 }), [setScene]);
-    const resetZoom = useCallback(() => setScene(prev => ({ ...prev, translateZ: 0 })), [setScene]);
+    const resetZoom = useCallback(() => setScene((prev) => ({ ...prev, translateZ: 0 })), [setScene]);
     const focusTO = useCallback(() => setScene({ translateX: 0, translateY: 0, translateZ: 0 }), [setScene]);
     const focusPO = useCallback(() => setScene({ translateX: 0, translateY: 0, translateZ: 0 }), [setScene]);
 
     const onCurrentTimeChange = useCallback((time: number) => {
-        setTimelineState(prev => ({ ...prev, currentTime: time }));
+        setTimelineState((prev) => ({ ...prev, currentTime: time }));
     }, []);
 
     const handlePlaybackComplete = useCallback(() => {
-        setTimelineState(prev => ({ ...prev, isPlaying: false }));
+        setTimelineState((prev) => ({ ...prev, isPlaying: false }));
     }, []);
 
     const { animatedTransforms, calculateAnimatedValues, willChangeString } = useAnimationPlayer(
@@ -84,20 +141,26 @@ export default function App() {
         trackControls,
         handlePlaybackComplete,
         animationResetKey.toString(),
-        stageElementRef
+        stageElementRef,
     );
 
     const currentStateRef = useRef(currentState);
     currentStateRef.current = currentState;
 
-    const commitChanges = useCallback((newState: Partial<HistoryState>) => {
-        saveStateToHistory({ ...currentStateRef.current, ...newState });
-    }, [saveStateToHistory]);
+    const commitChanges = useCallback(
+        (newState: Partial<HistoryState>) => {
+            saveStateToHistory({ ...currentStateRef.current, ...newState });
+        },
+        [saveStateToHistory],
+    );
 
-    const handleChange = useCallback((updates: Partial<TransformState>) => {
-        const newTransforms = { ...transforms, ...updates };
-        commitChanges({ transforms: newTransforms });
-    }, [transforms, commitChanges]);
+    const handleChange = useCallback(
+        (updates: Partial<TransformState>) => {
+            const newTransforms = { ...transforms, ...updates };
+            commitChanges({ transforms: newTransforms });
+        },
+        [transforms, commitChanges],
+    );
 
     const animationDataRef = useRef(animationData);
     animationDataRef.current = animationData;
@@ -106,75 +169,87 @@ export default function App() {
     const timelineStateRef = useRef(timelineState);
     timelineStateRef.current = timelineState;
 
-    const onKeyframeToggle = useCallback((property: keyof TransformState) => {
-        const track = animationDataRef.current[property] || [];
-        const currentTime = timelineStateRef.current.currentTime;
-        const existingKeyframeIndex = track.findIndex(kf => kf.time === currentTime);
-        let newAnimationData = { ...animationDataRef.current };
+    const onKeyframeToggle = useCallback(
+        (property: keyof TransformState) => {
+            const track = animationDataRef.current[property] || [];
+            const currentTime = timelineStateRef.current.currentTime;
+            const existingKeyframeIndex = track.findIndex((kf) => kf.time === currentTime);
+            const newAnimationData = { ...animationDataRef.current };
 
-        if (existingKeyframeIndex > -1) {
-            const newTrack = [...track];
-            newTrack.splice(existingKeyframeIndex, 1);
-            if (newTrack.length === 0) {
-                delete newAnimationData[property];
+            if (existingKeyframeIndex > -1) {
+                const newTrack = [...track];
+                newTrack.splice(existingKeyframeIndex, 1);
+                if (newTrack.length === 0) {
+                    delete newAnimationData[property];
+                } else {
+                    newAnimationData[property] = newTrack;
+                }
             } else {
+                const newKeyframe: Keyframe = {
+                    id: `${Date.now()}-${Math.random()}`,
+                    time: currentTime,
+                    value: transformsRef.current[property],
+                    easing: 'easeInOut',
+                };
+                const newTrack = [...track, newKeyframe].sort((a, b) => a.time - b.time);
                 newAnimationData[property] = newTrack;
             }
-        } else {
-            const newKeyframe: Keyframe = {
-                id: `${Date.now()}-${Math.random()}`,
-                time: currentTime,
-                value: transformsRef.current[property],
-                easing: 'easeInOut',
-            };
-            const newTrack = [...track, newKeyframe].sort((a, b) => a.time - b.time);
-            newAnimationData[property] = newTrack;
-        }
-        commitChanges({ animationData: newAnimationData });
-    }, [commitChanges]);
+            commitChanges({ animationData: newAnimationData });
+        },
+        [commitChanges],
+    );
 
-    const handleViewPresetClick = useCallback((presetName: PresetName) => {
-        const preset = VIEW_PRESETS[presetName];
-        commitChanges({ transforms: { ...transformsRef.current, ...preset } });
-    }, [commitChanges]);
+    const handleViewPresetClick = useCallback(
+        (presetName: PresetName) => {
+            const preset = VIEW_PRESETS[presetName];
+            commitChanges({ transforms: { ...transformsRef.current, ...preset } });
+        },
+        [commitChanges],
+    );
 
-    const handleAnimationPresetClick = useCallback((presetName: PresetAnimationName) => {
-        const preset = ANIMATION_PRESETS[presetName];
-        const newTransforms = { ...transformsRef.current, ...preset.initialTransforms };
+    const handleAnimationPresetClick = useCallback(
+        (presetName: PresetAnimationName) => {
+            const preset = ANIMATION_PRESETS[presetName];
+            const newTransforms = { ...transformsRef.current, ...preset.initialTransforms };
 
-        setTimelineState(prev => ({
-            ...prev,
-            currentTime: 0,
-            isPlaying: true,
-            duration: preset.timelineState.duration,
-            isLooping: preset.timelineState.isLooping,
-            direction: preset.timelineState.direction || 'normal',
-            easing: preset.timelineState.easing || 'linear',
-        }));
+            setTimelineState((prev) => ({
+                ...prev,
+                currentTime: 0,
+                isPlaying: true,
+                duration: preset.timelineState.duration,
+                isLooping: preset.timelineState.isLooping,
+                direction: preset.timelineState.direction || 'normal',
+                easing: preset.timelineState.easing || 'linear',
+            }));
 
-        setAnimationResetKey(p => p + 1);
+            setAnimationResetKey((p) => p + 1);
 
-        commitChanges({
-            transforms: newTransforms,
-            animationData: preset.animationData,
-            timelineDuration: preset.timelineState.duration,
-            timelineIsLooping: preset.timelineState.isLooping,
-            timelineDirection: preset.timelineState.direction || 'normal',
-            timelineEasing: preset.timelineState.easing || 'linear',
-        });
-    }, [commitChanges, setTimelineState]);
+            commitChanges({
+                transforms: newTransforms,
+                animationData: preset.animationData,
+                timelineDuration: preset.timelineState.duration,
+                timelineIsLooping: preset.timelineState.isLooping,
+                timelineDirection: preset.timelineState.direction || 'normal',
+                timelineEasing: preset.timelineState.easing || 'linear',
+            });
+        },
+        [commitChanges, setTimelineState],
+    );
 
-    const handleTimelineStateChange = useCallback((newState: React.SetStateAction<typeof timelineState>) => {
-        const current = timelineStateRef.current;
-        const updatedState = typeof newState === 'function' ? newState(current) : newState;
-        setTimelineState(updatedState);
-        commitChanges({
-            timelineDuration: updatedState.duration,
-            timelineIsLooping: updatedState.isLooping,
-            timelineDirection: updatedState.direction,
-            timelineEasing: updatedState.easing,
-        });
-    }, [setTimelineState, commitChanges]);
+    const handleTimelineStateChange = useCallback(
+        (newState: React.SetStateAction<typeof timelineState>) => {
+            const current = timelineStateRef.current;
+            const updatedState = typeof newState === 'function' ? newState(current) : newState;
+            setTimelineState(updatedState);
+            commitChanges({
+                timelineDuration: updatedState.duration,
+                timelineIsLooping: updatedState.isLooping,
+                timelineDirection: updatedState.direction,
+                timelineEasing: updatedState.easing,
+            });
+        },
+        [setTimelineState, commitChanges],
+    );
 
     const handlePlayOnClickToggle = useCallback(() => {
         commitChanges({ timelinePlayOnClick: !timelinePlayOnClick });
@@ -182,15 +257,15 @@ export default function App() {
 
     const handleStageElementClick = useCallback(() => {
         if (timelinePlayOnClick) {
-            setTimelineState(prev => ({ ...prev, currentTime: 0, isPlaying: true }));
-            setAnimationResetKey(p => p + 1);
+            setTimelineState((prev) => ({ ...prev, currentTime: 0, isPlaying: true }));
+            setAnimationResetKey((p) => p + 1);
         }
     }, [timelinePlayOnClick]);
 
     const handleUndoAction = useCallback(() => {
         const restored = handleUndo();
         if (restored) {
-            setTimelineState(prev => ({
+            setTimelineState((prev) => ({
                 ...prev,
                 duration: restored.timelineDuration,
                 isLooping: restored.timelineIsLooping,
@@ -203,7 +278,7 @@ export default function App() {
     const handleRedoAction = useCallback(() => {
         const restored = handleRedo();
         if (restored) {
-            setTimelineState(prev => ({
+            setTimelineState((prev) => ({
                 ...prev,
                 duration: restored.timelineDuration,
                 isLooping: restored.timelineIsLooping,
@@ -215,7 +290,7 @@ export default function App() {
 
     const handleReset = useCallback(() => {
         const restored = resetHistory();
-        setTimelineState(prev => ({
+        setTimelineState((prev) => ({
             ...prev,
             currentTime: 0,
             isPlaying: false,
@@ -224,23 +299,24 @@ export default function App() {
             direction: restored.timelineDirection,
             easing: restored.timelineEasing,
         }));
-        setAnimationResetKey(p => p + 1);
+        setAnimationResetKey((p) => p + 1);
         setStageElement('card');
         handleFileRemove();
     }, [resetHistory, setTimelineState, setStageElement, handleFileRemove]);
 
     const handleFrameStep = useCallback((direction: 'next' | 'prev') => {
-        setTimelineState(prev => {
+        setTimelineState((prev) => {
             const frameTime = 1000 / prev.fps;
-            const newTime = direction === 'next'
-                ? Math.min(prev.duration, prev.currentTime + frameTime)
-                : Math.max(0, prev.currentTime - frameTime);
+            const newTime =
+                direction === 'next'
+                    ? Math.min(prev.duration, prev.currentTime + frameTime)
+                    : Math.max(0, prev.currentTime - frameTime);
             return { ...prev, currentTime: newTime };
         });
     }, []);
 
     const handleToggleLoop = useCallback(() => {
-        handleTimelineStateChange(prev => ({ ...prev, isLooping: !prev.isLooping }));
+        handleTimelineStateChange((prev) => ({ ...prev, isLooping: !prev.isLooping }));
     }, [handleTimelineStateChange]);
 
     const handleGoToStart = useCallback(() => {
@@ -252,26 +328,32 @@ export default function App() {
     }, [onCurrentTimeChange]);
 
     const handleStop = useCallback(() => {
-        handleTimelineStateChange(prev => ({ ...prev, isPlaying: false, currentTime: 0 }));
+        handleTimelineStateChange((prev) => ({ ...prev, isPlaying: false, currentTime: 0 }));
     }, [handleTimelineStateChange]);
 
-    useHotkeys({
-        ' ': (e) => { e.preventDefault(); handleTimelineStateChange(s => ({ ...s, isPlaying: !s.isPlaying })); },
-        'meta+z': handleUndoAction,
-        'meta+shift+z': handleRedoAction,
-        'meta+y': handleRedoAction,
-        'arrowleft': () => handleFrameStep('prev'),
-        ',': () => handleFrameStep('prev'),
-        'arrowright': () => handleFrameStep('next'),
-        '.': () => handleFrameStep('next'),
-        'home': () => handleGoToStart(),
-        'end': () => handleGoToEnd(),
-        'l': () => handleToggleLoop(),
-    }, [handleUndoAction, handleRedoAction, handleFrameStep, handleGoToStart, handleGoToEnd, handleToggleLoop]);
+    useHotkeys(
+        {
+            ' ': (e) => {
+                e.preventDefault();
+                handleTimelineStateChange((s) => ({ ...s, isPlaying: !s.isPlaying }));
+            },
+            'meta+z': handleUndoAction,
+            'meta+shift+z': handleRedoAction,
+            'meta+y': handleRedoAction,
+            arrowleft: () => handleFrameStep('prev'),
+            ',': () => handleFrameStep('prev'),
+            arrowright: () => handleFrameStep('next'),
+            '.': () => handleFrameStep('next'),
+            home: () => handleGoToStart(),
+            end: () => handleGoToEnd(),
+            l: () => handleToggleLoop(),
+        },
+        [handleUndoAction, handleRedoAction, handleFrameStep, handleGoToStart, handleGoToEnd, handleToggleLoop],
+    );
 
     useEffect(() => {
         if (!isRestoring.current) {
-            setTimelineState(prev => ({
+            setTimelineState((prev) => ({
                 ...prev,
                 duration: timelineDuration,
                 isLooping: timelineIsLooping,
@@ -284,71 +366,111 @@ export default function App() {
     const isThreeJsMode = animationEngine === 'threejs';
     const displayedTransforms = animatedTransforms;
 
-    const timelineStateForPanel = useMemo(() => ({
-        duration: timelineState.duration,
-        isLooping: timelineState.isLooping,
-        direction: timelineState.direction,
-        easing: timelineState.easing
-    }), [timelineState.duration, timelineState.isLooping, timelineState.direction, timelineState.easing]);
+    const timelineStateForPanel = useMemo(
+        () => ({
+            duration: timelineState.duration,
+            isLooping: timelineState.isLooping,
+            direction: timelineState.direction,
+            easing: timelineState.easing,
+        }),
+        [timelineState.duration, timelineState.isLooping, timelineState.direction, timelineState.easing],
+    );
 
     // Stable UI callbacks for memoized children
-    const handleShowHelp = useCallback(() => setUiState(s => ({ ...s, showHelp: true })), [setUiState]);
-    const handleCloseHelp = useCallback(() => setUiState(s => ({ ...s, showHelp: false })), [setUiState]);
+    const handleShowHelp = useCallback(() => setUiState((s) => ({ ...s, showHelp: true })), [setUiState]);
+    const handleCloseHelp = useCallback(() => setUiState((s) => ({ ...s, showHelp: false })), [setUiState]);
     const handleClearPreview = useCallback(() => setPreviewPresetName(null), []);
     const handleAdjustStart = useCallback(() => setIsAdjusting(true), []);
     const handleAdjustEnd = useCallback(() => setIsAdjusting(false), []);
-    const handleShowGridChange = useCallback((val: boolean) => setUiState(s => ({ ...s, showGrid: val })), [setUiState]);
-    const handleShowStageUIChange = useCallback((val: boolean) => setUiState(s => ({ ...s, showStageUI: val })), [setUiState]);
-    const handleAlignGridToViewChange = useCallback((val: boolean) => setUiState(s => ({ ...s, alignGridToView: val })), [setUiState]);
-    const handleExplodeToggle = useCallback(() => setUiState(s => ({ ...s, isExploded: !s.isExploded })), [setUiState]);
-    const handleEngineConfigChange = useCallback((newConfig: EngineConfig) => commitChanges({ engineConfig: newConfig }), [commitChanges]);
-    const handleCodePanelHeightChange = useCallback((h: number) => setUiState(s => ({ ...s, codePanelHeight: h })), [setUiState]);
-    const handleTimelineHeightChange = useCallback((h: number) => setUiState(s => ({ ...s, timelineHeight: h })), [setUiState]);
-    const handleTimelineToggle = useCallback(() => setUiState(s => ({ ...s, timelineHeight: s.timelineHeight > 37 ? 37 : 300 })), [setUiState]);
+    const handleShowGridChange = useCallback(
+        (val: boolean) => setUiState((s) => ({ ...s, showGrid: val })),
+        [setUiState],
+    );
+    const handleShowStageUIChange = useCallback(
+        (val: boolean) => setUiState((s) => ({ ...s, showStageUI: val })),
+        [setUiState],
+    );
+    const handleAlignGridToViewChange = useCallback(
+        (val: boolean) => setUiState((s) => ({ ...s, alignGridToView: val })),
+        [setUiState],
+    );
+    const handleExplodeToggle = useCallback(() => setUiState((s) => ({ ...s, isExploded: !s.isExploded })), [setUiState]);
+    const handleEngineConfigChange = useCallback(
+        (newConfig: EngineConfig) => commitChanges({ engineConfig: newConfig }),
+        [commitChanges],
+    );
+    const handleCodePanelHeightChange = useCallback(
+        (h: number) => setUiState((s) => ({ ...s, codePanelHeight: h })),
+        [setUiState],
+    );
+    const handleTimelineHeightChange = useCallback(
+        (h: number) => setUiState((s) => ({ ...s, timelineHeight: h })),
+        [setUiState],
+    );
+    const handleTimelineToggle = useCallback(
+        () => setUiState((s) => ({ ...s, timelineHeight: s.timelineHeight > 37 ? 37 : 300 })),
+        [setUiState],
+    );
 
-    const handleDeleteKeyframe = useCallback((property: keyof TransformState, keyframeId: string) => {
-        const newTrack = (animationDataRef.current[property] || []).filter(kf => kf.id !== keyframeId);
-        const newAnimationData = { ...animationDataRef.current };
-        if (newTrack.length === 0) {
-            delete newAnimationData[property];
-        } else {
-            newAnimationData[property] = newTrack;
-        }
-        commitChanges({ animationData: newAnimationData });
-    }, [commitChanges]);
+    const handleDeleteKeyframe = useCallback(
+        (property: keyof TransformState, keyframeId: string) => {
+            const newTrack = (animationDataRef.current[property] || []).filter((kf) => kf.id !== keyframeId);
+            const newAnimationData = { ...animationDataRef.current };
+            if (newTrack.length === 0) {
+                delete newAnimationData[property];
+            } else {
+                newAnimationData[property] = newTrack;
+            }
+            commitChanges({ animationData: newAnimationData });
+        },
+        [commitChanges],
+    );
 
-    const handleUpdateKeyframe = useCallback((property: keyof TransformState, keyframeId: string, newValues: Partial<Keyframe>) => {
-        const newTrack = (animationDataRef.current[property] || []).map(kf => kf.id === keyframeId ? { ...kf, ...newValues } : kf);
-        commitChanges({ animationData: { ...animationDataRef.current, [property]: newTrack } });
-    }, [commitChanges]);
+    const handleUpdateKeyframe = useCallback(
+        (property: keyof TransformState, keyframeId: string, newValues: Partial<Keyframe>) => {
+            const newTrack = (animationDataRef.current[property] || []).map((kf) =>
+                kf.id === keyframeId ? { ...kf, ...newValues } : kf,
+            );
+            commitChanges({ animationData: { ...animationDataRef.current, [property]: newTrack } });
+        },
+        [commitChanges],
+    );
 
-    const handleUpdateMultipleKeyframes = useCallback((updates: Array<{ property: keyof TransformState; keyframeId: string; newValues: Partial<Keyframe> }>) => {
-        const newAnimationData = { ...animationDataRef.current };
-        updates.forEach(({ property, keyframeId, newValues }) => {
-            const newTrack = (newAnimationData[property] || []).map(kf => kf.id === keyframeId ? { ...kf, ...newValues } : kf);
-            newAnimationData[property] = newTrack;
-        });
-        commitChanges({ animationData: newAnimationData });
-    }, [commitChanges]);
-
-    const handleTrackControlChange = useCallback((property: keyof TransformState, control: 'solo' | 'mute') => {
-        const currentTrackControls = currentStateRef.current.trackControls;
-        const newTrackControls = { ...currentTrackControls };
-        const current = newTrackControls[property] || { solo: false, mute: false };
-
-        if (control === 'solo') {
-            const isSoloing = !current.solo;
-            Object.keys(newTrackControls).forEach(k => {
-                if (newTrackControls[k as keyof TransformState]) {
-                    newTrackControls[k as keyof TransformState]!.solo = false;
-                }
+    const handleUpdateMultipleKeyframes = useCallback(
+        (updates: Array<{ property: keyof TransformState; keyframeId: string; newValues: Partial<Keyframe> }>) => {
+            const newAnimationData = { ...animationDataRef.current };
+            updates.forEach(({ property, keyframeId, newValues }) => {
+                const newTrack = (newAnimationData[property] || []).map((kf) =>
+                    kf.id === keyframeId ? { ...kf, ...newValues } : kf,
+                );
+                newAnimationData[property] = newTrack;
             });
-            newTrackControls[property] = { solo: isSoloing, mute: false };
-        } else {
-            newTrackControls[property] = { ...current, mute: !current.mute, solo: false };
-        }
-        commitChanges({ trackControls: newTrackControls });
-    }, [commitChanges]);
+            commitChanges({ animationData: newAnimationData });
+        },
+        [commitChanges],
+    );
+
+    const handleTrackControlChange = useCallback(
+        (property: keyof TransformState, control: 'solo' | 'mute') => {
+            const currentTrackControls = currentStateRef.current.trackControls;
+            const newTrackControls = { ...currentTrackControls };
+            const current = newTrackControls[property] || { solo: false, mute: false };
+
+            if (control === 'solo') {
+                const isSoloing = !current.solo;
+                Object.keys(newTrackControls).forEach((k) => {
+                    if (newTrackControls[k as keyof TransformState]) {
+                        newTrackControls[k as keyof TransformState]!.solo = false;
+                    }
+                });
+                newTrackControls[property] = { solo: isSoloing, mute: false };
+            } else {
+                newTrackControls[property] = { ...current, mute: !current.mute, solo: false };
+            }
+            commitChanges({ trackControls: newTrackControls });
+        },
+        [commitChanges],
+    );
 
     return (
         // Applied deep radial gradient here for the main background

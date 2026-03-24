@@ -17,8 +17,8 @@ export default function StageStyleSelector({ selectedStyle, onStyleChange }: Sta
             <button
               onClick={() => onStyleChange(name)}
               className={`flex items-center justify-center rounded-md transition-colors aspect-square ${
-                selectedStyle === name 
-                  ? 'bg-indigo-500/30 text-indigo-300 ring-1 ring-indigo-500' 
+                selectedStyle === name
+                  ? 'bg-indigo-500/30 text-indigo-300 ring-1 ring-indigo-500'
                   : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200'
               }`}
             >

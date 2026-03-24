@@ -1,7 +1,7 @@
 /**
  * @vitest-environment jsdom
  */
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vite-plus/test';
 import { renderHook, act } from '@testing-library/react';
 import { useHistoryManager, HistoryState, defaultEngineConfig } from '../hooks/useHistoryManager';
 import { defaultTransformState } from '../types';
@@ -11,9 +11,15 @@ const localStorageMock = (() => {
   let store: Record<string, string> = {};
   return {
     getItem: vi.fn((key: string) => store[key] ?? null),
-    setItem: vi.fn((key: string, value: string) => { store[key] = value; }),
-    removeItem: vi.fn((key: string) => { delete store[key]; }),
-    clear: vi.fn(() => { store = {}; }),
+    setItem: vi.fn((key: string, value: string) => {
+      store[key] = value;
+    }),
+    removeItem: vi.fn((key: string) => {
+      delete store[key];
+    }),
+    clear: vi.fn(() => {
+      store = {};
+    }),
   };
 })();
 
@@ -76,9 +82,15 @@ describe('useHistoryManager', () => {
       transforms: { ...defaultTransformState, rotateY: 45 },
     });
 
-    act(() => { result.current.saveStateToHistory(newState); });
-    act(() => { result.current.handleUndo(); });
-    act(() => { result.current.handleRedo(); });
+    act(() => {
+      result.current.saveStateToHistory(newState);
+    });
+    act(() => {
+      result.current.handleUndo();
+    });
+    act(() => {
+      result.current.handleRedo();
+    });
 
     expect(result.current.currentState.transforms.rotateY).toBe(45);
     expect(result.current.canRedo).toBe(false);
@@ -90,21 +102,31 @@ describe('useHistoryManager', () => {
     const state1 = makeState({ transforms: { ...defaultTransformState, translateX: 10 } });
     const state2 = makeState({ transforms: { ...defaultTransformState, translateX: 20 } });
 
-    act(() => { result.current.saveStateToHistory(state1); });
-    act(() => { result.current.saveStateToHistory(state2); });
-    act(() => { result.current.handleUndo(); });
+    act(() => {
+      result.current.saveStateToHistory(state1);
+    });
+    act(() => {
+      result.current.saveStateToHistory(state2);
+    });
+    act(() => {
+      result.current.handleUndo();
+    });
 
     expect(result.current.currentState.transforms.translateX).toBe(10);
     expect(result.current.canRedo).toBe(true);
 
     const state3 = makeState({ transforms: { ...defaultTransformState, translateX: 30 } });
-    act(() => { result.current.saveStateToHistory(state3); });
+    act(() => {
+      result.current.saveStateToHistory(state3);
+    });
 
     expect(result.current.currentState.transforms.translateX).toBe(30);
     expect(result.current.canRedo).toBe(false);
 
     // Undo goes to state1, not state2 (state2 was discarded)
-    act(() => { result.current.handleUndo(); });
+    act(() => {
+      result.current.handleUndo();
+    });
     expect(result.current.currentState.transforms.translateX).toBe(10);
   });
 
@@ -113,9 +135,7 @@ describe('useHistoryManager', () => {
 
     for (let i = 0; i < 55; i++) {
       act(() => {
-        result.current.saveStateToHistory(
-          makeState({ transforms: { ...defaultTransformState, translateX: i } })
-        );
+        result.current.saveStateToHistory(makeState({ transforms: { ...defaultTransformState, translateX: i } }));
       });
     }
 
@@ -123,7 +143,9 @@ describe('useHistoryManager', () => {
     // We can test by undoing many times and counting
     let undoCount = 0;
     while (result.current.canUndo) {
-      act(() => { result.current.handleUndo(); });
+      act(() => {
+        result.current.handleUndo();
+      });
       undoCount++;
     }
 
@@ -134,9 +156,7 @@ describe('useHistoryManager', () => {
     const { result } = renderHook(() => useHistoryManager());
 
     act(() => {
-      result.current.saveStateToHistory(
-        makeState({ transforms: { ...defaultTransformState, scaleX: 5 } })
-      );
+      result.current.saveStateToHistory(makeState({ transforms: { ...defaultTransformState, scaleX: 5 } }));
     });
 
     act(() => {
@@ -172,10 +192,7 @@ describe('useHistoryManager', () => {
 
   it('persists current state to localStorage', () => {
     renderHook(() => useHistoryManager());
-    expect(localStorageMock.setItem).toHaveBeenCalledWith(
-      'css3d-playground-state',
-      expect.any(String)
-    );
+    expect(localStorageMock.setItem).toHaveBeenCalledWith('css3d-playground-state', expect.any(String));
   });
 
   it('loads from localStorage on init', () => {

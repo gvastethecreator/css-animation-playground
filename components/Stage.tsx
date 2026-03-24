@@ -1,6 +1,14 @@
-
 import React, { useRef, useState, useEffect, lazy, Suspense } from 'react';
-import { TransformState, StageElement, StageStyle, StageStyleName, AnimationData, TrackControlState, AnimationEngine, EasingName, GizmoMode } from '../types';
+import {
+  TransformState,
+  StageElement,
+  StageStyle,
+  AnimationData,
+  TrackControlState,
+  AnimationEngine,
+  EasingValue,
+  GizmoMode,
+} from '../types';
 import CameraInfo from './CameraInfo';
 import CameraControls from './CameraControls';
 import FrameCounter from './FrameCounter';
@@ -64,7 +72,7 @@ interface StageProps {
   onExplodeToggle: () => void;
   animationEngine: AnimationEngine;
   willChangeString: string;
-  globalEasing: EasingName | string;
+  globalEasing: EasingValue;
   gizmoMode: GizmoMode;
   onGizmoModeChange: (mode: GizmoMode) => void;
   onElementClick: () => void;
@@ -115,9 +123,7 @@ function Stage({
   onGizmoModeChange,
   onElementClick,
 }: StageProps) {
-  const {
-    perspective, perspectiveOriginX, perspectiveOriginY,
-  } = transforms;
+  const { perspective, perspectiveOriginX, perspectiveOriginY } = transforms;
 
   const stageContainerRef = useRef<HTMLDivElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -133,9 +139,9 @@ function Stage({
   const handleToggleFullscreen = () => {
     if (!stageContainerRef.current) return;
     if (isFullscreen) {
-      document.exitFullscreen();
+      void document.exitFullscreen();
     } else {
-      stageContainerRef.current.requestFullscreen();
+      void stageContainerRef.current.requestFullscreen();
     }
   };
 
@@ -148,10 +154,12 @@ function Stage({
     transform: `translate3d(${scene.translateX}px, ${scene.translateY}px, ${scene.translateZ}px)`,
   };
 
-  const gridContainerStyle: React.CSSProperties = alignGridToView ? {
-    transform: `rotateX(${transforms.rotateX}deg) rotateY(${transforms.rotateY}deg) rotateZ(${transforms.rotateZ}deg)`,
-    transformOrigin: `${transforms.transformOriginX}% ${transforms.transformOriginY}% ${transforms.transformOriginZ}px`,
-  } : {};
+  const gridContainerStyle: React.CSSProperties = alignGridToView
+    ? {
+      transform: `rotateX(${transforms.rotateX}deg) rotateY(${transforms.rotateY}deg) rotateZ(${transforms.rotateZ}deg)`,
+      transformOrigin: `${transforms.transformOriginX}% ${transforms.transformOriginY}% ${transforms.transformOriginZ}px`,
+    }
+    : {};
 
   const gridAndGuidelinesClass = isAdjusting ? 'opacity-50 blur-[1px]' : 'opacity-100 blur-none';
 
@@ -168,14 +176,20 @@ function Stage({
     };
 
     switch (stageElement) {
-      case 'card': return <StageCard {...cssElementProps} style={stageStyle.card} imageDataUrl={imageDataUrl} />;
-      case 'cube': return <StageCube {...cssElementProps} style={stageStyle.cube} />;
-      case 'text': return <StageText {...cssElementProps} style={stageStyle.text} />;
-      case 'image': return <StageImage {...cssElementProps} imageDataUrl={imageDataUrl} onFileChange={onFileChange} />;
-      case 'model': return <StageModel {...cssElementProps} modelDataUrl={modelDataUrl} onFileChange={onFileChange} />;
-      default: return <StageCard {...cssElementProps} style={stageStyle.card} imageDataUrl={imageDataUrl} />;
+      case 'card':
+        return <StageCard {...cssElementProps} style={stageStyle.card} imageDataUrl={imageDataUrl} />;
+      case 'cube':
+        return <StageCube {...cssElementProps} style={stageStyle.cube} />;
+      case 'text':
+        return <StageText {...cssElementProps} style={stageStyle.text} />;
+      case 'image':
+        return <StageImage {...cssElementProps} imageDataUrl={imageDataUrl} onFileChange={onFileChange} />;
+      case 'model':
+        return <StageModel {...cssElementProps} modelDataUrl={modelDataUrl} onFileChange={onFileChange} />;
+      default:
+        return <StageCard {...cssElementProps} style={stageStyle.card} imageDataUrl={imageDataUrl} />;
     }
-  }
+  };
 
   const panelTitle = `${stageElement.charAt(0).toUpperCase() + stageElement.slice(1)} Controls`;
 
@@ -192,7 +206,7 @@ function Stage({
     >
       <div className="absolute top-4 left-4 z-20 flex items-start gap-2">
         <div className="flex items-center gap-2 p-1 bg-zinc-900/80 backdrop-blur-sm rounded-lg shadow-lg">
-          <Tooltip content={showStageUI ? "Hide UI" : "Show UI"}>
+          <Tooltip content={showStageUI ? 'Hide UI' : 'Show UI'}>
             <button
               onClick={() => onShowStageUIChange(!showStageUI)}
               className={`w-7 h-7 flex items-center justify-center rounded-md transition-all ${!showStageUI ? 'bg-indigo-500/20 text-indigo-300' : 'text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'}`}
@@ -200,7 +214,7 @@ function Stage({
               {showStageUI ? <EyeOff size={18} strokeWidth={2} /> : <Eye size={18} strokeWidth={2} />}
             </button>
           </Tooltip>
-          <Tooltip content={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}>
+          <Tooltip content={isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}>
             <button
               onClick={handleToggleFullscreen}
               className="w-7 h-7 flex items-center justify-center rounded-md transition-all text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"
@@ -261,11 +275,7 @@ function Stage({
       {showStageUI && (
         <>
           <FrameCounter currentTime={currentTime} fps={fps} />
-          <CameraInfo
-            translateX={scene.translateX}
-            translateY={scene.translateY}
-            translateZ={scene.translateZ}
-          />
+          <CameraInfo translateX={scene.translateX} translateY={scene.translateY} translateZ={scene.translateZ} />
           <LiveAnimationInfo
             isPlaying={isPlaying}
             transforms={transforms}
@@ -292,7 +302,13 @@ function Stage({
       )}
 
       {animationEngine === 'threejs' ? (
-        <Suspense fallback={<div className="absolute inset-0 flex items-center justify-center text-zinc-500 text-sm">Loading 3D engine…</div>}>
+        <Suspense
+          fallback={
+            <div className="absolute inset-0 flex items-center justify-center text-zinc-500 text-sm">
+              Loading 3D engine…
+            </div>
+          }
+        >
           <ThreeCanvas
             transforms={transforms}
             scene={scene}
@@ -320,7 +336,9 @@ function Stage({
           >
             {/* Perspective Origin Marker */}
             {showStageUI && (
-              <Tooltip content={`Perspective Origin: ${perspectiveOriginX.toFixed(0)}%, ${perspectiveOriginY.toFixed(0)}%`}>
+              <Tooltip
+                content={`Perspective Origin: ${perspectiveOriginX.toFixed(0)}%, ${perspectiveOriginY.toFixed(0)}%`}
+              >
                 <div
                   className="absolute z-50 w-4 h-4 rounded-full bg-cyan-500/50 border-2 border-cyan-400 pointer-events-none"
                   style={{
@@ -335,7 +353,7 @@ function Stage({
               </Tooltip>
             )}
             <div
-              className={`relative preserve-3d pointer-events-auto w-0 h-0 ${(!isDragging && !isAdjusting) ? 'transition-transform duration-500 ease-in-out' : ''}`}
+              className={`relative preserve-3d pointer-events-auto w-0 h-0 ${!isDragging && !isAdjusting ? 'transition-transform duration-500 ease-in-out' : ''}`}
               style={sceneStyle}
             >
               {showGrid && (
@@ -354,11 +372,15 @@ function Stage({
                                 `,
                       backgroundSize: '50px 50px',
                       maskImage: 'radial-gradient(circle at center, black 0%, transparent 55%)',
-                      WebkitMaskImage: 'radial-gradient(circle at center, black 0%, transparent 55%)'
+                      WebkitMaskImage: 'radial-gradient(circle at center, black 0%, transparent 55%)',
                     }}
                   />
-                  <div className={`absolute h-[2px] w-[2000px] bg-red-500/80 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ${gridAndGuidelinesClass}`} />
-                  <div className={`absolute w-[2px] h-[2000px] bg-green-500/80 left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-300 ${gridAndGuidelinesClass}`} />
+                  <div
+                    className={`absolute left-1/2 top-1/2 h-0.5 w-500 -translate-x-1/2 -translate-y-1/2 bg-red-500/80 transition-all duration-300 ${gridAndGuidelinesClass}`}
+                  />
+                  <div
+                    className={`absolute left-1/2 top-1/2 h-500 w-0.5 -translate-x-1/2 -translate-y-1/2 bg-green-500/80 transition-all duration-300 ${gridAndGuidelinesClass}`}
+                  />
                 </div>
               )}
               {renderDOMStageElement()}

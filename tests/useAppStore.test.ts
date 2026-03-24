@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vite-plus/test';
 import { useAppStore } from '../store/useAppStore';
 
 describe('useAppStore', () => {
@@ -25,7 +25,7 @@ describe('useAppStore', () => {
     });
 
     it('updates with function updater', () => {
-      useAppStore.getState().setUiState(prev => ({ isExploded: !prev.isExploded }));
+      useAppStore.getState().setUiState((prev) => ({ isExploded: !prev.isExploded }));
       expect(useAppStore.getState().uiState.isExploded).toBe(true);
     });
   });
@@ -45,7 +45,7 @@ describe('useAppStore', () => {
     });
 
     it('updates with function updater', () => {
-      useAppStore.getState().setScene(prev => ({ translateZ: prev.translateZ + 50 }));
+      useAppStore.getState().setScene((prev) => ({ translateZ: prev.translateZ + 50 }));
       expect(useAppStore.getState().scene.translateZ).toBe(50);
     });
   });

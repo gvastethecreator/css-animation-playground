@@ -2,17 +2,25 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "🚀 Dev Server",
-            "type": "npm",
-            "script": "dev",
+            "label": "⚡ Dev",
+            "type": "shell",
+            "command": "bun",
+            "args": [
+                "run",
+                "dev"
+            ],
             "problemMatcher": [],
             "isBackground": true,
             "group": "build"
         },
         {
             "label": "📦 Build",
-            "type": "npm",
-            "script": "build",
+            "type": "shell",
+            "command": "bun",
+            "args": [
+                "run",
+                "build"
+            ],
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -22,54 +30,98 @@
             ]
         },
         {
-            "label": "✅ Type Check",
-            "type": "npm",
-            "script": "typecheck",
+            "label": "🩺 Check",
+            "type": "shell",
+            "command": "bun",
+            "args": [
+                "run",
+                "check"
+            ],
             "problemMatcher": [
                 "$tsc"
             ]
         },
         {
-            "label": "🔍 Lint",
-            "type": "npm",
-            "script": "lint",
+            "label": "✅ Type",
+            "type": "shell",
+            "command": "bun",
+            "args": [
+                "run",
+                "typecheck"
+            ],
+            "problemMatcher": [
+                "$tsc"
+            ]
+        },
+        {
+            "label": "🔎 Lint",
+            "type": "shell",
+            "command": "bun",
+            "args": [
+                "run",
+                "lint"
+            ],
             "problemMatcher": []
         },
         {
-            "label": "🎨 Format",
-            "type": "npm",
-            "script": "format",
+            "label": "✨ Format",
+            "type": "shell",
+            "command": "bun",
+            "args": [
+                "run",
+                "format"
+            ],
             "problemMatcher": []
         },
         {
             "label": "🧪 Test",
-            "type": "npm",
-            "script": "test",
+            "type": "shell",
+            "command": "bun",
+            "args": [
+                "run",
+                "test"
+            ],
             "problemMatcher": []
         },
         {
-            "label": "🧪 Test Watch",
-            "type": "npm",
-            "script": "test:watch",
+            "label": "👀 Watch",
+            "type": "shell",
+            "command": "bun",
+            "args": [
+                "run",
+                "test:watch"
+            ],
             "problemMatcher": [],
             "isBackground": true
         },
         {
-            "label": "📊 Coverage",
-            "type": "npm",
-            "script": "test:coverage",
+            "label": "📊 Cover",
+            "type": "shell",
+            "command": "bun",
+            "args": [
+                "run",
+                "test:coverage"
+            ],
             "problemMatcher": []
         },
         {
             "label": "🧹 Clean",
-            "type": "npm",
-            "script": "clean",
+            "type": "shell",
+            "command": "bun",
+            "args": [
+                "run",
+                "clean"
+            ],
             "problemMatcher": []
         },
         {
-            "label": "👁️ Preview",
-            "type": "npm",
-            "script": "preview",
+            "label": "👁 Preview",
+            "type": "shell",
+            "command": "bun",
+            "args": [
+                "run",
+                "preview"
+            ],
             "problemMatcher": []
         }
     ]

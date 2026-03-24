@@ -19,11 +19,11 @@ export function useHotkeys(hotkeyMap: HotkeyMap, deps: unknown[] = []) {
 
       const map = hotkeyMapRef.current;
       const keys = Object.keys(map);
-      
+
       for (const key of keys) {
         const parts = key.toLowerCase().split('+');
         const eventKey = event.key.toLowerCase();
-        
+
         const requiredKey = parts.pop();
         if (requiredKey !== eventKey) continue;
 
@@ -32,11 +32,12 @@ export function useHotkeys(hotkeyMap: HotkeyMap, deps: unknown[] = []) {
         const shift = parts.includes('shift');
         const alt = parts.includes('alt');
 
-        if (meta === (event.metaKey || event.ctrlKey) &&
-            (meta || ctrl === event.ctrlKey) &&
-            shift === event.shiftKey &&
-            alt === event.altKey) {
-          
+        if (
+          meta === (event.metaKey || event.ctrlKey) &&
+          (meta || ctrl === event.ctrlKey) &&
+          shift === event.shiftKey &&
+          alt === event.altKey
+        ) {
           event.preventDefault();
           map[key](event);
           return;

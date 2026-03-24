@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import Tooltip from './Tooltip';
@@ -27,12 +26,10 @@ export default function ControlGroup({ title, children, defaultOpen = true }: Co
           {title}
         </button>
       </Tooltip>
-      <div 
+      <div
         className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}
       >
-        <div className="px-3 pb-3 pt-1.5 space-y-3">
-            {children}
-        </div>
+        <div className="px-3 pb-3 pt-1.5 space-y-3">{children}</div>
       </div>
     </div>
   );

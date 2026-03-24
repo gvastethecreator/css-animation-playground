@@ -18,6 +18,7 @@ lerna-debug.log*
 *.local
 .env
 .env.*
+!.env.example
 
 # Lock files (we use bun)
 package-lock.json
@@ -46,6 +47,12 @@ Thumbs.db
 # Test coverage
 coverage/
 *.lcov
+
+# Tooling caches
+.cache/
+.vite/
+.vite-plus/
+.vp/
 
 # Misc
 *.tsbuildinfo

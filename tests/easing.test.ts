@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from 'vite-plus/test';
 import { easingFunctions, getEasingFunction, EASING_CSS_MAP } from '../easing';
 
 describe('easingFunctions', () => {

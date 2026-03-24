@@ -8,9 +8,9 @@ interface ViewPresetControlsProps {
 
 export default function ViewPresetControls({ onViewPresetClick }: ViewPresetControlsProps) {
   return (
-    <div 
-        className="flex items-center gap-0.5 p-0.5 bg-zinc-900/80 backdrop-blur-sm rounded-lg shadow-lg"
-        onMouseDown={e => e.stopPropagation()}
+    <div
+      className="flex items-center gap-0.5 p-0.5 bg-zinc-900/80 backdrop-blur-sm rounded-lg shadow-lg"
+      onMouseDown={(e) => e.stopPropagation()}
     >
       {(Object.keys(VIEW_PRESETS) as PresetName[]).map((preset) => (
         <Tooltip key={preset} content={`Set view to ${preset}`}>
