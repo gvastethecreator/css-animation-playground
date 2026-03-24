@@ -1,5 +1,5 @@
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, lazy, Suspense } from 'react';
 import { TransformState, StageElement, StageStyle, StageStyleName, AnimationData, TrackControlState, AnimationEngine, EasingName, GizmoMode } from '../types';
 import CameraInfo from './CameraInfo';
 import CameraControls from './CameraControls';
@@ -15,7 +15,7 @@ import { Layers, Move3d, Eye, EyeOff, Expand, Minimize } from 'lucide-react';
 import LiveAnimationInfo from './LiveAnimationInfo';
 import FloatingPanel from './FloatingPanel';
 import ElementControls from './ElementControls';
-import ThreeCanvas from './ThreeCanvas';
+const ThreeCanvas = lazy(() => import('./ThreeCanvas'));
 import Tooltip from './Tooltip';
 import TransformGizmoToolbar from './TransformGizmoToolbar';
 import CSSGizmo from './CSSGizmo';
@@ -292,23 +292,25 @@ function Stage({
       )}
 
       {animationEngine === 'threejs' ? (
-        <ThreeCanvas
-          transforms={transforms}
-          scene={scene}
-          stageElement={stageElement}
-          modelDataUrl={modelDataUrl}
-          imageDataUrl={imageDataUrl}
-          stageStyle={stageStyle}
-          showGrid={showGrid}
-          alignGridToView={alignGridToView}
-          isExploded={isExploded}
-          onFileChange={onFileChange}
-          gizmoMode={gizmoMode}
-          onChange={onChange}
-          onAdjustStart={onAdjustStart}
-          onAdjustEnd={onAdjustEnd}
-          onElementClick={onElementClick}
-        />
+        <Suspense fallback={<div className="absolute inset-0 flex items-center justify-center text-zinc-500 text-sm">Loading 3D engine…</div>}>
+          <ThreeCanvas
+            transforms={transforms}
+            scene={scene}
+            stageElement={stageElement}
+            modelDataUrl={modelDataUrl}
+            imageDataUrl={imageDataUrl}
+            stageStyle={stageStyle}
+            showGrid={showGrid}
+            alignGridToView={alignGridToView}
+            isExploded={isExploded}
+            onFileChange={onFileChange}
+            gizmoMode={gizmoMode}
+            onChange={onChange}
+            onAdjustStart={onAdjustStart}
+            onAdjustEnd={onAdjustEnd}
+            onElementClick={onElementClick}
+          />
+        </Suspense>
       ) : (
         <>
           <div className="absolute inset-0 pointer-events-none" style={{ background: stageStyle.stage.background }} />
