@@ -1,5 +1,5 @@
-const RUNTIME_ISSUES_KEY = 'css3d-playground:runtime-issues';
-const RUNTIME_EVENT_NAME = 'css3d-playground:runtime-issue';
+const RUNTIME_ISSUES_KEY = "css3d-playground:runtime-issues";
+const RUNTIME_EVENT_NAME = "css3d-playground:runtime-issue";
 
 interface RuntimeIssue {
   scope: string;
@@ -10,17 +10,17 @@ interface RuntimeIssue {
 
 export function getErrorMessage(error: unknown): string {
   if (error instanceof Error) return error.message;
-  if (typeof error === 'string') return error;
+  if (typeof error === "string") return error;
 
   try {
     return JSON.stringify(error);
   } catch {
-    return 'Unknown error';
+    return "Unknown error";
   }
 }
 
 export function reportRuntimeIssue(scope: string, error: unknown, message: string) {
-  if (typeof window === 'undefined') return;
+  if (typeof window === "undefined") return;
 
   const issue: RuntimeIssue = {
     scope,

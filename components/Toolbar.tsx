@@ -1,7 +1,7 @@
-import React, { useState, useRef } from 'react';
-import { PresetAnimationName } from '../types';
-import AnimationPresetPopover from './AnimationPresetPopover';
-import { Upload, Dices, Loader, Sparkles, Trash2 } from 'lucide-react';
+import React, { useState, useRef } from "react";
+import { PresetAnimationName } from "../types";
+import AnimationPresetPopover from "./AnimationPresetPopover";
+import { Upload, Dices, Loader, Sparkles, Trash2 } from "lucide-react";
 
 interface ToolbarProps {
   onAnimationPresetClick: (preset: PresetAnimationName) => void;
@@ -84,7 +84,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
           ) : (
             <Dices size={16} strokeWidth={2} />
           )}
-          {isLoadingModel ? 'Loading...' : 'Sample'}
+          {isLoadingModel ? "Loading..." : "Sample"}
         </button>
         {hasMedia && (
           <button

@@ -1,128 +1,89 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "⚡ Dev",
-            "type": "shell",
-            "command": "bun",
-            "args": [
-                "run",
-                "dev"
-            ],
-            "problemMatcher": [],
-            "isBackground": true,
-            "group": "build"
-        },
-        {
-            "label": "📦 Build",
-            "type": "shell",
-            "command": "bun",
-            "args": [
-                "run",
-                "build"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": [
-                "$tsc"
-            ]
-        },
-        {
-            "label": "🩺 Check",
-            "type": "shell",
-            "command": "bun",
-            "args": [
-                "run",
-                "check"
-            ],
-            "problemMatcher": [
-                "$tsc"
-            ]
-        },
-        {
-            "label": "✅ Type",
-            "type": "shell",
-            "command": "bun",
-            "args": [
-                "run",
-                "typecheck"
-            ],
-            "problemMatcher": [
-                "$tsc"
-            ]
-        },
-        {
-            "label": "🔎 Lint",
-            "type": "shell",
-            "command": "bun",
-            "args": [
-                "run",
-                "lint"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label": "✨ Format",
-            "type": "shell",
-            "command": "bun",
-            "args": [
-                "run",
-                "format"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label": "🧪 Test",
-            "type": "shell",
-            "command": "bun",
-            "args": [
-                "run",
-                "test"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label": "👀 Watch",
-            "type": "shell",
-            "command": "bun",
-            "args": [
-                "run",
-                "test:watch"
-            ],
-            "problemMatcher": [],
-            "isBackground": true
-        },
-        {
-            "label": "📊 Cover",
-            "type": "shell",
-            "command": "bun",
-            "args": [
-                "run",
-                "test:coverage"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label": "🧹 Clean",
-            "type": "shell",
-            "command": "bun",
-            "args": [
-                "run",
-                "clean"
-            ],
-            "problemMatcher": []
-        },
-        {
-            "label": "👁 Preview",
-            "type": "shell",
-            "command": "bun",
-            "args": [
-                "run",
-                "preview"
-            ],
-            "problemMatcher": []
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "⚡ Dev",
+      "type": "shell",
+      "command": "bun",
+      "args": ["run", "dev"],
+      "problemMatcher": [],
+      "isBackground": true,
+      "group": "build"
+    },
+    {
+      "label": "📦 Build",
+      "type": "shell",
+      "command": "bun",
+      "args": ["run", "build"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "🩺 Check",
+      "type": "shell",
+      "command": "bun",
+      "args": ["run", "check"],
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "✅ Type",
+      "type": "shell",
+      "command": "bun",
+      "args": ["run", "typecheck"],
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "🔎 Lint",
+      "type": "shell",
+      "command": "bun",
+      "args": ["run", "lint"],
+      "problemMatcher": []
+    },
+    {
+      "label": "✨ Format",
+      "type": "shell",
+      "command": "bun",
+      "args": ["run", "format"],
+      "problemMatcher": []
+    },
+    {
+      "label": "🧪 Test",
+      "type": "shell",
+      "command": "bun",
+      "args": ["run", "test"],
+      "problemMatcher": []
+    },
+    {
+      "label": "👀 Watch",
+      "type": "shell",
+      "command": "bun",
+      "args": ["run", "test:watch"],
+      "problemMatcher": [],
+      "isBackground": true
+    },
+    {
+      "label": "📊 Cover",
+      "type": "shell",
+      "command": "bun",
+      "args": ["run", "test:coverage"],
+      "problemMatcher": []
+    },
+    {
+      "label": "🧹 Clean",
+      "type": "shell",
+      "command": "bun",
+      "args": ["run", "clean"],
+      "problemMatcher": []
+    },
+    {
+      "label": "👁 Preview",
+      "type": "shell",
+      "command": "bun",
+      "args": ["run", "preview"],
+      "problemMatcher": []
+    }
+  ]
 }

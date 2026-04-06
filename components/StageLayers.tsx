@@ -1,7 +1,7 @@
-import React from 'react';
-import { TransformState } from '../types';
-import { getTransformString, getFilterString } from '../utils/styleUtils';
-import Tooltip from './Tooltip';
+import React from "react";
+import { TransformState } from "../types";
+import { getTransformString, getFilterString } from "../utils/styleUtils";
+import Tooltip from "./Tooltip";
 
 interface StageLayersProps {
   transforms: TransformState;
@@ -24,7 +24,7 @@ const StageLayers = React.forwardRef<HTMLDivElement, StageLayersProps>(
       isAdjusting,
       isPlaying,
       children,
-      className = '',
+      className = "",
       layerGap = 20,
       showStageUI,
       willChangeString,
@@ -37,13 +37,15 @@ const StageLayers = React.forwardRef<HTMLDivElement, StageLayersProps>(
       transformOrigin: `${transforms.transformOriginX}% ${transforms.transformOriginY}% ${transforms.transformOriginZ}px`,
       opacity: transforms.opacityEnabled ? transforms.opacity : 1,
       filter: getFilterString(transforms),
-      borderRadius: transforms.borderRadiusEnabled ? `${transforms.borderRadius}px` : '0px',
-      willChange: isPlaying ? willChangeString : 'auto',
+      borderRadius: transforms.borderRadiusEnabled ? `${transforms.borderRadius}px` : "0px",
+      willChange: isPlaying ? willChangeString : "auto",
     };
 
     const transitionClass =
-      !isAdjusting && !isPlaying ? 'transition-[transform,filter,opacity,border-radius] duration-300 ease-out' : '';
-    const explodeTransitionClass = 'transition-transform duration-500 ease-in-out';
+      !isAdjusting && !isPlaying
+        ? "transition-[transform,filter,opacity,border-radius] duration-300 ease-out"
+        : "";
+    const explodeTransitionClass = "transition-transform duration-500 ease-in-out";
 
     const layers = React.Children.toArray(children);
     const midIndex = Math.floor(layers.length / 2);

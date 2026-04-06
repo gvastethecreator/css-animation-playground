@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef, memo } from 'react';
-import { EasingName, EasingValue } from '../types';
-import { easingFunctions, EASING_CSS_MAP } from '../easing';
+import React, { useState, useEffect, useRef, memo } from "react";
+import { EasingName, EasingValue } from "../types";
+import { easingFunctions, EASING_CSS_MAP } from "../easing";
 
 interface BezierEditorProps {
   easing: EasingValue;
@@ -10,7 +10,7 @@ interface BezierEditorProps {
 
 const parseBezier = (easing: string): [number, number, number, number] => {
   // 1. Direct match for a cubic-bezier string
-  if (typeof easing === 'string' && easing.startsWith('cubic-bezier')) {
+  if (typeof easing === "string" && easing.startsWith("cubic-bezier")) {
     const match = easing.match(/-?[\d.]+/g);
     if (match && match.length === 4) {
       return match.map(Number) as [number, number, number, number];
@@ -21,7 +21,7 @@ const parseBezier = (easing: string): [number, number, number, number] => {
   const cssValue = EASING_CSS_MAP[easing as EasingName];
   if (cssValue) {
     // 3. If the mapped value is a cubic-bezier string, parse it directly
-    if (cssValue.startsWith('cubic-bezier')) {
+    if (cssValue.startsWith("cubic-bezier")) {
       const match = cssValue.match(/-?[\d.]+/g);
       if (match && match.length === 4) {
         return match.map(Number) as [number, number, number, number];
@@ -30,9 +30,9 @@ const parseBezier = (easing: string): [number, number, number, number] => {
     // 4. Handle standard CSS keywords by mapping them to their bezier equivalents
     const keywordMap: Record<string, [number, number, number, number]> = {
       ease: [0.25, 0.1, 0.25, 1.0],
-      'ease-in': [0.42, 0, 1.0, 1.0],
-      'ease-out': [0, 0, 0.58, 1.0],
-      'ease-in-out': [0.42, 0, 0.58, 1.0],
+      "ease-in": [0.42, 0, 1.0, 1.0],
+      "ease-out": [0, 0, 0.58, 1.0],
+      "ease-in-out": [0.42, 0, 0.58, 1.0],
       linear: [0, 0, 1, 1],
     };
     if (keywordMap[cssValue]) {
@@ -48,7 +48,7 @@ const BezierEditor = memo(({ easing, onChange, color }: BezierEditorProps) => {
   const [p1, setP1] = useState({ x: 0, y: 0 });
   const [p2, setP2] = useState({ x: 0, y: 0 });
   const svgRef = useRef<SVGSVGElement>(null);
-  const [dragging, setDragging] = useState<'p1' | 'p2' | null>(null);
+  const [dragging, setDragging] = useState<"p1" | "p2" | null>(null);
 
   const p1Ref = useRef(p1);
   const p2Ref = useRef(p2);
@@ -69,7 +69,7 @@ const BezierEditor = memo(({ easing, onChange, color }: BezierEditorProps) => {
     return { x, y: 1 - y };
   };
 
-  const handleMouseDown = (point: 'p1' | 'p2') => (e: React.MouseEvent) => {
+  const handleMouseDown = (point: "p1" | "p2") => (e: React.MouseEvent) => {
     e.preventDefault();
     setDragging(point);
   };
@@ -79,7 +79,7 @@ const BezierEditor = memo(({ easing, onChange, color }: BezierEditorProps) => {
 
     const handleMouseMove = (e: MouseEvent) => {
       const { x, y } = getMousePos(e);
-      const updater = dragging === 'p1' ? setP1 : setP2;
+      const updater = dragging === "p1" ? setP1 : setP2;
       updater({ x, y });
     };
 
@@ -90,11 +90,11 @@ const BezierEditor = memo(({ easing, onChange, color }: BezierEditorProps) => {
       setDragging(null);
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
     };
   }, [dragging, onChange]);
 
@@ -122,22 +122,41 @@ const BezierEditor = memo(({ easing, onChange, color }: BezierEditorProps) => {
 
   return (
     <div className="flex flex-col items-center">
-      <svg ref={svgRef} width={size} height={size} className="bg-zinc-800 rounded-md cursor-pointer">
+      <svg
+        ref={svgRef}
+        width={size}
+        height={size}
+        className="bg-zinc-800 rounded-md cursor-pointer"
+      >
         <path
           d={`M ${padding} ${padding} L ${padding} ${size - padding} L ${size - padding} ${size - padding}`}
           fill="none"
           stroke="#4b5563"
           strokeWidth="1"
         />
-        <line x1={p0_svg.x} y1={p0_svg.y} x2={p1_svg.x} y2={p1_svg.y} stroke="#6b7280" strokeWidth="1" />
-        <line x1={p3_svg.x} y1={p3_svg.y} x2={p2_svg.x} y2={p2_svg.y} stroke="#6b7280" strokeWidth="1" />
+        <line
+          x1={p0_svg.x}
+          y1={p0_svg.y}
+          x2={p1_svg.x}
+          y2={p1_svg.y}
+          stroke="#6b7280"
+          strokeWidth="1"
+        />
+        <line
+          x1={p3_svg.x}
+          y1={p3_svg.y}
+          x2={p2_svg.x}
+          y2={p2_svg.y}
+          stroke="#6b7280"
+          strokeWidth="1"
+        />
         <path d={pathData} stroke={color} strokeWidth="2.5" fill="none" />
         <circle
           cx={p1_svg.x}
           cy={p1_svg.y}
           r="6"
           fill="white"
-          onMouseDown={handleMouseDown('p1')}
+          onMouseDown={handleMouseDown("p1")}
           className="cursor-grab active:cursor-grabbing"
         />
         <circle
@@ -145,7 +164,7 @@ const BezierEditor = memo(({ easing, onChange, color }: BezierEditorProps) => {
           cy={p2_svg.y}
           r="6"
           fill="white"
-          onMouseDown={handleMouseDown('p2')}
+          onMouseDown={handleMouseDown("p2")}
           className="cursor-grab active:cursor-grabbing"
         />
       </svg>

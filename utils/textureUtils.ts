@@ -1,18 +1,18 @@
-import * as THREE from 'three';
-import { StageStyle } from '../types';
+import * as THREE from "three";
+import { StageStyle } from "../types";
 
 export const createTextTexture = (
   text: string,
   fontSize: number,
   fontWeight: number,
   textColor: string,
-  style: StageStyle['text'],
+  style: StageStyle["text"],
   bgColor?: string,
   width?: number,
   height?: number,
 ): THREE.CanvasTexture => {
-  const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext('2d')!;
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d")!;
 
   // Optimización High-DPI: Usar devicePixelRatio pero limitar a 4x para evitar uso excesivo de VRAM
   const pixelRatio = window.devicePixelRatio || 1;
@@ -38,11 +38,11 @@ export const createTextTexture = (
 
   // Configuración de texto
   ctx.font = fontString;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
 
   // Renderizado de gradiente o color sólido
-  if (textColor !== 'rgba(255, 255, 255, 1)' && !style.from) {
+  if (textColor !== "rgba(255, 255, 255, 1)" && !style.from) {
     ctx.fillStyle = textColor;
   } else {
     const gradient = ctx.createLinearGradient(0, 0, canvas.width, 0);
@@ -52,7 +52,7 @@ export const createTextTexture = (
   }
 
   // Sombra suave para profundidad (escalada)
-  ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+  ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
   ctx.shadowBlur = 8 * scale;
   ctx.shadowOffsetY = 4 * scale;
 

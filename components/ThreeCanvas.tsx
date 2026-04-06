@@ -1,10 +1,10 @@
-import React, { useRef, useEffect, useLayoutEffect, useState } from 'react';
-import * as THREE from 'three';
-import { StageStyle, TransformState, StageElement, GizmoMode } from '../types';
-import { UploadCloud } from 'lucide-react';
-import { createTextTexture } from '../utils/textureUtils';
-import { useThreeSetup } from '../hooks/useThreeSetup';
-import { useResourceLoader } from '../hooks/useResourceLoader';
+import React, { useRef, useEffect, useLayoutEffect, useState } from "react";
+import * as THREE from "three";
+import { StageStyle, TransformState, StageElement, GizmoMode } from "../types";
+import { UploadCloud } from "lucide-react";
+import { createTextTexture } from "../utils/textureUtils";
+import { useThreeSetup } from "../hooks/useThreeSetup";
+import { useResourceLoader } from "../hooks/useResourceLoader";
 
 interface ThreeCanvasProps {
   transforms: TransformState;
@@ -78,14 +78,16 @@ const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
     const obj = refs.object.current;
     if (!obj) return;
 
-    if (stageElement === 'card' && obj instanceof THREE.Group) {
-      const back = obj.getObjectByName('card-back') as THREE.Mesh;
-      const base = obj.getObjectByName('card-base') as THREE.Mesh;
-      if (back && back.material instanceof THREE.MeshStandardMaterial) back.material.color.set(stageStyle.card.base);
-      if (base && base.material instanceof THREE.MeshStandardMaterial) base.material.color.set(stageStyle.card.base);
+    if (stageElement === "card" && obj instanceof THREE.Group) {
+      const back = obj.getObjectByName("card-back") as THREE.Mesh;
+      const base = obj.getObjectByName("card-base") as THREE.Mesh;
+      if (back && back.material instanceof THREE.MeshStandardMaterial)
+        back.material.color.set(stageStyle.card.base);
+      if (base && base.material instanceof THREE.MeshStandardMaterial)
+        base.material.color.set(stageStyle.card.base);
     }
 
-    if (stageElement === 'cube' && obj instanceof THREE.Mesh) {
+    if (stageElement === "cube" && obj instanceof THREE.Mesh) {
       const materials = stageStyle.cube.map((colorStr, i) => {
         const match = colorStr.match(/rgba?\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)/);
         let color = new THREE.Color(0xffffff),
@@ -95,7 +97,7 @@ const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
           opacity = parseFloat(match[4]);
         }
         const textTexture = transforms.cubeShowNumbers
-          ? createTextTexture(String(i + 1), 48, 700, '#FFFFFF', { from: '', to: '' })
+          ? createTextTexture(String(i + 1), 48, 700, "#FFFFFF", { from: "", to: "" })
           : null;
         return new THREE.MeshStandardMaterial({
           color,
@@ -110,9 +112,9 @@ const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
       obj.material = materials;
     }
 
-    if (stageElement === 'text' && obj instanceof THREE.Mesh) {
+    if (stageElement === "text" && obj instanceof THREE.Mesh) {
       const texture = createTextTexture(
-        'ANIMATE',
+        "ANIMATE",
         transforms.fontSize,
         transforms.fontWeight,
         transforms.textColor,
@@ -131,11 +133,15 @@ const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
         (obj.material as THREE.Material).dispose();
       }
 
-      obj.material = new THREE.MeshBasicMaterial({ map: texture, transparent: true, side: THREE.DoubleSide });
+      obj.material = new THREE.MeshBasicMaterial({
+        map: texture,
+        transparent: true,
+        side: THREE.DoubleSide,
+      });
       refs.dimensions.current = { width: textWidth, height: textHeight, depth: 1 };
     }
 
-    if (stageElement === 'image' && obj instanceof THREE.Mesh && obj.userData.aspect) {
+    if (stageElement === "image" && obj instanceof THREE.Mesh && obj.userData.aspect) {
       const width = transforms.imageWidth;
       const height = width / obj.userData.aspect;
       obj.scale.set(width, height, 1);
@@ -167,17 +173,17 @@ const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
 
     // Background color
     const bgMatch = stageStyle.stage.background.match(/#([0-9a-f]{6})/i);
-    scene.background = new THREE.Color(bgMatch ? bgMatch[0] : '#09090b');
+    scene.background = new THREE.Color(bgMatch ? bgMatch[0] : "#09090b");
 
     // Config GIZMO
     if (refs.transformControls.current) {
       const controls = refs.transformControls.current;
       const controlsHelper = refs.transformControlsHelper.current;
       // Three.js TransformControls only supports translate/rotate/scale — skip 'skew'
-      const effectiveMode = gizmoMode === 'skew' ? 'translate' : gizmoMode;
+      const effectiveMode = gizmoMode === "skew" ? "translate" : gizmoMode;
       if (object) {
         if (controls.mode !== effectiveMode) controls.setMode(effectiveMode);
-        if (effectiveMode === 'translate') {
+        if (effectiveMode === "translate") {
           if (controls.object !== mainContainer) controls.attach(mainContainer);
         } else {
           if (controls.object !== pivotGroup) controls.attach(pivotGroup);
@@ -198,8 +204,8 @@ const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
           (Array.isArray(child.material) ? child.material : [child.material]).forEach((m) => {
             if (m) {
               m.wireframe =
-                (stageElement === 'model' && transforms.modelWireframe) ||
-                (stageElement === 'cube' && transforms.cubeWireframe);
+                (stageElement === "model" && transforms.modelWireframe) ||
+                (stageElement === "cube" && transforms.cubeWireframe);
               const targetOpacity = transforms.opacityEnabled ? transforms.opacity : 1.0;
               if (m.opacity !== targetOpacity) {
                 m.opacity = targetOpacity;
@@ -212,7 +218,7 @@ const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
       });
 
       // Layer explosion logic
-      if (stageElement === 'card' && object instanceof THREE.Group) {
+      if (stageElement === "card" && object instanceof THREE.Group) {
         const layers = object.children as THREE.Mesh[];
         const midIndex = Math.floor(layers.length / 2);
         layers.forEach((layer, index) => {
@@ -242,7 +248,7 @@ const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
         THREE.MathUtils.degToRad(-rotateX),
         THREE.MathUtils.degToRad(-rotateY),
         THREE.MathUtils.degToRad(-rotateZ),
-        'YXZ',
+        "YXZ",
       );
       pivotGroup.scale.set(scaleX, scaleY, scaleZ);
 
@@ -276,29 +282,45 @@ const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
     }
 
     renderer.render(scene, camera);
-  }, [transforms, cameraOffset, stageStyle, showGrid, alignGridToView, isExploded, stageElement, gizmoMode]);
+  }, [
+    transforms,
+    cameraOffset,
+    stageStyle,
+    showGrid,
+    alignGridToView,
+    isExploded,
+    stageElement,
+    gizmoMode,
+  ]);
 
-  const showPlaceholder = (stageElement === 'image' && !imageDataUrl) || (stageElement === 'model' && !modelDataUrl);
+  const showPlaceholder =
+    (stageElement === "image" && !imageDataUrl) || (stageElement === "model" && !modelDataUrl);
 
   return (
-    <div className="absolute inset-0 w-full h-full" {...handleDragEvents} onMouseDown={(e) => e.stopPropagation()}>
+    <div
+      className="absolute inset-0 w-full h-full"
+      {...handleDragEvents}
+      onMouseDown={(e) => e.stopPropagation()}
+    >
       <div ref={mountRef} className="absolute inset-0 w-full h-full" />
       {showPlaceholder && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <label
             htmlFor={`stage-file-upload-three-${stageElement}`}
-            className={`w-80 h-80 rounded-xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-colors pointer-events-auto ${isDraggingOver ? 'border-indigo-500 bg-indigo-500/10' : 'border-zinc-700 bg-zinc-900/50 hover:border-zinc-500'}`}
+            className={`w-80 h-80 rounded-xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-colors pointer-events-auto ${isDraggingOver ? "border-indigo-500 bg-indigo-500/10" : "border-zinc-700 bg-zinc-900/50 hover:border-zinc-500"}`}
           >
             <UploadCloud
               size={48}
-              className={`transition-colors ${isDraggingOver ? 'text-indigo-400' : 'text-zinc-600'}`}
+              className={`transition-colors ${isDraggingOver ? "text-indigo-400" : "text-zinc-600"}`}
             />
             <p
-              className={`mt-4 font-bold text-lg transition-colors ${isDraggingOver ? 'text-indigo-300' : 'text-zinc-500'}`}
+              className={`mt-4 font-bold text-lg transition-colors ${isDraggingOver ? "text-indigo-300" : "text-zinc-500"}`}
             >
-              Drop {stageElement === 'image' ? 'Image/Video' : '3D Model'} here
+              Drop {stageElement === "image" ? "Image/Video" : "3D Model"} here
             </p>
-            <p className={`mt-1 text-sm transition-colors ${isDraggingOver ? 'text-indigo-400' : 'text-zinc-600'}`}>
+            <p
+              className={`mt-1 text-sm transition-colors ${isDraggingOver ? "text-indigo-400" : "text-zinc-600"}`}
+            >
               or click to browse
             </p>
             <input
@@ -306,7 +328,7 @@ const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
               type="file"
               className="hidden"
               onChange={(e) => e.target.files && onFileChange(e.target.files[0])}
-              accept={stageElement === 'image' ? 'image/*,video/webm' : '.gltf,.glb'}
+              accept={stageElement === "image" ? "image/*,video/webm" : ".gltf,.glb"}
             />
           </label>
         </div>

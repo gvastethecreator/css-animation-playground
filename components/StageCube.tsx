@@ -1,6 +1,6 @@
-import React from 'react';
-import { TransformState } from '../types';
-import StageLayers from './StageLayers';
+import React from "react";
+import { TransformState } from "../types";
+import StageLayers from "./StageLayers";
 
 interface StageCubeProps {
   transforms: TransformState;
@@ -15,34 +15,43 @@ interface StageCubeProps {
 
 const StageCube = React.forwardRef<HTMLDivElement, StageCubeProps>(
   (
-    { transforms, isExploded, isAdjusting, isPlaying, style: faceColors, showStageUI, willChangeString, onClick },
+    {
+      transforms,
+      isExploded,
+      isAdjusting,
+      isPlaying,
+      style: faceColors,
+      showStageUI,
+      willChangeString,
+      onClick,
+    },
     ref,
   ) => {
     const { cubeShowNumbers, cubeWireframe } = transforms;
     const size = 200;
 
     const faces = [
-      { transform: `rotateY(0deg) translateZ(${size / 2}px)`, name: 'front' },
-      { transform: `rotateY(180deg) translateZ(${size / 2}px)`, name: 'back' },
-      { transform: `rotateY(90deg) translateZ(${size / 2}px)`, name: 'right' },
-      { transform: `rotateY(-90deg) translateZ(${size / 2}px)`, name: 'left' },
-      { transform: `rotateX(90deg) translateZ(${size / 2}px)`, name: 'top' },
-      { transform: `rotateX(-90deg) translateZ(${size / 2}px)`, name: 'bottom' },
+      { transform: `rotateY(0deg) translateZ(${size / 2}px)`, name: "front" },
+      { transform: `rotateY(180deg) translateZ(${size / 2}px)`, name: "back" },
+      { transform: `rotateY(90deg) translateZ(${size / 2}px)`, name: "right" },
+      { transform: `rotateY(-90deg) translateZ(${size / 2}px)`, name: "left" },
+      { transform: `rotateX(90deg) translateZ(${size / 2}px)`, name: "top" },
+      { transform: `rotateX(-90deg) translateZ(${size / 2}px)`, name: "bottom" },
     ];
 
     const faceBaseStyle: React.CSSProperties = {
-      position: 'absolute',
+      position: "absolute",
       width: `${size}px`,
       height: `${size}px`,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontSize: '48px',
-      fontWeight: 'bold',
-      color: 'white',
-      backfaceVisibility: 'hidden',
-      border: cubeWireframe ? '2px solid rgba(255,255,255,0.7)' : 'none',
-      boxSizing: 'border-box',
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: "48px",
+      fontWeight: "bold",
+      color: "white",
+      backfaceVisibility: "hidden",
+      border: cubeWireframe ? "2px solid rgba(255,255,255,0.7)" : "none",
+      boxSizing: "border-box",
     };
 
     return (
@@ -65,7 +74,9 @@ const StageCube = React.forwardRef<HTMLDivElement, StageCubeProps>(
               style={{
                 ...faceBaseStyle,
                 transform: face.transform,
-                backgroundColor: cubeWireframe ? 'transparent' : faceColors[i] || 'rgba(255,255,255,0.2)',
+                backgroundColor: cubeWireframe
+                  ? "transparent"
+                  : faceColors[i] || "rgba(255,255,255,0.2)",
               }}
             >
               {cubeShowNumbers && <span className="drop-shadow-lg">{i + 1}</span>}

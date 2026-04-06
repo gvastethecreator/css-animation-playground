@@ -1,5 +1,5 @@
-import React from 'react';
-import { Clapperboard } from 'lucide-react';
+import React from "react";
+import { Clapperboard } from "lucide-react";
 
 interface FrameCounterProps {
   currentTime: number;

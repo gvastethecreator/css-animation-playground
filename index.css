@@ -1,8 +1,8 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @theme {
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, monospace;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Roboto Mono", ui-monospace, SFMono-Regular, monospace;
   --color-zinc-950: #09090b;
   --color-zinc-900: #18181b;
   --color-zinc-850: #202023;
@@ -19,7 +19,8 @@
   --shadow-glow-sm: 0 0 5px rgba(99, 102, 241, 0.3);
   --shadow-inner-depth: inset 0 2px 4px 0 rgba(0, 0, 0, 0.6);
   --shadow-raised:
-    0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
   --animate-spin-slow: spin 3s linear infinite;
   --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
@@ -31,7 +32,7 @@
     overflow: hidden;
   }
   body {
-    font-family: 'Inter', sans-serif;
+    font-family: "Inter", sans-serif;
     background-color: #09090b;
     color: #d4d4d8;
     overscroll-behavior: none;
@@ -207,7 +208,7 @@
 pre code {
   background: transparent;
   color: #d4d4d8;
-  font-family: 'Roboto Mono', ui-monospace, SFMono-Regular, monospace;
+  font-family: "Roboto Mono", ui-monospace, SFMono-Regular, monospace;
   white-space: pre-wrap;
   word-break: break-all;
 }
@@ -249,54 +250,54 @@ pre code {
   opacity: 1;
 }
 
-.tooltip-content[data-pos^='top'] {
+.tooltip-content[data-pos^="top"] {
   --tooltip-origin-y: 100%;
   --tooltip-translate-y: -100%;
   margin-top: -6px;
 }
-.tooltip-content[data-pos^='bottom'] {
+.tooltip-content[data-pos^="bottom"] {
   --tooltip-origin-y: 0;
   --tooltip-translate-y: 0;
   margin-top: 6px;
 }
-.tooltip-content[data-pos^='left'],
-.tooltip-content[data-pos^='right'] {
+.tooltip-content[data-pos^="left"],
+.tooltip-content[data-pos^="right"] {
   --tooltip-origin-y: 50%;
 }
 
-.tooltip-content[data-pos$='start'] {
+.tooltip-content[data-pos$="start"] {
   --tooltip-origin-x: 0;
   --tooltip-translate-x: 0;
 }
-.tooltip-content[data-pos$='end'] {
+.tooltip-content[data-pos$="end"] {
   --tooltip-origin-x: 100%;
   --tooltip-translate-x: -100%;
 }
-.tooltip-content[data-pos$='center'] {
+.tooltip-content[data-pos$="center"] {
   --tooltip-origin-x: 50%;
   --tooltip-translate-x: -50%;
 }
 
-.tooltip-content[data-pos^='left'] {
+.tooltip-content[data-pos^="left"] {
   --tooltip-origin-x: 100%;
   --tooltip-translate-x: -100%;
   margin-left: -6px;
 }
-.tooltip-content[data-pos^='right'] {
+.tooltip-content[data-pos^="right"] {
   --tooltip-origin-x: 0;
   --tooltip-translate-x: 0;
   margin-left: 6px;
 }
 
-.tooltip-content[data-pos='right-center'],
-.tooltip-content[data-pos='left-center'] {
+.tooltip-content[data-pos="right-center"],
+.tooltip-content[data-pos="left-center"] {
   --tooltip-translate-y: -50%;
 }
-.tooltip-content[data-pos='right-start'],
-.tooltip-content[data-pos='left-start'] {
+.tooltip-content[data-pos="right-start"],
+.tooltip-content[data-pos="left-start"] {
   --tooltip-translate-y: 0;
 }
-.tooltip-content[data-pos='right-end'],
-.tooltip-content[data-pos='left-end'] {
+.tooltip-content[data-pos="right-end"],
+.tooltip-content[data-pos="left-end"] {
   --tooltip-translate-y: -100%;
 }

@@ -1,6 +1,6 @@
-import React from 'react';
-import { getEasingFunction } from '../../easing';
-import { EasingValue } from '../../types';
+import React from "react";
+import { getEasingFunction } from "../../easing";
+import { EasingValue } from "../../types";
 
 interface EasingCurveProps {
   easing: EasingValue;
@@ -10,7 +10,13 @@ interface EasingCurveProps {
   strokeWidth?: number;
 }
 
-export default function EasingCurve({ easing, width, height, color, strokeWidth = 2 }: EasingCurveProps) {
+export default function EasingCurve({
+  easing,
+  width,
+  height,
+  color,
+  strokeWidth = 2,
+}: EasingCurveProps) {
   const func = getEasingFunction(easing);
 
   if (width <= 0 || height <= 0) return null;
@@ -25,7 +31,12 @@ export default function EasingCurve({ easing, width, height, color, strokeWidth 
   }
 
   return (
-    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none">
+    <svg
+      width={width}
+      height={height}
+      viewBox={`0 0 ${width} ${height}`}
+      preserveAspectRatio="none"
+    >
       <path
         d={pathData}
         stroke={color}

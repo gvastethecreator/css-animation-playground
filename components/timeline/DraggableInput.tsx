@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import Tooltip from '../Tooltip';
+import React, { useState, useEffect, useRef } from "react";
+import Tooltip from "../Tooltip";
 
 interface DraggableInputProps {
   value: number;
@@ -18,15 +18,15 @@ const DraggableInput: React.FC<DraggableInputProps> = ({
   min = -Infinity,
   max = Infinity,
   step = 1,
-  className = '',
-  title = '',
+  className = "",
+  title = "",
   children,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [inputValue, setInputValue] = useState(value.toString());
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const getPrecision = (num: number) => (num.toString().split('.')[1] || '').length;
+  const getPrecision = (num: number) => (num.toString().split(".")[1] || "").length;
 
   useEffect(() => {
     if (!isEditing) {
@@ -55,8 +55,8 @@ const DraggableInput: React.FC<DraggableInputProps> = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') handleCommit();
-    else if (e.key === 'Escape') {
+    if (e.key === "Enter") handleCommit();
+    else if (e.key === "Escape") {
       setIsEditing(false);
       const precision = getPrecision(step);
       setInputValue(value.toFixed(precision));
@@ -69,7 +69,7 @@ const DraggableInput: React.FC<DraggableInputProps> = ({
     const startX = e.clientX;
     const startValue = value;
 
-    document.body.style.cursor = 'ew-resize';
+    document.body.style.cursor = "ew-resize";
 
     const handleMouseMove = (moveEvent: MouseEvent) => {
       const deltaX = moveEvent.clientX - startX;
@@ -83,13 +83,13 @@ const DraggableInput: React.FC<DraggableInputProps> = ({
     };
 
     const handleMouseUp = () => {
-      document.body.style.cursor = 'default';
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      document.body.style.cursor = "default";
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
   };
 
   const precision = getPrecision(step);

@@ -1,12 +1,12 @@
-import React from 'react';
-import { StageStyle, TransformState } from '../types';
-import StageLayers from './StageLayers';
+import React from "react";
+import { StageStyle, TransformState } from "../types";
+import StageLayers from "./StageLayers";
 
 interface StageTextProps {
   transforms: TransformState;
   isAdjusting: boolean;
   isPlaying: boolean;
-  style: StageStyle['text'];
+  style: StageStyle["text"];
   showStageUI: boolean;
   willChangeString: string;
   isExploded: boolean; // Added for StageLayers
@@ -14,18 +14,31 @@ interface StageTextProps {
 }
 
 const StageText = React.forwardRef<HTMLDivElement, StageTextProps>(
-  ({ transforms, isAdjusting, isPlaying, style, showStageUI, willChangeString, isExploded, onClick }, ref) => {
+  (
+    {
+      transforms,
+      isAdjusting,
+      isPlaying,
+      style,
+      showStageUI,
+      willChangeString,
+      isExploded,
+      onClick,
+    },
+    ref,
+  ) => {
     const textStyle: React.CSSProperties = {
       fontSize: `${transforms.fontSize}px`,
       letterSpacing: `${transforms.letterSpacing}px`,
       fontWeight: transforms.fontWeight,
-      textShadow: '0 4px 20px rgba(0,0,0,0.5)',
+      textShadow: "0 4px 20px rgba(0,0,0,0.5)",
       color: transforms.textColor,
       backgroundImage:
-        transforms.textColor === 'rgba(255, 255, 255, 1)'
+        transforms.textColor === "rgba(255, 255, 255, 1)"
           ? `linear-gradient(45deg, ${style.from}, ${style.to})`
-          : 'none',
-      backgroundColor: transforms.textColor !== 'rgba(255, 255, 255, 1)' ? transforms.textColor : 'transparent',
+          : "none",
+      backgroundColor:
+        transforms.textColor !== "rgba(255, 255, 255, 1)" ? transforms.textColor : "transparent",
     };
 
     return (
@@ -41,7 +54,10 @@ const StageText = React.forwardRef<HTMLDivElement, StageTextProps>(
         className="w-auto h-auto"
         onClick={onClick}
       >
-        <h1 className="font-bold text-transparent bg-clip-text drop-shadow-xl whitespace-nowrap" style={textStyle}>
+        <h1
+          className="font-bold text-transparent bg-clip-text drop-shadow-xl whitespace-nowrap"
+          style={textStyle}
+        >
           ANIMATE
         </h1>
       </StageLayers>

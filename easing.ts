@@ -1,5 +1,5 @@
-import { EasingName, EasingValue } from './types';
-import { reportRuntimeIssue } from './utils/runtimeDiagnostics.ts';
+import { EasingName, EasingValue } from "./types";
+import { reportRuntimeIssue } from "./utils/runtimeDiagnostics.ts";
 
 // --- BEZIER CURVE IMPLEMENTATION ---
 // This is a port of the bezier-easing library by Gaëtan Renaudeau.
@@ -15,7 +15,8 @@ const A = (aA1: number, aA2: number) => 1.0 - 3.0 * aA2 + 3.0 * aA1;
 const B = (aA1: number, aA2: number) => 3.0 * aA2 - 6.0 * aA1;
 const C = (aA1: number) => 3.0 * aA1;
 
-const calcBezier = (aT: number, aA1: number, aA2: number) => ((A(aA1, aA2) * aT + B(aA1, aA2)) * aT + C(aA1)) * aT;
+const calcBezier = (aT: number, aA1: number, aA2: number) =>
+  ((A(aA1, aA2) * aT + B(aA1, aA2)) * aT + C(aA1)) * aT;
 const getSlope = (aT: number, aA1: number, aA2: number) =>
   3.0 * A(aA1, aA2) * aT * aT + 2.0 * B(aA1, aA2) * aT + C(aA1);
 
@@ -65,7 +66,9 @@ const createBezier = (mX1: number, mY1: number, mX2: number, mY2: number) => {
     }
     --currentSample;
 
-    const dist = (aX - sampleValues[currentSample]) / (sampleValues[currentSample + 1] - sampleValues[currentSample]);
+    const dist =
+      (aX - sampleValues[currentSample]) /
+      (sampleValues[currentSample + 1] - sampleValues[currentSample]);
     const guessForT = intervalStart + dist * kSampleStepSize;
     const initialSlope = getSlope(guessForT, mX1, mX2);
 
@@ -82,7 +85,9 @@ const createBezier = (mX1: number, mY1: number, mX2: number, mY2: number) => {
 };
 
 // Easing functions from https://easings.net/ and other sources
-export const easingFunctions: Record<EasingName, (t: number) => number> & { createBezier: typeof createBezier } = {
+export const easingFunctions: Record<EasingName, (t: number) => number> & {
+  createBezier: typeof createBezier;
+} = {
   // Standard - Now using bezier functions for consistency where possible
   linear: (t) => t,
   ease: createBezier(0.25, 0.1, 0.25, 1.0),
@@ -166,7 +171,9 @@ export const easingFunctions: Record<EasingName, (t: number) => number> & { crea
     }
   },
   easeInOutBounce: (x) =>
-    x < 0.5 ? (1 - easingFunctions.easeOutBounce(1 - 2 * x)) / 2 : (1 + easingFunctions.easeOutBounce(2 * x - 1)) / 2,
+    x < 0.5
+      ? (1 - easingFunctions.easeOutBounce(1 - 2 * x)) / 2
+      : (1 + easingFunctions.easeOutBounce(2 * x - 1)) / 2,
 
   // New special easings
   snappy: createBezier(0.3, 1.0, 0.4, 1.0),
@@ -194,14 +201,14 @@ export const getEasingFunction = (easing: EasingValue): ((t: number) => number) 
   }
 
   // 2. Check if it is a cubic-bezier string
-  if (typeof easing === 'string' && easing.startsWith('cubic-bezier')) {
+  if (typeof easing === "string" && easing.startsWith("cubic-bezier")) {
     try {
       const values = easing.match(/-?[\d.]+/g)?.map(Number);
       if (values && values.length === 4) {
         return easingFunctions.createBezier(values[0], values[1], values[2], values[3]);
       }
     } catch (error) {
-      reportRuntimeIssue('easing.parse', error, `Failed to parse cubic-bezier string: ${easing}`);
+      reportRuntimeIssue("easing.parse", error, `Failed to parse cubic-bezier string: ${easing}`);
     }
   }
 
@@ -211,71 +218,71 @@ export const getEasingFunction = (easing: EasingValue): ((t: number) => number) 
 
 export const EASING_CSS_MAP: Record<EasingName, string> = {
   // Standard
-  linear: 'linear',
-  ease: 'ease',
-  easeIn: 'ease-in',
-  easeOut: 'ease-out',
-  easeInOut: 'ease-in-out',
+  linear: "linear",
+  ease: "ease",
+  easeIn: "ease-in",
+  easeOut: "ease-out",
+  easeInOut: "ease-in-out",
 
   // Sine
-  easeInSine: 'cubic-bezier(0.12, 0, 0.39, 0)',
-  easeOutSine: 'cubic-bezier(0.61, 1, 0.88, 1)',
-  easeInOutSine: 'cubic-bezier(0.37, 0, 0.63, 1)',
+  easeInSine: "cubic-bezier(0.12, 0, 0.39, 0)",
+  easeOutSine: "cubic-bezier(0.61, 1, 0.88, 1)",
+  easeInOutSine: "cubic-bezier(0.37, 0, 0.63, 1)",
 
   // Quad
-  easeInQuad: 'cubic-bezier(0.55, 0.085, 0.68, 0.53)',
-  easeOutQuad: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-  easeInOutQuad: 'cubic-bezier(0.455, 0.03, 0.515, 0.955)',
+  easeInQuad: "cubic-bezier(0.55, 0.085, 0.68, 0.53)",
+  easeOutQuad: "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+  easeInOutQuad: "cubic-bezier(0.455, 0.03, 0.515, 0.955)",
 
   // Cubic
-  easeInCubic: 'cubic-bezier(0.55, 0.055, 0.675, 0.19)',
-  easeOutCubic: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
-  easeInOutCubic: 'cubic-bezier(0.645, 0.045, 0.355, 1)',
+  easeInCubic: "cubic-bezier(0.55, 0.055, 0.675, 0.19)",
+  easeOutCubic: "cubic-bezier(0.215, 0.61, 0.355, 1)",
+  easeInOutCubic: "cubic-bezier(0.645, 0.045, 0.355, 1)",
 
   // Quart
-  easeInQuart: 'cubic-bezier(0.895, 0.03, 0.685, 0.22)',
-  easeOutQuart: 'cubic-bezier(0.165, 0.84, 0.44, 1)',
-  easeInOutQuart: 'cubic-bezier(0.77, 0, 0.175, 1)',
+  easeInQuart: "cubic-bezier(0.895, 0.03, 0.685, 0.22)",
+  easeOutQuart: "cubic-bezier(0.165, 0.84, 0.44, 1)",
+  easeInOutQuart: "cubic-bezier(0.77, 0, 0.175, 1)",
 
   // Quint
-  easeInQuint: 'cubic-bezier(0.755, 0.05, 0.855, 0.06)',
-  easeOutQuint: 'cubic-bezier(0.23, 1, 0.32, 1)',
-  easeInOutQuint: 'cubic-bezier(0.86, 0, 0.07, 1)',
+  easeInQuint: "cubic-bezier(0.755, 0.05, 0.855, 0.06)",
+  easeOutQuint: "cubic-bezier(0.23, 1, 0.32, 1)",
+  easeInOutQuint: "cubic-bezier(0.86, 0, 0.07, 1)",
 
   // Expo
-  easeInExpo: 'cubic-bezier(0.95, 0.05, 0.795, 0.035)',
-  easeOutExpo: 'cubic-bezier(0.19, 1, 0.22, 1)',
-  easeInOutExpo: 'cubic-bezier(1, 0, 0, 1)',
+  easeInExpo: "cubic-bezier(0.95, 0.05, 0.795, 0.035)",
+  easeOutExpo: "cubic-bezier(0.19, 1, 0.22, 1)",
+  easeInOutExpo: "cubic-bezier(1, 0, 0, 1)",
 
   // Circ
-  easeInCirc: 'cubic-bezier(0.6, 0.04, 0.98, 0.335)',
-  easeOutCirc: 'cubic-bezier(0.075, 0.82, 0.165, 1)',
-  easeInOutCirc: 'cubic-bezier(0.785, 0.135, 0.15, 0.86)',
+  easeInCirc: "cubic-bezier(0.6, 0.04, 0.98, 0.335)",
+  easeOutCirc: "cubic-bezier(0.075, 0.82, 0.165, 1)",
+  easeInOutCirc: "cubic-bezier(0.785, 0.135, 0.15, 0.86)",
 
   // Back
-  easeInBack: 'cubic-bezier(0.6, -0.28, 0.735, 0.045)',
-  easeOutBack: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-  easeInOutBack: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+  easeInBack: "cubic-bezier(0.6, -0.28, 0.735, 0.045)",
+  easeOutBack: "cubic-bezier(0.175, 0.885, 0.32, 1.275)",
+  easeInOutBack: "cubic-bezier(0.68, -0.55, 0.265, 1.55)",
 
   // Elastic and Bounce cannot be represented by a single cubic-bezier.
   // CSS animations would need to use workarounds like keyframe approximations.
   // For JS libraries, we use the real functions.
-  easeInElastic: 'steps(10, end)',
-  easeOutElastic: 'steps(10, end)',
-  easeInOutElastic: 'steps(10, end)',
+  easeInElastic: "steps(10, end)",
+  easeOutElastic: "steps(10, end)",
+  easeInOutElastic: "steps(10, end)",
 
-  easeInBounce: 'steps(10, end)',
-  easeOutBounce: 'steps(10, end)',
-  easeInOutBounce: 'steps(10, end)',
+  easeInBounce: "steps(10, end)",
+  easeOutBounce: "steps(10, end)",
+  easeInOutBounce: "steps(10, end)",
 
   // New special easings
-  snappy: 'cubic-bezier(0.3, 1, 0.4, 1)',
-  spring: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-  anticipateOvershoot: 'cubic-bezier(1, -0.4, 0.35, 0.95)',
-  easeOutBackSoft: 'cubic-bezier(0.175, 0.885, 0.32, 1.1)',
-  springy: 'cubic-bezier(0.68, -0.6, 0.32, 1.6)',
-  snap: 'cubic-bezier(0, 1, 0, 1)',
-  bouncy: 'cubic-bezier(0.5, -0.5, 0.5, 1.5)',
-  materialDecelerate: 'cubic-bezier(0.0, 0.0, 0.2, 1)',
-  materialAccelerate: 'cubic-bezier(0.4, 0.0, 1, 1)',
+  snappy: "cubic-bezier(0.3, 1, 0.4, 1)",
+  spring: "cubic-bezier(0.34, 1.56, 0.64, 1)",
+  anticipateOvershoot: "cubic-bezier(1, -0.4, 0.35, 0.95)",
+  easeOutBackSoft: "cubic-bezier(0.175, 0.885, 0.32, 1.1)",
+  springy: "cubic-bezier(0.68, -0.6, 0.32, 1.6)",
+  snap: "cubic-bezier(0, 1, 0, 1)",
+  bouncy: "cubic-bezier(0.5, -0.5, 0.5, 1.5)",
+  materialDecelerate: "cubic-bezier(0.0, 0.0, 0.2, 1)",
+  materialAccelerate: "cubic-bezier(0.4, 0.0, 1, 1)",
 };

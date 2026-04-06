@@ -1,9 +1,19 @@
-import React, { useState, useCallback } from 'react';
-import { PresetAnimationName, AnimationEngine } from '../types';
-import AnimationPresetPopover from './AnimationPresetPopover';
-import EngineSelector from './EngineSelector';
-import Tooltip from './Tooltip';
-import { HelpCircle, Github, CornerUpLeft, CornerUpRight, Trash2, Upload, Dices, Loader, Sparkles } from 'lucide-react';
+import React, { useState, useCallback } from "react";
+import { PresetAnimationName, AnimationEngine } from "../types";
+import AnimationPresetPopover from "./AnimationPresetPopover";
+import EngineSelector from "./EngineSelector";
+import Tooltip from "./Tooltip";
+import {
+  HelpCircle,
+  Github,
+  CornerUpLeft,
+  CornerUpRight,
+  Trash2,
+  Upload,
+  Dices,
+  Loader,
+  Sparkles,
+} from "lucide-react";
 
 interface HeaderProps {
   onUndo: () => void;
@@ -74,7 +84,7 @@ const Header: React.FC<HeaderProps> = ({
   );
 
   const btnClass =
-    'p-2 rounded-lg text-zinc-400 hover:text-zinc-100 btn-tactile disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:transform-none disabled:hover:bg-transparent';
+    "p-2 rounded-lg text-zinc-400 hover:text-zinc-100 btn-tactile disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:transform-none disabled:hover:bg-transparent";
 
   return (
     <header className="flex items-center justify-between px-4 py-2 glass-panel border-b border-zinc-700/50 shrink-0 h-16 z-30">
@@ -88,7 +98,9 @@ const Header: React.FC<HeaderProps> = ({
             <h1 className="text-sm font-bold text-transparent bg-clip-text bg-linear-to-r from-zinc-100 to-zinc-400 tracking-tight leading-none">
               CSS
             </h1>
-            <h1 className="text-xs font-semibold text-zinc-500 tracking-wider leading-none">PLAYGROUND</h1>
+            <h1 className="text-xs font-semibold text-zinc-500 tracking-wider leading-none">
+              PLAYGROUND
+            </h1>
           </div>
         </div>
 
@@ -97,7 +109,7 @@ const Header: React.FC<HeaderProps> = ({
         <Tooltip content="Browse animation presets">
           <button
             onClick={handleOpenPresets}
-            className={`btn-tactile px-3 py-1.5 rounded-lg flex items-center gap-2 text-xs font-medium text-zinc-300 ${isPresetPopoverOpen ? 'active' : ''}`}
+            className={`btn-tactile px-3 py-1.5 rounded-lg flex items-center gap-2 text-xs font-medium text-zinc-300 ${isPresetPopoverOpen ? "active" : ""}`}
           >
             <Sparkles size={14} strokeWidth={2} className="text-indigo-400" />
             Presets
@@ -140,7 +152,7 @@ const Header: React.FC<HeaderProps> = ({
               ) : (
                 <Dices size={14} strokeWidth={2} />
               )}
-              {isLoadingModel ? 'Loading...' : 'Sample'}
+              {isLoadingModel ? "Loading..." : "Sample"}
             </button>
           </Tooltip>
           {hasMedia && (

@@ -1,7 +1,7 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { AnimationData, PROPERTY_COLORS, Keyframe, EasingValue } from '../../types';
-import EasingCurve from './EasingCurve';
-import { getEasingFunction } from '../../easing';
+import React, { useRef, useState, useEffect, useCallback } from "react";
+import { AnimationData, PROPERTY_COLORS, Keyframe, EasingValue } from "../../types";
+import EasingCurve from "./EasingCurve";
+import { getEasingFunction } from "../../easing";
 
 interface CondensedTimelineViewProps {
   animationData: AnimationData;
@@ -62,12 +62,12 @@ const CondensedTimelineView: React.FC<CondensedTimelineViewProps> = ({
     };
 
     const handleMouseUp = () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
   };
 
   const func = getEasingFunction(easing);
@@ -84,7 +84,13 @@ const CondensedTimelineView: React.FC<CondensedTimelineViewProps> = ({
       {/* Easing Curve Background */}
       <div className="absolute inset-0 opacity-60">
         {containerWidth > 0 && (
-          <EasingCurve easing={easing} width={containerWidth} height={14} color="#818cf8" strokeWidth={2} />
+          <EasingCurve
+            easing={easing}
+            width={containerWidth}
+            height={14}
+            color="#818cf8"
+            strokeWidth={2}
+          />
         )}
       </div>
 
@@ -98,7 +104,7 @@ const CondensedTimelineView: React.FC<CondensedTimelineViewProps> = ({
               className="absolute top-0 w-px h-full z-10"
               style={{
                 left: `calc(${(kf.time / duration) * 100}%)`,
-                backgroundColor: PROPERTY_COLORS[prop] || '#fff',
+                backgroundColor: PROPERTY_COLORS[prop] || "#fff",
                 opacity: 0.5,
               }}
             />
@@ -111,9 +117,9 @@ const CondensedTimelineView: React.FC<CondensedTimelineViewProps> = ({
         style={{
           left: `calc(${progress * 100}%)`,
           top: `calc(${(1 - easedProgress) * 100}%)`,
-          transform: 'translate(-50%, -50%)',
-          boxShadow: '0 0 5px rgba(255, 255, 255, 0.7)',
-          willChange: 'transform',
+          transform: "translate(-50%, -50%)",
+          boxShadow: "0 0 5px rgba(255, 255, 255, 0.7)",
+          willChange: "transform",
         }}
       />
 
@@ -122,7 +128,7 @@ const CondensedTimelineView: React.FC<CondensedTimelineViewProps> = ({
         className="absolute top-0 h-full w-0.5 bg-red-500 z-30"
         style={{
           left: `calc(${progress * 100}%)`,
-          transform: 'translateX(-50%)',
+          transform: "translateX(-50%)",
         }}
       />
     </div>

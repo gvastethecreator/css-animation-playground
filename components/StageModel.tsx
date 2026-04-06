@@ -1,8 +1,8 @@
-import React from 'react';
-import { TransformState } from '../types';
-import { UploadCloud, VenetianMask } from 'lucide-react';
-import StageLayers from './StageLayers';
-import { useStageDragHandlers } from '../hooks/useStageDragHandlers';
+import React from "react";
+import { TransformState } from "../types";
+import { UploadCloud, VenetianMask } from "lucide-react";
+import StageLayers from "./StageLayers";
+import { useStageDragHandlers } from "../hooks/useStageDragHandlers";
 
 interface StageModelProps {
   transforms: TransformState;
@@ -52,14 +52,14 @@ const StageModel = React.forwardRef<HTMLDivElement, StageModelProps>(
             <VenetianMask size={48} className="text-zinc-600" />
             <p className="mt-4 font-bold text-lg text-zinc-500">3D Model View</p>
             <p className="mt-1 text-sm text-zinc-600">
-              This element is only visible with the <b className="text-zinc-400">Three.js</b> engine. Please select it
-              from the header.
+              This element is only visible with the <b className="text-zinc-400">Three.js</b>{" "}
+              engine. Please select it from the header.
             </p>
           </div>
         ) : (
           <label
             htmlFor="stage-file-upload-model"
-            className={`w-80 h-80 rounded-xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-colors ${isDraggingOver ? 'border-indigo-500 bg-indigo-500/10' : 'border-zinc-700 bg-zinc-900/50 hover:border-zinc-500'}`}
+            className={`w-80 h-80 rounded-xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-colors ${isDraggingOver ? "border-indigo-500 bg-indigo-500/10" : "border-zinc-700 bg-zinc-900/50 hover:border-zinc-500"}`}
             onDragEnter={handleDragEnter}
             onDragLeave={handleDragLeave}
             onDragOver={handleDragOver}
@@ -68,14 +68,16 @@ const StageModel = React.forwardRef<HTMLDivElement, StageModelProps>(
           >
             <UploadCloud
               size={48}
-              className={`transition-colors ${isDraggingOver ? 'text-indigo-400' : 'text-zinc-600'}`}
+              className={`transition-colors ${isDraggingOver ? "text-indigo-400" : "text-zinc-600"}`}
             />
             <p
-              className={`mt-4 font-bold text-lg transition-colors ${isDraggingOver ? 'text-indigo-300' : 'text-zinc-500'}`}
+              className={`mt-4 font-bold text-lg transition-colors ${isDraggingOver ? "text-indigo-300" : "text-zinc-500"}`}
             >
               Drop 3D Model here
             </p>
-            <p className={`mt-1 text-sm transition-colors ${isDraggingOver ? 'text-indigo-400' : 'text-zinc-600'}`}>
+            <p
+              className={`mt-1 text-sm transition-colors ${isDraggingOver ? "text-indigo-400" : "text-zinc-600"}`}
+            >
               (.glb, .gltf)
             </p>
             <input

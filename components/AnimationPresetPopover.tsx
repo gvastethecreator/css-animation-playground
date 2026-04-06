@@ -1,7 +1,7 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
-import ReactDOM from 'react-dom';
-import { ANIMATION_PRESETS, PresetAnimationName } from '../types';
-import Tooltip from './Tooltip';
+import React, { useLayoutEffect, useRef, useState } from "react";
+import ReactDOM from "react-dom";
+import { ANIMATION_PRESETS, PresetAnimationName } from "../types";
+import Tooltip from "./Tooltip";
 
 interface AnimationPresetPopoverProps {
   isOpen: boolean;
@@ -32,12 +32,15 @@ const AnimationPresetPopover: React.FC<AnimationPresetPopoverProps> = ({
 
       let top = anchorRect.bottom + gap;
       let left = anchorRect.left;
-      let origin = 'top left';
+      let origin = "top left";
 
       // Vertical placement
-      if (top + popoverRect.height > window.innerHeight && anchorRect.top - popoverRect.height - gap > 0) {
+      if (
+        top + popoverRect.height > window.innerHeight &&
+        anchorRect.top - popoverRect.height - gap > 0
+      ) {
         top = anchorRect.top - popoverRect.height - gap;
-        origin = 'bottom left';
+        origin = "bottom left";
       }
 
       // Horizontal placement
@@ -62,7 +65,7 @@ const AnimationPresetPopover: React.FC<AnimationPresetPopoverProps> = ({
     if (!isOpen) return;
 
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         onClose();
       }
     };
@@ -78,11 +81,11 @@ const AnimationPresetPopover: React.FC<AnimationPresetPopoverProps> = ({
       }
     };
 
-    document.addEventListener('keydown', handleEscape);
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('keydown', handleEscape);
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen, onClose, anchorEl]);
 
@@ -93,11 +96,11 @@ const AnimationPresetPopover: React.FC<AnimationPresetPopoverProps> = ({
   return ReactDOM.createPortal(
     <div
       ref={popoverRef}
-      className={`absolute z-[1001] w-72 p-2 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl transition-all duration-150 ease-out ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+      className={`absolute z-[1001] w-72 p-2 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl transition-all duration-150 ease-out ${isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
       style={{
         top: `${position.top}px`,
         left: `${position.left}px`,
-        transformOrigin: 'top left',
+        transformOrigin: "top left",
       }}
       onMouseDown={(e) => e.stopPropagation()}
       onMouseLeave={onPresetLeave}
