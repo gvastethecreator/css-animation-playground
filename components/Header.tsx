@@ -5,7 +5,7 @@ import EngineSelector from "./EngineSelector";
 import Tooltip from "./Tooltip";
 import {
   HelpCircle,
-  Github,
+  GitFork,
   CornerUpLeft,
   CornerUpRight,
   Trash2,
@@ -215,7 +215,7 @@ const Header: React.FC<HeaderProps> = ({
             rel="noopener noreferrer"
             className={btnClass}
           >
-            <Github size={16} strokeWidth={2} />
+            <GitFork size={16} strokeWidth={2} />
           </a>
         </Tooltip>
       </div>
