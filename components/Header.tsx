@@ -1,19 +1,19 @@
-import React, { useState, useCallback } from "react";
-import { PresetAnimationName, AnimationEngine } from "../types";
+import {
+    CornerUpLeft,
+    CornerUpRight,
+    Dices,
+    GitFork,
+    HelpCircle,
+    Loader,
+    Sparkles,
+    Trash2,
+    Upload,
+} from "lucide-react";
+import React, { useCallback, useState } from "react";
+import { AnimationEngine, PresetAnimationName } from "../types";
 import AnimationPresetPopover from "./AnimationPresetPopover";
 import EngineSelector from "./EngineSelector";
 import Tooltip from "./Tooltip";
-import {
-  HelpCircle,
-  GitFork,
-  CornerUpLeft,
-  CornerUpRight,
-  Trash2,
-  Upload,
-  Dices,
-  Loader,
-  Sparkles,
-} from "lucide-react";
 
 interface HeaderProps {
   onUndo: () => void;
