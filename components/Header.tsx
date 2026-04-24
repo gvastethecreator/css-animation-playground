@@ -1,13 +1,13 @@
 import {
-    CornerUpLeft,
-    CornerUpRight,
-    Dices,
-    GitFork,
-    HelpCircle,
-    Loader,
-    Sparkles,
-    Trash2,
-    Upload,
+  CornerUpLeft,
+  CornerUpRight,
+  Dices,
+  GitFork,
+  HelpCircle,
+  Loader,
+  Sparkles,
+  Trash2,
+  Upload,
 } from "lucide-react";
 import React, { useCallback, useState } from "react";
 import { AnimationEngine, PresetAnimationName } from "../types";
