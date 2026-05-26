@@ -31,7 +31,7 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@types/node": "25.6.0",
-    "@types/react": "^19.2.14",
+    "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
     "@types/three": "^0.184.1",
     "@vitejs/plugin-react": "6.0.1",
@@ -41,7 +41,7 @@
     "tailwindcss": "^4.3.0",
     "typescript": "~6.0.3",
     "vite": "8.0.8",
-    "vite-plus": "^0.1.21",
+    "vite-plus": "^0.1.22",
     "vitest": "4.1.4"
   },
   "engines": {
