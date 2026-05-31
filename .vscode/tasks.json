@@ -2,7 +2,7 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "⚡ Dev",
+      "label": "🚀 Dev",
       "type": "shell",
       "command": "bun",
       "args": ["run", "dev"],
@@ -11,7 +11,7 @@
       "group": "build"
     },
     {
-      "label": "📦 Build",
+      "label": "🏗️ Build",
       "type": "shell",
       "command": "bun",
       "args": ["run", "build"],
@@ -22,21 +22,21 @@
       "problemMatcher": ["$tsc"]
     },
     {
-      "label": "🩺 Check",
+      "label": "✅ Check",
       "type": "shell",
       "command": "bun",
       "args": ["run", "check"],
       "problemMatcher": ["$tsc"]
     },
     {
-      "label": "✅ Type",
+      "label": "🧠 Typecheck",
       "type": "shell",
       "command": "bun",
       "args": ["run", "typecheck"],
       "problemMatcher": ["$tsc"]
     },
     {
-      "label": "🔎 Lint",
+      "label": "🧹 Lint",
       "type": "shell",
       "command": "bun",
       "args": ["run", "lint"],
@@ -57,7 +57,7 @@
       "problemMatcher": []
     },
     {
-      "label": "👀 Watch",
+      "label": "👀 Test Watch",
       "type": "shell",
       "command": "bun",
       "args": ["run", "test:watch"],
@@ -65,24 +65,24 @@
       "isBackground": true
     },
     {
-      "label": "📊 Cover",
+      "label": "📊 Coverage",
       "type": "shell",
       "command": "bun",
       "args": ["run", "test:coverage"],
       "problemMatcher": []
     },
     {
-      "label": "🧹 Clean",
-      "type": "shell",
-      "command": "bun",
-      "args": ["run", "clean"],
-      "problemMatcher": []
-    },
-    {
-      "label": "👁 Preview",
+      "label": "👁️ Preview",
       "type": "shell",
       "command": "bun",
       "args": ["run", "preview"],
+      "problemMatcher": []
+    },
+    {
+      "label": "🗑️ Clean",
+      "type": "shell",
+      "command": "bun",
+      "args": ["run", "clean"],
       "problemMatcher": []
     }
   ]
