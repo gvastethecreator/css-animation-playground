@@ -1,6 +1,5 @@
 {
   "projectColors.mainColor": "#7814db",
-  "window.title": "<local-project-path>",
   "workbench.colorCustomizations": {
     "[Bearded Theme Black & Gold]": {},
     "statusBarItem.warningBackground": "#7814db",

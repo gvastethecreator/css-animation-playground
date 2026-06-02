@@ -4,8 +4,9 @@ node_modules/
 # Build outputs
 dist/
 dist-ssr/
+*.tsbuildinfo
 
-# Logs
+# Local logs (script outputs)
 logs/
 *.log
 npm-debug.log*
@@ -20,7 +21,7 @@ lerna-debug.log*
 .env.*
 !.env.example
 
-# Lock files (we use bun)
+# Lock files from other package managers (we use bun)
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
@@ -29,20 +30,24 @@ pnpm-lock.yaml
 # bun.lock
 
 # IDE
-.vscode/*
-!.vscode/tasks.json
-!.vscode/extensions.json
-!.vscode/settings.json
 .idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+# Tracked IDE files (project-wide tasks and shared settings)
+.vscode/*
+!.vscode/tasks.json
+!.vscode/extensions.json
+!.vscode/settings.json
 
 # OS files
 .DS_Store
 Thumbs.db
+desktop.ini
+ehthumbs.db
+$RECYCLE.BIN/
 
 # Test coverage
 coverage/
@@ -54,5 +59,6 @@ coverage/
 .vite-plus/
 .vp/
 
-# Misc
-*.tsbuildinfo
+# Local reports (never commit audit/output reports)
+*-readiness-report.md
+readiness-report.md
