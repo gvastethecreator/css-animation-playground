@@ -12,6 +12,10 @@ application surface allows.
 - Minimal GitHub Actions CI running `typecheck`, `lint`, `test`, and `build`.
 - `CONTRIBUTING.md`, `SECURITY.md`, and `CODE_OF_CONDUCT.md`.
 - MIT `LICENSE`.
+- `tests/codeOutputPanel.test.tsx`: 10 targeted tests for the
+  `CodeOutputPanel` code-export branches (CSS keyframes, GSAP timeline,
+  anime.js keyframe arrays, three.js pivotGroup output, 3D model warning,
+  panel collapse).
 
 ### Changed
 
@@ -25,6 +29,19 @@ application surface allows.
   alongside CSS, GSAP, and Three.js. The "legacy" framing in `README.md`
   is dropped; the open scope decision has been removed from
   `TECH-DEBT.md`.
+- Cross-cutting docs (`architecture.md`, `code-rules.md`, `design.md`,
+  `design-system.md`, `prd.md`) consolidated into `docs/`. The
+  `docs/README.md` index, `README.md`, `AGENTS.md`, and `CONTRIBUTING.md`
+  were updated to point at the new locations. Historical references in
+  `CHANGELOG.md` and `docs/WORKLOG.md` are intentionally left untouched.
+
+### Fixed
+
+- The Node `--localstorage-file` warning that surfaced once per Vitest
+  worker under Node 25 is now suppressed via `NODE_NO_WARNINGS=1` in
+  `scripts/run-with-log.mjs` for `test`, `coverage`, `lint`, `lint-fix`,
+  and `check` labels. The full Vitest suite runs clean
+  (`Test Files 12 passed (12) | Tests 119 passed (119)`).
 
 ### Removed
 
@@ -35,6 +52,8 @@ application surface allows.
   `.oxfmtrc.json`).
 - Personal Windows path and personal GitHub URL from git history via
   `git filter-repo`.
+- `TECH-DEBT.md` items 1 (`--localstorage-file` warning) and 2
+  (Three.js chunk further optimization); both resolved.
 
 ## [0.2.0] - 2026
 

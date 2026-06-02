@@ -25,9 +25,7 @@ interface AnimatedSpec {
   to: number;
 }
 
-const buildAnimationData = (
-  specs: Partial<Record<keyof TransformState, AnimatedSpec>>,
-): AnimationData => {
+const buildAnimationData = (specs: Partial<Record<keyof TransformState, AnimatedSpec>>): AnimationData => {
   const data: AnimationData = {};
   for (const [key, spec] of Object.entries(specs) as [keyof TransformState, AnimatedSpec][]) {
     data[key] = [
@@ -191,7 +189,7 @@ describe('CodeOutputPanel', () => {
     });
     expect(code).toContain("targets: '.element'");
     expect(code).toContain("direction: 'normal'");
-    expect(code).toContain("easing: \"easeInOutCubic\"");
+    expect(code).toContain('easing: "easeInOutCubic"');
     expect(code).toContain("transformOrigin: '50% 50% 0px'");
     expect(code).toContain("translateX: [{ value: '0px', duration: 1000 }]");
   });
