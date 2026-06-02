@@ -1,10 +1,10 @@
 /**
  * @vitest-environment jsdom
  */
-import { describe, it, expect, beforeEach, afterEach, vi } from "vite-plus/test";
-import { renderHook } from "@testing-library/react";
-import { useAnimationPlayer } from "../hooks/useAnimationPlayer";
-import { defaultTransformState, type AnimationData, type TrackControlState } from "../types";
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vite-plus/test';
+import { renderHook } from '@testing-library/react';
+import { useAnimationPlayer } from '../hooks/useAnimationPlayer';
+import { defaultTransformState, type AnimationData, type TrackControlState } from '../types';
 
 const makeTimelineState = (
   overrides: Partial<{
@@ -12,7 +12,7 @@ const makeTimelineState = (
     duration: number;
     isPlaying: boolean;
     isLooping: boolean;
-    direction: "normal" | "alternate";
+    direction: 'normal' | 'alternate';
     easing: string;
   }> = {},
 ) => ({
@@ -20,12 +20,12 @@ const makeTimelineState = (
   duration: 1000,
   isPlaying: false,
   isLooping: false,
-  direction: "normal" as const,
-  easing: "linear",
+  direction: 'normal' as const,
+  easing: 'linear',
   ...overrides,
 });
 
-describe("useAnimationPlayer", () => {
+describe('useAnimationPlayer', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
   });
@@ -34,11 +34,11 @@ describe("useAnimationPlayer", () => {
     vi.restoreAllMocks();
   });
 
-  it("calculates interpolated values for the current time when paused", () => {
+  it('calculates interpolated values for the current time when paused', () => {
     const animationData: AnimationData = {
       translateX: [
-        { id: "a", time: 0, value: 0, easing: "linear" },
-        { id: "b", time: 1000, value: 100, easing: "linear" },
+        { id: 'a', time: 0, value: 0, easing: 'linear' },
+        { id: 'b', time: 1000, value: 100, easing: 'linear' },
       ],
     };
 
@@ -54,18 +54,18 @@ describe("useAnimationPlayer", () => {
 
     expect(result.current.calculateAnimatedValues(500).translateX).toBe(50);
     expect(result.current.animatedTransforms.translateX).toBe(50);
-    expect(result.current.willChangeString).toBe("transform, opacity, filter");
+    expect(result.current.willChangeString).toBe('transform, opacity, filter');
   });
 
-  it("respects muted and soloed track controls in calculations", () => {
+  it('respects muted and soloed track controls in calculations', () => {
     const animationData: AnimationData = {
       translateX: [
-        { id: "a", time: 0, value: 0, easing: "linear" },
-        { id: "b", time: 1000, value: 100, easing: "linear" },
+        { id: 'a', time: 0, value: 0, easing: 'linear' },
+        { id: 'b', time: 1000, value: 100, easing: 'linear' },
       ],
       rotateZ: [
-        { id: "c", time: 0, value: 0, easing: "linear" },
-        { id: "d", time: 1000, value: 90, easing: "linear" },
+        { id: 'c', time: 0, value: 0, easing: 'linear' },
+        { id: 'd', time: 1000, value: 90, easing: 'linear' },
       ],
     };
 

@@ -1,14 +1,14 @@
-import React from "react";
-import { StageStyle, TransformState } from "../types";
-import StageLayers from "./StageLayers";
-import { CreditCard, Cpu } from "lucide-react";
+import React from 'react';
+import { StageStyle, TransformState } from '../types';
+import StageLayers from './StageLayers';
+import { CreditCard, Cpu } from 'lucide-react';
 
 interface StageCardProps {
   transforms: TransformState;
   isExploded: boolean;
   isAdjusting: boolean;
   isPlaying: boolean;
-  style: StageStyle["card"];
+  style: StageStyle['card'];
   showStageUI: boolean;
   willChangeString: string;
   onClick?: () => void;
@@ -17,17 +17,7 @@ interface StageCardProps {
 
 const StageCard = React.forwardRef<HTMLDivElement, StageCardProps>(
   (
-    {
-      transforms,
-      isExploded,
-      isAdjusting,
-      isPlaying,
-      style,
-      showStageUI,
-      willChangeString,
-      onClick,
-      imageDataUrl,
-    },
+    { transforms, isExploded, isAdjusting, isPlaying, style, showStageUI, willChangeString, onClick, imageDataUrl },
     ref,
   ) => {
     return (
@@ -48,26 +38,20 @@ const StageCard = React.forwardRef<HTMLDivElement, StageCardProps>(
           <div
             className="absolute inset-0 rounded-2xl flex flex-col items-center justify-center backface-hidden border-2"
             style={{
-              transform: "rotateY(180deg)",
-              backgroundColor: "#18181b", // zinc-900
+              transform: 'rotateY(180deg)',
+              backgroundColor: '#18181b', // zinc-900
               borderColor: style.border,
-              backgroundImage: "radial-gradient(#27272a 1px, transparent 1px)",
-              backgroundSize: "10px 10px",
+              backgroundImage: 'radial-gradient(#27272a 1px, transparent 1px)',
+              backgroundSize: '10px 10px',
             }}
           >
             <div className="p-4 rounded-full bg-zinc-800/80 mb-4 border border-zinc-700">
               <Cpu size={32} color={style.textSecondary} />
             </div>
-            <p
-              className="font-mono text-sm font-bold tracking-widest uppercase"
-              style={{ color: style.textSecondary }}
-            >
+            <p className="font-mono text-sm font-bold tracking-widest uppercase" style={{ color: style.textSecondary }}>
               Backend
             </p>
-            <p
-              className="font-mono text-[10px] mt-2 opacity-50"
-              style={{ color: style.textSecondary }}
-            >
+            <p className="font-mono text-[10px] mt-2 opacity-50" style={{ color: style.textSecondary }}>
               SISTEMA: V-2.0
             </p>
           </div>
@@ -85,7 +69,7 @@ const StageCard = React.forwardRef<HTMLDivElement, StageCardProps>(
             <img
               src={
                 imageDataUrl ||
-                "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop"
+                'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop'
               }
               alt="Card Cover"
               className="w-full h-full object-cover"
@@ -122,9 +106,7 @@ const StageCard = React.forwardRef<HTMLDivElement, StageCardProps>(
           className="absolute -bottom-4 -right-4 w-16 h-16 rounded-full backface-hidden border-4 border-zinc-900"
           style={{ backgroundColor: style.accent }}
         >
-          <div className="w-full h-full flex items-center justify-center text-white font-bold text-xs">
-            3D
-          </div>
+          <div className="w-full h-full flex items-center justify-center text-white font-bold text-xs">3D</div>
         </div>
       </StageLayers>
     );

@@ -1,9 +1,9 @@
 /**
  * @vitest-environment jsdom
  */
-import { describe, it, expect, vi } from "vite-plus/test";
-import { act, renderHook } from "@testing-library/react";
-import { useStageDragHandlers } from "../hooks/useStageDragHandlers";
+import { describe, it, expect, vi } from 'vite-plus/test';
+import { act, renderHook } from '@testing-library/react';
+import { useStageDragHandlers } from '../hooks/useStageDragHandlers';
 
 const createDragEvent = (file?: File) => ({
   preventDefault: vi.fn(),
@@ -13,8 +13,8 @@ const createDragEvent = (file?: File) => ({
   },
 });
 
-describe("useStageDragHandlers", () => {
-  it("sets dragging state on drag enter and clears it on drag leave", () => {
+describe('useStageDragHandlers', () => {
+  it('sets dragging state on drag enter and clears it on drag leave', () => {
     const onFileChange = vi.fn();
     const { result } = renderHook(() => useStageDragHandlers(onFileChange));
 
@@ -37,7 +37,7 @@ describe("useStageDragHandlers", () => {
     expect(result.current.isDraggingOver).toBe(false);
   });
 
-  it("prevents default on drag over without changing state", () => {
+  it('prevents default on drag over without changing state', () => {
     const onFileChange = vi.fn();
     const { result } = renderHook(() => useStageDragHandlers(onFileChange));
 
@@ -51,10 +51,10 @@ describe("useStageDragHandlers", () => {
     expect(result.current.isDraggingOver).toBe(false);
   });
 
-  it("handles drop, clears drag state and forwards the file", () => {
+  it('handles drop, clears drag state and forwards the file', () => {
     const onFileChange = vi.fn();
     const { result } = renderHook(() => useStageDragHandlers(onFileChange));
-    const file = new File(["hello"], "demo.png", { type: "image/png" });
+    const file = new File(['hello'], 'demo.png', { type: 'image/png' });
 
     act(() => {
       result.current.handleDragEnter(createDragEvent() as any);
@@ -72,7 +72,7 @@ describe("useStageDragHandlers", () => {
     expect(onFileChange).toHaveBeenCalledWith(file);
   });
 
-  it("ignores drop events without files", () => {
+  it('ignores drop events without files', () => {
     const onFileChange = vi.fn();
     const { result } = renderHook(() => useStageDragHandlers(onFileChange));
 

@@ -1,8 +1,8 @@
-import React from "react";
-import { TransformState } from "../types";
-import { UploadCloud } from "lucide-react";
-import StageLayers from "./StageLayers";
-import { useStageDragHandlers } from "../hooks/useStageDragHandlers";
+import React from 'react';
+import { TransformState } from '../types';
+import { UploadCloud } from 'lucide-react';
+import StageLayers from './StageLayers';
+import { useStageDragHandlers } from '../hooks/useStageDragHandlers';
 
 interface StageImageProps {
   transforms: TransformState;
@@ -36,9 +36,9 @@ const StageImage = React.forwardRef<HTMLDivElement, StageImageProps>(
 
     const mediaStyle: React.CSSProperties = {
       width: `${transforms.imageWidth}px`,
-      maxWidth: "initial",
-      maxHeight: "initial",
-      borderRadius: "inherit", // Inherit border radius from the container
+      maxWidth: 'initial',
+      maxHeight: 'initial',
+      borderRadius: 'inherit', // Inherit border radius from the container
     };
 
     return (
@@ -55,12 +55,8 @@ const StageImage = React.forwardRef<HTMLDivElement, StageImageProps>(
         onClick={onClick}
       >
         {imageDataUrl ? (
-          <div
-            onMouseDown={(e) => e.stopPropagation()}
-            className="overflow-hidden"
-            style={{ borderRadius: "inherit" }}
-          >
-            {imageDataUrl.startsWith("data:video/webm") ? (
+          <div onMouseDown={(e) => e.stopPropagation()} className="overflow-hidden" style={{ borderRadius: 'inherit' }}>
+            {imageDataUrl.startsWith('data:video/webm') ? (
               <video
                 src={imageDataUrl}
                 autoPlay
@@ -82,7 +78,7 @@ const StageImage = React.forwardRef<HTMLDivElement, StageImageProps>(
         ) : (
           <label
             htmlFor="stage-file-upload"
-            className={`w-80 h-80 rounded-xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-colors ${isDraggingOver ? "border-indigo-500 bg-indigo-500/10" : "border-zinc-700 bg-zinc-900/50 hover:border-zinc-500"}`}
+            className={`w-80 h-80 rounded-xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-colors ${isDraggingOver ? 'border-indigo-500 bg-indigo-500/10' : 'border-zinc-700 bg-zinc-900/50 hover:border-zinc-500'}`}
             onDragEnter={handleDragEnter}
             onDragLeave={handleDragLeave}
             onDragOver={handleDragOver}
@@ -91,16 +87,14 @@ const StageImage = React.forwardRef<HTMLDivElement, StageImageProps>(
           >
             <UploadCloud
               size={48}
-              className={`transition-colors ${isDraggingOver ? "text-indigo-400" : "text-zinc-600"}`}
+              className={`transition-colors ${isDraggingOver ? 'text-indigo-400' : 'text-zinc-600'}`}
             />
             <p
-              className={`mt-4 font-bold text-lg transition-colors ${isDraggingOver ? "text-indigo-300" : "text-zinc-500"}`}
+              className={`mt-4 font-bold text-lg transition-colors ${isDraggingOver ? 'text-indigo-300' : 'text-zinc-500'}`}
             >
               Drop Image/Video here
             </p>
-            <p
-              className={`mt-1 text-sm transition-colors ${isDraggingOver ? "text-indigo-400" : "text-zinc-600"}`}
-            >
+            <p className={`mt-1 text-sm transition-colors ${isDraggingOver ? 'text-indigo-400' : 'text-zinc-600'}`}>
               or click to browse
             </p>
             <input

@@ -1,7 +1,7 @@
-import { useRef, useEffect, useLayoutEffect } from "react";
-import * as THREE from "three";
-import { TransformControls } from "three/addons/controls/TransformControls.js";
-import { reportRuntimeIssue } from "../utils/runtimeDiagnostics.ts";
+import { useRef, useEffect, useLayoutEffect } from 'react';
+import * as THREE from 'three';
+import { TransformControls } from 'three/addons/controls/TransformControls.js';
+import { reportRuntimeIssue } from '../utils/runtimeDiagnostics.ts';
 
 /** Safely add three.js objects to a parent, skipping non-Object3D values. */
 export const safeAdd = (parent: THREE.Object3D, ...children: unknown[]) => {
@@ -9,11 +9,7 @@ export const safeAdd = (parent: THREE.Object3D, ...children: unknown[]) => {
     if (child instanceof THREE.Object3D) {
       parent.add(child);
     } else if (child) {
-      reportRuntimeIssue(
-        "three.safe-add",
-        child,
-        "ThreeCanvas attempted to add an invalid object to the scene.",
-      );
+      reportRuntimeIssue('three.safe-add', child, 'ThreeCanvas attempted to add an invalid object to the scene.');
     }
   }
 };
@@ -45,10 +41,7 @@ interface SetupCallbacks {
  *
  * Returns stable refs that the consumer can use in follow-up effects.
  */
-export function useThreeSetup(
-  mountRef: React.RefObject<HTMLDivElement | null>,
-  callbacks: SetupCallbacks,
-) {
+export function useThreeSetup(mountRef: React.RefObject<HTMLDivElement | null>, callbacks: SetupCallbacks) {
   // ---- Refs ----
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const sceneRef = useRef(new THREE.Scene());
@@ -73,12 +66,7 @@ export function useThreeSetup(
     onAdjustStartRef.current = callbacks.onAdjustStart;
     onAdjustEndRef.current = callbacks.onAdjustEnd;
     onElementClickRef.current = callbacks.onElementClick;
-  }, [
-    callbacks.onChange,
-    callbacks.onAdjustStart,
-    callbacks.onAdjustEnd,
-    callbacks.onElementClick,
-  ]);
+  }, [callbacks.onChange, callbacks.onAdjustStart, callbacks.onAdjustEnd, callbacks.onElementClick]);
 
   // ---- One-time hierarchy setup ----
   useLayoutEffect(() => {
@@ -96,12 +84,7 @@ export function useThreeSetup(
     if (!mountNode) return;
 
     // Camera & Renderer
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      mountNode.clientWidth / mountNode.clientHeight,
-      0.1,
-      20000,
-    );
+    const camera = new THREE.PerspectiveCamera(75, mountNode.clientWidth / mountNode.clientHeight, 0.1, 20000);
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(mountNode.clientWidth, mountNode.clientHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
@@ -183,27 +166,21 @@ export function useThreeSetup(
       }
     };
 
-    transformControls.addEventListener("dragging-changed", onDraggingChanged);
-    transformControls.addEventListener("change", onObjectChange);
+    transformControls.addEventListener('dragging-changed', onDraggingChanged);
+    transformControls.addEventListener('change', onObjectChange);
 
     // Grid helpers
     const gridHelper = new THREE.GridHelper(4000, 80, 0x555555, 0x222222);
     gridHelper.position.y = -200;
 
     const lineX = new THREE.Line(
-      new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(-2000, 0.1, 0),
-        new THREE.Vector3(2000, 0.1, 0),
-      ]),
+      new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-2000, 0.1, 0), new THREE.Vector3(2000, 0.1, 0)]),
       new THREE.LineBasicMaterial({ color: 0xef4444, fog: false }),
     );
     lineX.position.y = -200 + 0.5;
 
     const lineZ = new THREE.Line(
-      new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(0, 0.1, -2000),
-        new THREE.Vector3(0, 0.1, 2000),
-      ]),
+      new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0.1, -2000), new THREE.Vector3(0, 0.1, 2000)]),
       new THREE.LineBasicMaterial({ color: 0x22c55e, fog: false }),
     );
     lineZ.position.y = -200 + 0.5;
@@ -217,7 +194,7 @@ export function useThreeSetup(
       cameraRef.current.aspect = mountNode.clientWidth / mountNode.clientHeight;
       cameraRef.current.updateProjectionMatrix();
     };
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
 
     // Click handler (ray-cast)
     const handleClick = (event: MouseEvent) => {
@@ -233,14 +210,14 @@ export function useThreeSetup(
         onElementClickRef.current?.();
       }
     };
-    mountNode.addEventListener("click", handleClick);
+    mountNode.addEventListener('click', handleClick);
 
     // Cleanup
     return () => {
-      window.removeEventListener("resize", handleResize);
-      mountNode.removeEventListener("click", handleClick);
-      transformControls.removeEventListener("dragging-changed", onDraggingChanged);
-      transformControls.removeEventListener("change", onObjectChange);
+      window.removeEventListener('resize', handleResize);
+      mountNode.removeEventListener('click', handleClick);
+      transformControls.removeEventListener('dragging-changed', onDraggingChanged);
+      transformControls.removeEventListener('change', onObjectChange);
       transformControls.dispose();
       if (transformControlsHelperRef.current) {
         scene.remove(transformControlsHelperRef.current);

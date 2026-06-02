@@ -1,10 +1,10 @@
 /**
  * @vitest-environment jsdom
  */
-import { describe, it, expect, beforeEach, vi } from "vite-plus/test";
-import { renderHook, act } from "@testing-library/react";
-import { useHistoryManager, HistoryState, defaultEngineConfig } from "../hooks/useHistoryManager";
-import { defaultTransformState } from "../types";
+import { describe, it, expect, beforeEach, vi } from 'vite-plus/test';
+import { renderHook, act } from '@testing-library/react';
+import { useHistoryManager, HistoryState, defaultEngineConfig } from '../hooks/useHistoryManager';
+import { defaultTransformState } from '../types';
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -23,35 +23,35 @@ const localStorageMock = (() => {
   };
 })();
 
-Object.defineProperty(globalThis, "localStorage", { value: localStorageMock });
+Object.defineProperty(globalThis, 'localStorage', { value: localStorageMock });
 
 const makeState = (overrides: Partial<HistoryState> = {}): HistoryState => ({
   transforms: { ...defaultTransformState },
   animationData: {},
   timelineDuration: 5000,
   timelineIsLooping: true,
-  timelineDirection: "normal",
-  timelineEasing: "linear",
+  timelineDirection: 'normal',
+  timelineEasing: 'linear',
   trackControls: {},
   engineConfig: { ...defaultEngineConfig },
   timelinePlayOnClick: false,
   ...overrides,
 });
 
-describe("useHistoryManager", () => {
+describe('useHistoryManager', () => {
   beforeEach(() => {
     localStorageMock.clear();
     vi.clearAllMocks();
   });
 
-  it("returns initial default state", () => {
+  it('returns initial default state', () => {
     const { result } = renderHook(() => useHistoryManager());
     expect(result.current.currentState.transforms).toEqual(defaultTransformState);
     expect(result.current.canUndo).toBe(false);
     expect(result.current.canRedo).toBe(false);
   });
 
-  it("saves state to history and allows undo", () => {
+  it('saves state to history and allows undo', () => {
     const { result } = renderHook(() => useHistoryManager());
 
     const newState = makeState({
@@ -70,14 +70,12 @@ describe("useHistoryManager", () => {
       result.current.handleUndo();
     });
 
-    expect(result.current.currentState.transforms.translateX).toBe(
-      defaultTransformState.translateX,
-    );
+    expect(result.current.currentState.transforms.translateX).toBe(defaultTransformState.translateX);
     expect(result.current.canUndo).toBe(false);
     expect(result.current.canRedo).toBe(true);
   });
 
-  it("supports redo after undo", () => {
+  it('supports redo after undo', () => {
     const { result } = renderHook(() => useHistoryManager());
 
     const newState = makeState({
@@ -98,7 +96,7 @@ describe("useHistoryManager", () => {
     expect(result.current.canRedo).toBe(false);
   });
 
-  it("discards redo branch when saving new state after undo", () => {
+  it('discards redo branch when saving new state after undo', () => {
     const { result } = renderHook(() => useHistoryManager());
 
     const state1 = makeState({ transforms: { ...defaultTransformState, translateX: 10 } });
@@ -132,14 +130,12 @@ describe("useHistoryManager", () => {
     expect(result.current.currentState.transforms.translateX).toBe(10);
   });
 
-  it("limits history to 50 entries", () => {
+  it('limits history to 50 entries', () => {
     const { result } = renderHook(() => useHistoryManager());
 
     for (let i = 0; i < 55; i++) {
       act(() => {
-        result.current.saveStateToHistory(
-          makeState({ transforms: { ...defaultTransformState, translateX: i } }),
-        );
+        result.current.saveStateToHistory(makeState({ transforms: { ...defaultTransformState, translateX: i } }));
       });
     }
 
@@ -156,13 +152,11 @@ describe("useHistoryManager", () => {
     expect(undoCount).toBeLessThanOrEqual(50);
   });
 
-  it("resetHistory returns to default and clears history", () => {
+  it('resetHistory returns to default and clears history', () => {
     const { result } = renderHook(() => useHistoryManager());
 
     act(() => {
-      result.current.saveStateToHistory(
-        makeState({ transforms: { ...defaultTransformState, scaleX: 5 } }),
-      );
+      result.current.saveStateToHistory(makeState({ transforms: { ...defaultTransformState, scaleX: 5 } }));
     });
 
     act(() => {
@@ -174,7 +168,7 @@ describe("useHistoryManager", () => {
     expect(result.current.canRedo).toBe(false);
   });
 
-  it("handleUndo returns null when at first state", () => {
+  it('handleUndo returns null when at first state', () => {
     const { result } = renderHook(() => useHistoryManager());
     let undoResult: HistoryState | null = null;
 
@@ -185,7 +179,7 @@ describe("useHistoryManager", () => {
     expect(undoResult).toBeNull();
   });
 
-  it("handleRedo returns null when at latest state", () => {
+  it('handleRedo returns null when at latest state', () => {
     const { result } = renderHook(() => useHistoryManager());
     let redoResult: HistoryState | null = null;
 
@@ -196,19 +190,16 @@ describe("useHistoryManager", () => {
     expect(redoResult).toBeNull();
   });
 
-  it("persists current state to localStorage", () => {
+  it('persists current state to localStorage', () => {
     renderHook(() => useHistoryManager());
-    expect(localStorageMock.setItem).toHaveBeenCalledWith(
-      "css3d-playground-state",
-      expect.any(String),
-    );
+    expect(localStorageMock.setItem).toHaveBeenCalledWith('css3d-playground-state', expect.any(String));
   });
 
-  it("loads from localStorage on init", () => {
+  it('loads from localStorage on init', () => {
     const savedState = makeState({
       transforms: { ...defaultTransformState, translateZ: 999 },
     });
-    localStorageMock.setItem("css3d-playground-state", JSON.stringify(savedState));
+    localStorageMock.setItem('css3d-playground-state', JSON.stringify(savedState));
     localStorageMock.getItem.mockReturnValueOnce(JSON.stringify(savedState));
 
     const { result } = renderHook(() => useHistoryManager());

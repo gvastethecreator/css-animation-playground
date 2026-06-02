@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface RulerProps {
   duration: number;
@@ -35,13 +35,9 @@ const TimelineRuler = ({ duration, pixelsPerMs }: RulerProps) => {
     const left = time * pixelsPerMs;
 
     ticks.push(
-      <div
-        key={`major-${i}`}
-        className="absolute h-full w-px bg-zinc-600 top-0"
-        style={{ left: `${left}px` }}
-      >
+      <div key={`major-${i}`} className="absolute h-full w-px bg-zinc-600 top-0" style={{ left: `${left}px` }}>
         <span className="absolute top-full mt-0.5 -translate-x-1/2 text-[10px] text-zinc-500 font-mono whitespace-nowrap">
-          {time >= 1000 ? `${(time / 1000).toFixed(1).replace(/\.0$/, "")}s` : `${time}ms`}
+          {time >= 1000 ? `${(time / 1000).toFixed(1).replace(/\.0$/, '')}s` : `${time}ms`}
         </span>
       </div>,
     );
@@ -67,11 +63,7 @@ const TimelineRuler = ({ duration, pixelsPerMs }: RulerProps) => {
     }
   }
 
-  return (
-    <div className="absolute top-0 left-0 w-full h-4 pointer-events-none border-b border-zinc-800">
-      {ticks}
-    </div>
-  );
+  return <div className="absolute top-0 left-0 w-full h-4 pointer-events-none border-b border-zinc-800">{ticks}</div>;
 };
 
 export default React.memo(TimelineRuler);

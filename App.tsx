@@ -1,16 +1,16 @@
-import React, { useState, useCallback, useRef, useEffect, useMemo } from "react";
-import Sidebar from "./components/Sidebar";
-import Stage from "./components/Stage";
-import Timeline from "./components/timeline/Timeline";
-import CodeOutputPanel from "./components/CodeOutputPanel";
-import ShortcutHelp from "./components/ShortcutHelp";
-import Header from "./components/Header";
-import { useHistoryManager, HistoryState } from "./hooks/useHistoryManager";
-import { useAnimationPlayer } from "./hooks/useAnimationPlayer";
-import { useStageElementManager } from "./hooks/useStageElementManager";
-import { useHotkeys } from "./hooks/useHotkeys";
-import { usePreviewAnimator } from "./hooks/usePreviewAnimator";
-import { useAppStore } from "./store/useAppStore";
+import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react';
+import Sidebar from './components/Sidebar';
+import Stage from './components/Stage';
+import Timeline from './components/timeline/Timeline';
+import CodeOutputPanel from './components/CodeOutputPanel';
+import ShortcutHelp from './components/ShortcutHelp';
+import Header from './components/Header';
+import { useHistoryManager, HistoryState } from './hooks/useHistoryManager';
+import { useAnimationPlayer } from './hooks/useAnimationPlayer';
+import { useStageElementManager } from './hooks/useStageElementManager';
+import { useHotkeys } from './hooks/useHotkeys';
+import { usePreviewAnimator } from './hooks/usePreviewAnimator';
+import { useAppStore } from './store/useAppStore';
 import {
   TransformState,
   Keyframe,
@@ -20,19 +20,11 @@ import {
   VIEW_PRESETS,
   STAGE_STYLES,
   EngineConfig,
-} from "./types";
+} from './types';
 
 export default function App() {
-  const {
-    currentState,
-    saveStateToHistory,
-    handleUndo,
-    handleRedo,
-    resetHistory,
-    canUndo,
-    canRedo,
-    isRestoring,
-  } = useHistoryManager();
+  const { currentState, saveStateToHistory, handleUndo, handleRedo, resetHistory, canUndo, canRedo, isRestoring } =
+    useHistoryManager();
   const {
     transforms,
     animationData,
@@ -93,11 +85,7 @@ export default function App() {
   sceneRef.current = scene;
 
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    if (
-      (e.target as HTMLElement).id !== "stage-root" &&
-      (e.target as HTMLElement).tagName !== "CANVAS"
-    )
-      return;
+    if ((e.target as HTMLElement).id !== 'stage-root' && (e.target as HTMLElement).tagName !== 'CANVAS') return;
     setIsDragging(true);
     dragStartPos.current = {
       x: e.clientX,
@@ -135,19 +123,10 @@ export default function App() {
     [setScene],
   );
 
-  const resetView = useCallback(
-    () => setScene({ translateX: 0, translateY: 0, translateZ: 0 }),
-    [setScene],
-  );
+  const resetView = useCallback(() => setScene({ translateX: 0, translateY: 0, translateZ: 0 }), [setScene]);
   const resetZoom = useCallback(() => setScene((prev) => ({ ...prev, translateZ: 0 })), [setScene]);
-  const focusTO = useCallback(
-    () => setScene({ translateX: 0, translateY: 0, translateZ: 0 }),
-    [setScene],
-  );
-  const focusPO = useCallback(
-    () => setScene({ translateX: 0, translateY: 0, translateZ: 0 }),
-    [setScene],
-  );
+  const focusTO = useCallback(() => setScene({ translateX: 0, translateY: 0, translateZ: 0 }), [setScene]);
+  const focusPO = useCallback(() => setScene({ translateX: 0, translateY: 0, translateZ: 0 }), [setScene]);
 
   const onCurrentTimeChange = useCallback((time: number) => {
     setTimelineState((prev) => ({ ...prev, currentTime: time }));
@@ -213,7 +192,7 @@ export default function App() {
           id: `${Date.now()}-${Math.random()}`,
           time: currentTime,
           value: transformsRef.current[property],
-          easing: "easeInOut",
+          easing: 'easeInOut',
         };
         const newTrack = [...track, newKeyframe].sort((a, b) => a.time - b.time);
         newAnimationData[property] = newTrack;
@@ -242,8 +221,8 @@ export default function App() {
         isPlaying: true,
         duration: preset.timelineState.duration,
         isLooping: preset.timelineState.isLooping,
-        direction: preset.timelineState.direction || "normal",
-        easing: preset.timelineState.easing || "linear",
+        direction: preset.timelineState.direction || 'normal',
+        easing: preset.timelineState.easing || 'linear',
       }));
 
       setAnimationResetKey((p) => p + 1);
@@ -253,8 +232,8 @@ export default function App() {
         animationData: preset.animationData,
         timelineDuration: preset.timelineState.duration,
         timelineIsLooping: preset.timelineState.isLooping,
-        timelineDirection: preset.timelineState.direction || "normal",
-        timelineEasing: preset.timelineState.easing || "linear",
+        timelineDirection: preset.timelineState.direction || 'normal',
+        timelineEasing: preset.timelineState.easing || 'linear',
       });
     },
     [commitChanges, setTimelineState],
@@ -263,7 +242,7 @@ export default function App() {
   const handleTimelineStateChange = useCallback(
     (newState: React.SetStateAction<typeof timelineState>) => {
       const current = timelineStateRef.current;
-      const updatedState = typeof newState === "function" ? newState(current) : newState;
+      const updatedState = typeof newState === 'function' ? newState(current) : newState;
       setTimelineState(updatedState);
       commitChanges({
         timelineDuration: updatedState.duration,
@@ -324,15 +303,15 @@ export default function App() {
       easing: restored.timelineEasing,
     }));
     setAnimationResetKey((p) => p + 1);
-    setStageElement("card");
+    setStageElement('card');
     handleFileRemove();
   }, [resetHistory, setTimelineState, setStageElement, handleFileRemove]);
 
-  const handleFrameStep = useCallback((direction: "next" | "prev") => {
+  const handleFrameStep = useCallback((direction: 'next' | 'prev') => {
     setTimelineState((prev) => {
       const frameTime = 1000 / prev.fps;
       const newTime =
-        direction === "next"
+        direction === 'next'
           ? Math.min(prev.duration, prev.currentTime + frameTime)
           : Math.max(0, prev.currentTime - frameTime);
       return { ...prev, currentTime: newTime };
@@ -357,29 +336,22 @@ export default function App() {
 
   useHotkeys(
     {
-      " ": (e) => {
+      ' ': (e) => {
         e.preventDefault();
         handleTimelineStateChange((s) => ({ ...s, isPlaying: !s.isPlaying }));
       },
-      "meta+z": handleUndoAction,
-      "meta+shift+z": handleRedoAction,
-      "meta+y": handleRedoAction,
-      arrowleft: () => handleFrameStep("prev"),
-      ",": () => handleFrameStep("prev"),
-      arrowright: () => handleFrameStep("next"),
-      ".": () => handleFrameStep("next"),
+      'meta+z': handleUndoAction,
+      'meta+shift+z': handleRedoAction,
+      'meta+y': handleRedoAction,
+      arrowleft: () => handleFrameStep('prev'),
+      ',': () => handleFrameStep('prev'),
+      arrowright: () => handleFrameStep('next'),
+      '.': () => handleFrameStep('next'),
       home: () => handleGoToStart(),
       end: () => handleGoToEnd(),
       l: () => handleToggleLoop(),
     },
-    [
-      handleUndoAction,
-      handleRedoAction,
-      handleFrameStep,
-      handleGoToStart,
-      handleGoToEnd,
-      handleToggleLoop,
-    ],
+    [handleUndoAction, handleRedoAction, handleFrameStep, handleGoToStart, handleGoToEnd, handleToggleLoop],
   );
 
   useEffect(() => {
@@ -394,7 +366,7 @@ export default function App() {
     }
   }, [timelineDuration, timelineIsLooping, timelineDirection, timelineEasing, isRestoring]);
 
-  const isThreeJsMode = animationEngine === "threejs";
+  const isThreeJsMode = animationEngine === 'threejs';
   const displayedTransforms = animatedTransforms;
 
   const timelineStateForPanel = useMemo(
@@ -404,23 +376,12 @@ export default function App() {
       direction: timelineState.direction,
       easing: timelineState.easing,
     }),
-    [
-      timelineState.duration,
-      timelineState.isLooping,
-      timelineState.direction,
-      timelineState.easing,
-    ],
+    [timelineState.duration, timelineState.isLooping, timelineState.direction, timelineState.easing],
   );
 
   // Stable UI callbacks for memoized children
-  const handleShowHelp = useCallback(
-    () => setUiState((s) => ({ ...s, showHelp: true })),
-    [setUiState],
-  );
-  const handleCloseHelp = useCallback(
-    () => setUiState((s) => ({ ...s, showHelp: false })),
-    [setUiState],
-  );
+  const handleShowHelp = useCallback(() => setUiState((s) => ({ ...s, showHelp: true })), [setUiState]);
+  const handleCloseHelp = useCallback(() => setUiState((s) => ({ ...s, showHelp: false })), [setUiState]);
   const handleClearPreview = useCallback(() => setPreviewPresetName(null), []);
   const handleAdjustStart = useCallback(() => setIsAdjusting(true), []);
   const handleAdjustEnd = useCallback(() => setIsAdjusting(false), []);
@@ -436,10 +397,7 @@ export default function App() {
     (val: boolean) => setUiState((s) => ({ ...s, alignGridToView: val })),
     [setUiState],
   );
-  const handleExplodeToggle = useCallback(
-    () => setUiState((s) => ({ ...s, isExploded: !s.isExploded })),
-    [setUiState],
-  );
+  const handleExplodeToggle = useCallback(() => setUiState((s) => ({ ...s, isExploded: !s.isExploded })), [setUiState]);
   const handleEngineConfigChange = useCallback(
     (newConfig: EngineConfig) => commitChanges({ engineConfig: newConfig }),
     [commitChanges],
@@ -459,9 +417,7 @@ export default function App() {
 
   const handleDeleteKeyframe = useCallback(
     (property: keyof TransformState, keyframeId: string) => {
-      const newTrack = (animationDataRef.current[property] || []).filter(
-        (kf) => kf.id !== keyframeId,
-      );
+      const newTrack = (animationDataRef.current[property] || []).filter((kf) => kf.id !== keyframeId);
       const newAnimationData = { ...animationDataRef.current };
       if (newTrack.length === 0) {
         delete newAnimationData[property];
@@ -504,12 +460,12 @@ export default function App() {
   );
 
   const handleTrackControlChange = useCallback(
-    (property: keyof TransformState, control: "solo" | "mute") => {
+    (property: keyof TransformState, control: 'solo' | 'mute') => {
       const currentTrackControls = currentStateRef.current.trackControls;
       const newTrackControls = { ...currentTrackControls };
       const current = newTrackControls[property] || { solo: false, mute: false };
 
-      if (control === "solo") {
+      if (control === 'solo') {
         const isSoloing = !current.solo;
         Object.keys(newTrackControls).forEach((k) => {
           if (newTrackControls[k as keyof TransformState]) {

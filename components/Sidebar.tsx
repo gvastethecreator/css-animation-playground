@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback } from 'react';
 import {
   TransformState,
   AnimationData,
@@ -7,12 +7,12 @@ import {
   PresetName,
   VIEW_PRESETS,
   StageStyleName,
-} from "../types";
-import ControlGroup from "./ControlGroup";
-import RangeControl from "./RangeControl";
-import PositionGrid from "./PositionGrid";
-import ColorControl from "./ColorControl";
-import StageStyleSelector from "./StageStyleSelector";
+} from '../types';
+import ControlGroup from './ControlGroup';
+import RangeControl from './RangeControl';
+import PositionGrid from './PositionGrid';
+import ColorControl from './ColorControl';
+import StageStyleSelector from './StageStyleSelector';
 import {
   View,
   CircleSlash,
@@ -33,7 +33,7 @@ import {
   ChevronsUpDown,
   Crosshair,
   ScanEye,
-} from "lucide-react";
+} from 'lucide-react';
 
 interface SidebarProps {
   values: TransformState;
@@ -70,7 +70,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const iconSize = 14;
   const iconStroke = 2;
-  const iconClass = "mr-1.5 text-zinc-500";
+  const iconClass = 'mr-1.5 text-zinc-500';
 
   const renderRangeControl = useCallback(
     (
@@ -79,7 +79,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       min: number,
       max: number,
       step = 1,
-      unit = "",
+      unit = '',
       isActivatable = false,
       customDisabled = false,
     ) => {
@@ -114,17 +114,10 @@ const Sidebar: React.FC<SidebarProps> = ({
   );
 
   const renderColorControl = useCallback(
-    (
-      key: keyof TransformState,
-      label: React.ReactNode,
-      isActivatable = false,
-      customDisabled = false,
-    ) => {
+    (key: keyof TransformState, label: React.ReactNode, isActivatable = false, customDisabled = false) => {
       const isAnimated = key in animationData;
       const hasKeyframe = animationData[key]?.some((k) => k.time === currentTime) ?? false;
-      const enabledKey = isActivatable
-        ? (`${key.replace("Color", "")}Enabled` as keyof TransformState)
-        : undefined;
+      const enabledKey = isActivatable ? (`${key.replace('Color', '')}Enabled` as keyof TransformState) : undefined;
 
       return (
         <ColorControl
@@ -149,12 +142,10 @@ const Sidebar: React.FC<SidebarProps> = ({
   const renderEngineControls = () => {
     if (isThreeJsMode) return null; // No engine controls in three.js mode
     switch (animationEngine) {
-      case "gsap":
+      case 'gsap':
         return (
           <ControlGroup title="GSAP Ease Settings">
-            <p className="text-[11px] text-zinc-500 mb-2">
-              These settings apply to 'elastic' and 'back' easing types.
-            </p>
+            <p className="text-[11px] text-zinc-500 mb-2">These settings apply to 'elastic' and 'back' easing types.</p>
             <RangeControl
               label={<>Amplitude</>}
               value={engineConfig.gsap.easeAmplitude}
@@ -195,7 +186,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             />
           </ControlGroup>
         );
-      case "animejs":
+      case 'animejs':
         return (
           <ControlGroup title="Anime.js Settings">
             <RangeControl
@@ -249,7 +240,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
         <ControlGroup title="Perspective">
           {renderRangeControl(
-            "perspective",
+            'perspective',
             <>
               <View size={iconSize} strokeWidth={iconStroke} className={iconClass} />
               Distance
@@ -257,13 +248,13 @@ const Sidebar: React.FC<SidebarProps> = ({
             1,
             2000,
             10,
-            "px",
+            'px',
           )}
         </ControlGroup>
 
         <ControlGroup title="Filters & Effects">
           {renderRangeControl(
-            "opacity",
+            'opacity',
             <>
               <CircleSlash size={iconSize} strokeWidth={iconStroke} className={iconClass} />
               Opacity
@@ -271,11 +262,11 @@ const Sidebar: React.FC<SidebarProps> = ({
             0,
             1,
             0.01,
-            "",
+            '',
             true,
           )}
           {renderRangeControl(
-            "blur",
+            'blur',
             <>
               <Waves size={iconSize} strokeWidth={iconStroke} className={iconClass} />
               Blur
@@ -283,12 +274,12 @@ const Sidebar: React.FC<SidebarProps> = ({
             0,
             50,
             1,
-            "px",
+            'px',
             true,
             isThreeJsMode,
           )}
           {renderRangeControl(
-            "brightness",
+            'brightness',
             <>
               <Sun size={iconSize} strokeWidth={iconStroke} className={iconClass} />
               Brightness
@@ -296,12 +287,12 @@ const Sidebar: React.FC<SidebarProps> = ({
             0,
             200,
             1,
-            "%",
+            '%',
             true,
             isThreeJsMode,
           )}
           {renderRangeControl(
-            "contrast",
+            'contrast',
             <>
               <Contrast size={iconSize} strokeWidth={iconStroke} className={iconClass} />
               Contrast
@@ -309,7 +300,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             0,
             200,
             1,
-            "%",
+            '%',
             true,
             isThreeJsMode,
           )}
@@ -317,7 +308,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
         <ControlGroup title="Appearance">
           {renderRangeControl(
-            "borderRadius",
+            'borderRadius',
             <>
               <Radius size={iconSize} strokeWidth={iconStroke} className={iconClass} />
               Border Radius
@@ -325,7 +316,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             0,
             200,
             1,
-            "px",
+            'px',
             true,
             isThreeJsMode,
           )}
@@ -333,7 +324,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
         <ControlGroup title="Shadows">
           {renderColorControl(
-            "dropShadowColor",
+            'dropShadowColor',
             <>
               <Palette size={iconSize} strokeWidth={iconStroke} className={iconClass} />
               Color
@@ -342,33 +333,31 @@ const Sidebar: React.FC<SidebarProps> = ({
             isThreeJsMode,
           )}
           {renderRangeControl(
-            "dropShadowX",
+            'dropShadowX',
             <>
-              <MoveHorizontal size={iconSize} strokeWidth={iconStroke} className={iconClass} />X
-              Offset
+              <MoveHorizontal size={iconSize} strokeWidth={iconStroke} className={iconClass} />X Offset
             </>,
             -100,
             100,
             1,
-            "px",
+            'px',
             true,
             isThreeJsMode,
           )}
           {renderRangeControl(
-            "dropShadowY",
+            'dropShadowY',
             <>
-              <MoveVertical size={iconSize} strokeWidth={iconStroke} className={iconClass} />Y
-              Offset
+              <MoveVertical size={iconSize} strokeWidth={iconStroke} className={iconClass} />Y Offset
             </>,
             -100,
             100,
             1,
-            "px",
+            'px',
             true,
             isThreeJsMode,
           )}
           {renderRangeControl(
-            "dropShadowBlur",
+            'dropShadowBlur',
             <>
               <Baseline size={iconSize} strokeWidth={iconStroke} className={iconClass} />
               Blur
@@ -376,7 +365,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             0,
             100,
             1,
-            "px",
+            'px',
             true,
             isThreeJsMode,
           )}
@@ -384,73 +373,73 @@ const Sidebar: React.FC<SidebarProps> = ({
 
         <ControlGroup title="Translate">
           {renderRangeControl(
-            "translateX",
+            'translateX',
             <>
               <MoveHorizontal size={iconSize} strokeWidth={iconStroke} className={iconClass} />X
             </>,
             -500,
             500,
             1,
-            "px",
+            'px',
           )}
           {renderRangeControl(
-            "translateY",
+            'translateY',
             <>
               <MoveVertical size={iconSize} strokeWidth={iconStroke} className={iconClass} />Y
             </>,
             -500,
             500,
             1,
-            "px",
+            'px',
           )}
           {renderRangeControl(
-            "translateZ",
+            'translateZ',
             <>
               <Move3d size={iconSize} strokeWidth={iconStroke} className={iconClass} />Z
             </>,
             -1000,
             1000,
             1,
-            "px",
+            'px',
           )}
         </ControlGroup>
 
         <ControlGroup title="Rotate">
           {renderRangeControl(
-            "rotateX",
+            'rotateX',
             <>
               <Rotate3d size={iconSize} strokeWidth={iconStroke} className={iconClass} />X
             </>,
             -360,
             360,
             1,
-            "°",
+            '°',
           )}
           {renderRangeControl(
-            "rotateY",
+            'rotateY',
             <>
               <Rotate3d size={iconSize} strokeWidth={iconStroke} className={iconClass} />Y
             </>,
             -360,
             360,
             1,
-            "°",
+            '°',
           )}
           {renderRangeControl(
-            "rotateZ",
+            'rotateZ',
             <>
               <Rotate3d size={iconSize} strokeWidth={iconStroke} className={iconClass} />Z
             </>,
             -360,
             360,
             1,
-            "°",
+            '°',
           )}
         </ControlGroup>
 
         <ControlGroup title="Scale">
           {renderRangeControl(
-            "scaleX",
+            'scaleX',
             <>
               <StretchHorizontal size={iconSize} strokeWidth={iconStroke} className={iconClass} />X
             </>,
@@ -459,7 +448,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             0.01,
           )}
           {renderRangeControl(
-            "scaleY",
+            'scaleY',
             <>
               <StretchVertical size={iconSize} strokeWidth={iconStroke} className={iconClass} />Y
             </>,
@@ -468,7 +457,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             0.01,
           )}
           {renderRangeControl(
-            "scaleZ",
+            'scaleZ',
             <>
               <BoxSelect size={iconSize} strokeWidth={iconStroke} className={iconClass} />Z
             </>,
@@ -480,26 +469,26 @@ const Sidebar: React.FC<SidebarProps> = ({
 
         <ControlGroup title="Skew">
           {renderRangeControl(
-            "skewX",
+            'skewX',
             <>
               <ChevronsRightLeft size={iconSize} strokeWidth={iconStroke} className={iconClass} />X
             </>,
             -90,
             90,
             1,
-            "°",
+            '°',
             false,
             isThreeJsMode,
           )}
           {renderRangeControl(
-            "skewY",
+            'skewY',
             <>
               <ChevronsUpDown size={iconSize} strokeWidth={iconStroke} className={iconClass} />Y
             </>,
             -90,
             90,
             1,
-            "°",
+            '°',
             false,
             isThreeJsMode,
           )}
@@ -512,48 +501,46 @@ const Sidebar: React.FC<SidebarProps> = ({
               valueY={values.transformOriginY}
               onChange={(x, y) => onChange({ transformOriginX: x, transformOriginY: y })}
               propertyKeyX="transformOriginX"
-              isAnimated={
-                "transformOriginX" in animationData || "transformOriginY" in animationData
-              }
+              isAnimated={'transformOriginX' in animationData || 'transformOriginY' in animationData}
               hasKeyframeAtCurrentTime={
-                (animationData["transformOriginX"]?.some((k) => k.time === currentTime) ?? false) ||
-                (animationData["transformOriginY"]?.some((k) => k.time === currentTime) ?? false)
+                (animationData['transformOriginX']?.some((k) => k.time === currentTime) ?? false) ||
+                (animationData['transformOriginY']?.some((k) => k.time === currentTime) ?? false)
               }
               onKeyframeToggle={() => {
-                onKeyframeToggle("transformOriginX");
-                onKeyframeToggle("transformOriginY");
+                onKeyframeToggle('transformOriginX');
+                onKeyframeToggle('transformOriginY');
               }}
             />
             <div className="space-y-3">
               {renderRangeControl(
-                "transformOriginX",
+                'transformOriginX',
                 <>
                   <Crosshair size={iconSize} strokeWidth={iconStroke} className={iconClass} />X
                 </>,
                 -100,
                 200,
                 1,
-                "%",
+                '%',
               )}
               {renderRangeControl(
-                "transformOriginY",
+                'transformOriginY',
                 <>
                   <Crosshair size={iconSize} strokeWidth={iconStroke} className={iconClass} />Y
                 </>,
                 -100,
                 200,
                 1,
-                "%",
+                '%',
               )}
               {renderRangeControl(
-                "transformOriginZ",
+                'transformOriginZ',
                 <>
                   <Move3d size={iconSize} strokeWidth={iconStroke} className={iconClass} />Z
                 </>,
                 -500,
                 500,
                 1,
-                "px",
+                'px',
               )}
             </div>
           </div>
@@ -566,39 +553,36 @@ const Sidebar: React.FC<SidebarProps> = ({
               valueY={values.perspectiveOriginY}
               onChange={(x, y) => onChange({ perspectiveOriginX: x, perspectiveOriginY: y })}
               propertyKeyX="perspectiveOriginX"
-              isAnimated={
-                "perspectiveOriginX" in animationData || "perspectiveOriginY" in animationData
-              }
+              isAnimated={'perspectiveOriginX' in animationData || 'perspectiveOriginY' in animationData}
               hasKeyframeAtCurrentTime={
-                (animationData["perspectiveOriginX"]?.some((k) => k.time === currentTime) ??
-                  false) ||
-                (animationData["perspectiveOriginY"]?.some((k) => k.time === currentTime) ?? false)
+                (animationData['perspectiveOriginX']?.some((k) => k.time === currentTime) ?? false) ||
+                (animationData['perspectiveOriginY']?.some((k) => k.time === currentTime) ?? false)
               }
               onKeyframeToggle={() => {
-                onKeyframeToggle("perspectiveOriginX");
-                onKeyframeToggle("perspectiveOriginY");
+                onKeyframeToggle('perspectiveOriginX');
+                onKeyframeToggle('perspectiveOriginY');
               }}
             />
             <div className="space-y-3">
               {renderRangeControl(
-                "perspectiveOriginX",
+                'perspectiveOriginX',
                 <>
                   <ScanEye size={iconSize} strokeWidth={iconStroke} className={iconClass} />X
                 </>,
                 -100,
                 200,
                 1,
-                "%",
+                '%',
               )}
               {renderRangeControl(
-                "perspectiveOriginY",
+                'perspectiveOriginY',
                 <>
                   <ScanEye size={iconSize} strokeWidth={iconStroke} className={iconClass} />Y
                 </>,
                 -100,
                 200,
                 1,
-                "%",
+                '%',
               )}
             </div>
           </div>

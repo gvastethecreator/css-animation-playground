@@ -1,9 +1,9 @@
-import { useState, useEffect, useCallback, useRef, useMemo } from "react";
-import { TransformState, AnimationData, EasingValue, TrackControlState } from "../types";
-import { getEasingFunction } from "../easing";
-import { lerp, lerpColor } from "../utils/mathUtils";
-import { getTransformString, getFilterString } from "../utils/styleUtils";
-import { useAppStore } from "../store/useAppStore";
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { TransformState, AnimationData, EasingValue, TrackControlState } from '../types';
+import { getEasingFunction } from '../easing';
+import { lerp, lerpColor } from '../utils/mathUtils';
+import { getTransformString, getFilterString } from '../utils/styleUtils';
+import { useAppStore } from '../store/useAppStore';
 
 export function useAnimationPlayer(
   initialTransforms: TransformState,
@@ -13,7 +13,7 @@ export function useAnimationPlayer(
     duration: number;
     isPlaying: boolean;
     isLooping: boolean;
-    direction: "normal" | "alternate";
+    direction: 'normal' | 'alternate';
     easing: EasingValue;
   },
   onCurrentTimeChange: (time: number) => void,
@@ -96,8 +96,8 @@ export function useAnimationPlayer(
   }, [animationData, trackControls]);
 
   const willChangeString = useMemo(() => {
-    if (activeAnimatedProperties.length === 0) return "auto";
-    return "transform, opacity, filter";
+    if (activeAnimatedProperties.length === 0) return 'auto';
+    return 'transform, opacity, filter';
   }, [activeAnimatedProperties]);
 
   const calculateAnimatedValues = useCallback((time: number): Partial<TransformState> => {
@@ -143,11 +143,11 @@ export function useAnimationPlayer(
       const val1 = p1.value;
       const val2 = p2.value;
 
-      if (typeof val1 === "number" && typeof val2 === "number") {
+      if (typeof val1 === 'number' && typeof val2 === 'number') {
         (newValues as any)[property] = lerp(val1, val2, easedProgress);
-      } else if (typeof val1 === "string" && typeof val2 === "string") {
+      } else if (typeof val1 === 'string' && typeof val2 === 'string') {
         (newValues as any)[property] = lerpColor(val1, val2, easedProgress);
-      } else if (typeof val1 === "boolean" || typeof val2 === "boolean") {
+      } else if (typeof val1 === 'boolean' || typeof val2 === 'boolean') {
         (newValues as any)[property] = easedProgress < 0.5 ? val1 : val2;
       }
     }
@@ -161,13 +161,7 @@ export function useAnimationPlayer(
       const animatedValues = calculateAnimatedValues(timelineState.currentTime);
       setAnimatedTransforms({ ...initialTransforms, ...animatedValues });
     }
-  }, [
-    timelineState.currentTime,
-    initialTransforms,
-    calculateAnimatedValues,
-    animationData,
-    timelineState.isPlaying,
-  ]);
+  }, [timelineState.currentTime, initialTransforms, calculateAnimatedValues, animationData, timelineState.isPlaying]);
 
   // Animation Loop
   useEffect(() => {
@@ -192,7 +186,7 @@ export function useAnimationPlayer(
       if (duration > 0) {
         if (isLooping) {
           const cycleTime = absoluteElapsed % duration;
-          if (direction === "alternate") {
+          if (direction === 'alternate') {
             const loopCount = Math.floor(absoluteElapsed / duration);
             const isReversed = loopCount % 2 !== 0;
             effectiveTime = isReversed ? duration - cycleTime : cycleTime;
@@ -219,9 +213,7 @@ export function useAnimationPlayer(
           transformOrigin: `${currentTransforms.transformOriginX}% ${currentTransforms.transformOriginY}% ${currentTransforms.transformOriginZ}px`,
           opacity: currentTransforms.opacityEnabled ? currentTransforms.opacity : 1,
           filter: getFilterString(currentTransforms),
-          borderRadius: currentTransforms.borderRadiusEnabled
-            ? `${currentTransforms.borderRadius}px`
-            : "0px",
+          borderRadius: currentTransforms.borderRadiusEnabled ? `${currentTransforms.borderRadius}px` : '0px',
         };
 
         Object.assign(stageElementRef.current.style, targetStyle);

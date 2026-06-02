@@ -1,20 +1,10 @@
-import React, { useState } from "react";
-import {
-  Play,
-  Pause,
-  Rewind,
-  RotateCw,
-  Shuffle,
-  StepBack,
-  StepForward,
-  Square,
-  MousePointerClick,
-} from "lucide-react";
-import DraggableInput from "./DraggableInput";
-import { EasingValue } from "../../types";
-import Tooltip from "../Tooltip";
-import EasingEditor from "./EasingEditor";
-import EasingCurve from "./EasingCurve";
+import React, { useState } from 'react';
+import { Play, Pause, Rewind, RotateCw, Shuffle, StepBack, StepForward, Square, MousePointerClick } from 'lucide-react';
+import DraggableInput from './DraggableInput';
+import { EasingValue } from '../../types';
+import Tooltip from '../Tooltip';
+import EasingEditor from './EasingEditor';
+import EasingCurve from './EasingCurve';
 
 interface TimelineControlsProps {
   timelineState: {
@@ -22,13 +12,11 @@ interface TimelineControlsProps {
     duration: number;
     isPlaying: boolean;
     isLooping: boolean;
-    direction: "normal" | "alternate";
+    direction: 'normal' | 'alternate';
     easing: EasingValue;
     fps: number;
   };
-  onTimelineStateChange: React.Dispatch<
-    React.SetStateAction<TimelineControlsProps["timelineState"]>
-  >;
+  onTimelineStateChange: React.Dispatch<React.SetStateAction<TimelineControlsProps['timelineState']>>;
   onStop: () => void;
   playOnClick: boolean;
   onPlayOnClickChange: () => void;
@@ -43,15 +31,13 @@ const TimelineControls: React.FC<TimelineControlsProps> = ({
 }) => {
   const [easingEditorAnchor, setEasingEditorAnchor] = useState<HTMLButtonElement | null>(null);
 
-  const togglePlay = () =>
-    onTimelineStateChange((prev) => ({ ...prev, isPlaying: !prev.isPlaying }));
+  const togglePlay = () => onTimelineStateChange((prev) => ({ ...prev, isPlaying: !prev.isPlaying }));
   const rewind = () => onTimelineStateChange((prev) => ({ ...prev, currentTime: 0 }));
-  const toggleLoop = () =>
-    onTimelineStateChange((prev) => ({ ...prev, isLooping: !prev.isLooping }));
+  const toggleLoop = () => onTimelineStateChange((prev) => ({ ...prev, isLooping: !prev.isLooping }));
   const toggleDirection = () =>
     onTimelineStateChange((prev) => ({
       ...prev,
-      direction: prev.direction === "normal" ? "alternate" : "normal",
+      direction: prev.direction === 'normal' ? 'alternate' : 'normal',
     }));
 
   const nextFrame = () =>
@@ -70,10 +56,9 @@ const TimelineControls: React.FC<TimelineControlsProps> = ({
     setEasingEditorAnchor((prev) => (prev ? null : event.currentTarget));
   };
 
-  const iconBtnClass =
-    "p-1.5 rounded-md text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors";
+  const iconBtnClass = 'p-1.5 rounded-md text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 transition-colors';
   const activeIconBtnClass =
-    "p-1.5 rounded-md text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 transition-colors";
+    'p-1.5 rounded-md text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 transition-colors';
 
   return (
     <div className="flex items-center gap-3">
@@ -88,10 +73,10 @@ const TimelineControls: React.FC<TimelineControlsProps> = ({
             <StepBack size={14} strokeWidth={2} />
           </button>
         </Tooltip>
-        <Tooltip content={timelineState.isPlaying ? "Pause (Space)" : "Play (Space)"}>
+        <Tooltip content={timelineState.isPlaying ? 'Pause (Space)' : 'Play (Space)'}>
           <button
             onClick={togglePlay}
-            className={`mx-1 p-1.5 rounded-md flex items-center justify-center w-8 h-7 ${timelineState.isPlaying ? "bg-indigo-500 text-white shadow-md shadow-indigo-500/20" : "bg-zinc-700 text-zinc-300 hover:bg-zinc-600 hover:text-white"}`}
+            className={`mx-1 p-1.5 rounded-md flex items-center justify-center w-8 h-7 ${timelineState.isPlaying ? 'bg-indigo-500 text-white shadow-md shadow-indigo-500/20' : 'bg-zinc-700 text-zinc-300 hover:bg-zinc-600 hover:text-white'}`}
           >
             {timelineState.isPlaying ? (
               <Pause size={14} strokeWidth={2} fill="currentColor" />
@@ -115,27 +100,21 @@ const TimelineControls: React.FC<TimelineControlsProps> = ({
       <div className="w-px h-5 bg-zinc-800" />
 
       <div className="flex items-center gap-2">
-        <Tooltip content={`Loop: ${timelineState.isLooping ? "ON" : "OFF"} (L)`}>
-          <button
-            onClick={toggleLoop}
-            className={timelineState.isLooping ? activeIconBtnClass : iconBtnClass}
-          >
+        <Tooltip content={`Loop: ${timelineState.isLooping ? 'ON' : 'OFF'} (L)`}>
+          <button onClick={toggleLoop} className={timelineState.isLooping ? activeIconBtnClass : iconBtnClass}>
             <RotateCw size={15} strokeWidth={2} />
           </button>
         </Tooltip>
         <Tooltip content={`Direction: ${timelineState.direction}`}>
           <button
             onClick={toggleDirection}
-            className={timelineState.direction === "alternate" ? activeIconBtnClass : iconBtnClass}
+            className={timelineState.direction === 'alternate' ? activeIconBtnClass : iconBtnClass}
           >
             <Shuffle size={15} strokeWidth={2} />
           </button>
         </Tooltip>
-        <Tooltip content={`Play on Click: ${playOnClick ? "ON" : "OFF"}`}>
-          <button
-            onClick={onPlayOnClickChange}
-            className={playOnClick ? activeIconBtnClass : iconBtnClass}
-          >
+        <Tooltip content={`Play on Click: ${playOnClick ? 'ON' : 'OFF'}`}>
+          <button onClick={onPlayOnClickChange} className={playOnClick ? activeIconBtnClass : iconBtnClass}>
             <MousePointerClick size={15} strokeWidth={2} />
           </button>
         </Tooltip>

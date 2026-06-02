@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback } from 'react';
 
 export function useStageDragHandlers(onFileChange: (file: File) => void) {
   const [isDraggingOver, setIsDraggingOver] = useState(false);

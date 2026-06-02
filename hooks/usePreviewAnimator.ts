@@ -1,12 +1,9 @@
-import { useState, useEffect, useRef } from "react";
-import { TransformState, PresetAnimationName, ANIMATION_PRESETS } from "../types";
-import { getEasingFunction } from "../easing";
-import { lerp, lerpColor } from "../utils/mathUtils";
+import { useState, useEffect, useRef } from 'react';
+import { TransformState, PresetAnimationName, ANIMATION_PRESETS } from '../types';
+import { getEasingFunction } from '../easing';
+import { lerp, lerpColor } from '../utils/mathUtils';
 
-export function usePreviewAnimator(
-  presetName: PresetAnimationName | null,
-  baseTransforms: TransformState,
-) {
+export function usePreviewAnimator(presetName: PresetAnimationName | null, baseTransforms: TransformState) {
   const [previewTransforms, setPreviewTransforms] = useState<TransformState | null>(null);
   const animationFrameId = useRef<number | undefined>(undefined);
 
@@ -51,17 +48,17 @@ export function usePreviewAnimator(
         const progress = segmentDuration === 0 ? 1 : (time - p1.time) / segmentDuration;
 
         const easingName = p1.easing;
-        const easingFunc = getEasingFunction(easingName || "linear");
+        const easingFunc = getEasingFunction(easingName || 'linear');
 
         const easedProgress = easingFunc(progress);
         const val1 = p1.value;
         const val2 = p2.value;
 
-        if (typeof val1 === "number" && typeof val2 === "number") {
+        if (typeof val1 === 'number' && typeof val2 === 'number') {
           (newValues as any)[key] = lerp(val1, val2, easedProgress);
-        } else if (typeof val1 === "string" && typeof val2 === "string") {
+        } else if (typeof val1 === 'string' && typeof val2 === 'string') {
           (newValues as any)[key] = lerpColor(val1, val2, easedProgress);
-        } else if (typeof val1 === "boolean" || typeof val2 === "boolean") {
+        } else if (typeof val1 === 'boolean' || typeof val2 === 'boolean') {
           (newValues as any)[key] = easedProgress < 0.5 ? val1 : val2;
         }
       }
@@ -75,7 +72,7 @@ export function usePreviewAnimator(
       let effectiveTime = elapsed;
       if (isLooping) {
         effectiveTime = elapsed % duration;
-        if (direction === "alternate") {
+        if (direction === 'alternate') {
           const cycle = Math.floor(elapsed / duration);
           if (cycle % 2 !== 0) {
             // If it's an odd cycle (e.g., 1, 3, 5...), reverse the time

@@ -1,10 +1,10 @@
-import React from "react";
-import { TransformState, AnimationData, StageElement, PROPERTY_ICONS } from "../types";
-import RangeControl from "./RangeControl";
-import ColorControl from "./ColorControl";
-import ToggleControl from "./ToggleControl";
-import { Layers } from "lucide-react";
-import Tooltip from "./Tooltip";
+import React from 'react';
+import { TransformState, AnimationData, StageElement, PROPERTY_ICONS } from '../types';
+import RangeControl from './RangeControl';
+import ColorControl from './ColorControl';
+import ToggleControl from './ToggleControl';
+import { Layers } from 'lucide-react';
+import Tooltip from './Tooltip';
 
 interface ElementControlsProps {
   stageElement: StageElement;
@@ -33,7 +33,7 @@ const ElementControls: React.FC<ElementControlsProps> = ({
 }) => {
   const iconSize = 14;
   const iconStroke = 2;
-  const iconClass = "mr-1.5 text-zinc-500";
+  const iconClass = 'mr-1.5 text-zinc-500';
 
   const renderRangeControl = (
     key: keyof TransformState,
@@ -41,7 +41,7 @@ const ElementControls: React.FC<ElementControlsProps> = ({
     min: number,
     max: number,
     step = 1,
-    unit = "",
+    unit = '',
   ) => {
     const isAnimated = key in animationData;
     const hasKeyframe = animationData[key]?.some((k) => k.time === currentTime) ?? false;
@@ -116,46 +116,46 @@ const ElementControls: React.FC<ElementControlsProps> = ({
   };
 
   switch (stageElement) {
-    case "card":
+    case 'card':
       return (
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-[13px] font-bold text-zinc-300">
             <Layers size={14} strokeWidth={2} className={iconClass} />
             <span>Explode Layers</span>
           </div>
-          <Tooltip content={isExploded ? "Collapse Layers" : "Explode Layers"}>
+          <Tooltip content={isExploded ? 'Collapse Layers' : 'Explode Layers'}>
             <button
               onClick={onExplodeToggle}
               className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-zinc-800`}
             >
               <span
-                className={`${isExploded ? "translate-x-4 bg-indigo-500" : "translate-x-0 bg-zinc-500"}
+                className={`${isExploded ? 'translate-x-4 bg-indigo-500' : 'translate-x-0 bg-zinc-500'}
                               pointer-events-none inline-block h-4 w-4 transform rounded-full shadow-lg ring-0 transition duration-200 ease-in-out`}
               />
             </button>
           </Tooltip>
         </div>
       );
-    case "text":
+    case 'text':
       return (
         <>
-          {renderRangeControl("fontSize", "Font Size", 8, 200, 1, "px")}
-          {renderRangeControl("letterSpacing", "Spacing", -10, 50, 0.1, "px")}
-          {renderRangeControl("fontWeight", "Weight", 100, 900, 100)}
-          {renderColorControl("textColor", "Color")}
+          {renderRangeControl('fontSize', 'Font Size', 8, 200, 1, 'px')}
+          {renderRangeControl('letterSpacing', 'Spacing', -10, 50, 0.1, 'px')}
+          {renderRangeControl('fontWeight', 'Weight', 100, 900, 100)}
+          {renderColorControl('textColor', 'Color')}
         </>
       );
-    case "image":
-      return renderRangeControl("imageWidth", "Width", 10, 1000, 1, "px");
-    case "cube":
+    case 'image':
+      return renderRangeControl('imageWidth', 'Width', 10, 1000, 1, 'px');
+    case 'cube':
       return (
         <>
-          {renderToggleControl("cubeShowNumbers", "Show Numbers")}
-          {renderToggleControl("cubeWireframe", "Wireframe")}
+          {renderToggleControl('cubeShowNumbers', 'Show Numbers')}
+          {renderToggleControl('cubeWireframe', 'Wireframe')}
         </>
       );
-    case "model":
-      return renderToggleControl("modelWireframe", "Wireframe");
+    case 'model':
+      return renderToggleControl('modelWireframe', 'Wireframe');
     default:
       return null;
   }

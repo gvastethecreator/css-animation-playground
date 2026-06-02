@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, lazy, Suspense } from "react";
+import React, { useRef, useState, useEffect, lazy, Suspense } from 'react';
 import {
   TransformState,
   StageElement,
@@ -8,25 +8,25 @@ import {
   AnimationEngine,
   EasingValue,
   GizmoMode,
-} from "../types";
-import CameraInfo from "./CameraInfo";
-import CameraControls from "./CameraControls";
-import FrameCounter from "./FrameCounter";
-import StageElementSelector from "./StageElementSelector";
-import StageCard from "./StageCard";
-import StageCube from "./StageCube";
-import StageText from "./StageText";
-import StageImage from "./StageImage";
-import StageModel from "./StageModel";
-import OriginInfo from "./OriginInfo";
-import { Layers, Move3d, Eye, EyeOff, Expand, Minimize } from "lucide-react";
-import LiveAnimationInfo from "./LiveAnimationInfo";
-import FloatingPanel from "./FloatingPanel";
-import ElementControls from "./ElementControls";
-const ThreeCanvas = lazy(() => import("./ThreeCanvas"));
-import Tooltip from "./Tooltip";
-import TransformGizmoToolbar from "./TransformGizmoToolbar";
-import CSSGizmo from "./CSSGizmo";
+} from '../types';
+import CameraInfo from './CameraInfo';
+import CameraControls from './CameraControls';
+import FrameCounter from './FrameCounter';
+import StageElementSelector from './StageElementSelector';
+import StageCard from './StageCard';
+import StageCube from './StageCube';
+import StageText from './StageText';
+import StageImage from './StageImage';
+import StageModel from './StageModel';
+import OriginInfo from './OriginInfo';
+import { Layers, Move3d, Eye, EyeOff, Expand, Minimize } from 'lucide-react';
+import LiveAnimationInfo from './LiveAnimationInfo';
+import FloatingPanel from './FloatingPanel';
+import ElementControls from './ElementControls';
+const ThreeCanvas = lazy(() => import('./ThreeCanvas'));
+import Tooltip from './Tooltip';
+import TransformGizmoToolbar from './TransformGizmoToolbar';
+import CSSGizmo from './CSSGizmo';
 
 interface StageProps {
   transforms: TransformState;
@@ -132,8 +132,8 @@ function Stage({
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
     };
-    document.addEventListener("fullscreenchange", handleFullscreenChange);
-    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
   }, []);
 
   const handleToggleFullscreen = () => {
@@ -161,7 +161,7 @@ function Stage({
       }
     : {};
 
-  const gridAndGuidelinesClass = isAdjusting ? "opacity-50 blur-[1px]" : "opacity-100 blur-none";
+  const gridAndGuidelinesClass = isAdjusting ? 'opacity-50 blur-[1px]' : 'opacity-100 blur-none';
 
   const renderDOMStageElement = () => {
     const cssElementProps = {
@@ -176,34 +176,18 @@ function Stage({
     };
 
     switch (stageElement) {
-      case "card":
-        return (
-          <StageCard {...cssElementProps} style={stageStyle.card} imageDataUrl={imageDataUrl} />
-        );
-      case "cube":
+      case 'card':
+        return <StageCard {...cssElementProps} style={stageStyle.card} imageDataUrl={imageDataUrl} />;
+      case 'cube':
         return <StageCube {...cssElementProps} style={stageStyle.cube} />;
-      case "text":
+      case 'text':
         return <StageText {...cssElementProps} style={stageStyle.text} />;
-      case "image":
-        return (
-          <StageImage
-            {...cssElementProps}
-            imageDataUrl={imageDataUrl}
-            onFileChange={onFileChange}
-          />
-        );
-      case "model":
-        return (
-          <StageModel
-            {...cssElementProps}
-            modelDataUrl={modelDataUrl}
-            onFileChange={onFileChange}
-          />
-        );
+      case 'image':
+        return <StageImage {...cssElementProps} imageDataUrl={imageDataUrl} onFileChange={onFileChange} />;
+      case 'model':
+        return <StageModel {...cssElementProps} modelDataUrl={modelDataUrl} onFileChange={onFileChange} />;
       default:
-        return (
-          <StageCard {...cssElementProps} style={stageStyle.card} imageDataUrl={imageDataUrl} />
-        );
+        return <StageCard {...cssElementProps} style={stageStyle.card} imageDataUrl={imageDataUrl} />;
     }
   };
 
@@ -213,7 +197,7 @@ function Stage({
     <div
       id="stage-root" // ID used to identify clicks on the stage background
       ref={stageContainerRef}
-      className={`relative flex-1 bg-zinc-900 overflow-hidden flex items-center justify-center select-none ${isDragging ? "cursor-grabbing" : "cursor-grab"}`}
+      className={`relative flex-1 bg-zinc-900 overflow-hidden flex items-center justify-center select-none ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
       onMouseDown={onMouseDown}
       onMouseMove={onMouseMove}
       onMouseUp={onMouseUp}
@@ -222,28 +206,20 @@ function Stage({
     >
       <div className="absolute top-4 left-4 z-20 flex items-start gap-2">
         <div className="flex items-center gap-2 p-1 bg-zinc-900/80 backdrop-blur-sm rounded-lg shadow-lg">
-          <Tooltip content={showStageUI ? "Hide UI" : "Show UI"}>
+          <Tooltip content={showStageUI ? 'Hide UI' : 'Show UI'}>
             <button
               onClick={() => onShowStageUIChange(!showStageUI)}
-              className={`w-7 h-7 flex items-center justify-center rounded-md transition-all ${!showStageUI ? "bg-indigo-500/20 text-indigo-300" : "text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"}`}
+              className={`w-7 h-7 flex items-center justify-center rounded-md transition-all ${!showStageUI ? 'bg-indigo-500/20 text-indigo-300' : 'text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'}`}
             >
-              {showStageUI ? (
-                <EyeOff size={18} strokeWidth={2} />
-              ) : (
-                <Eye size={18} strokeWidth={2} />
-              )}
+              {showStageUI ? <EyeOff size={18} strokeWidth={2} /> : <Eye size={18} strokeWidth={2} />}
             </button>
           </Tooltip>
-          <Tooltip content={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}>
+          <Tooltip content={isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}>
             <button
               onClick={handleToggleFullscreen}
               className="w-7 h-7 flex items-center justify-center rounded-md transition-all text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"
             >
-              {isFullscreen ? (
-                <Minimize size={18} strokeWidth={2} />
-              ) : (
-                <Expand size={18} strokeWidth={2} />
-              )}
+              {isFullscreen ? <Minimize size={18} strokeWidth={2} /> : <Expand size={18} strokeWidth={2} />}
             </button>
           </Tooltip>
           {showStageUI && (
@@ -260,7 +236,7 @@ function Stage({
               <Tooltip content="Toggle Grid">
                 <button
                   onClick={() => onShowGridChange(!showGrid)}
-                  className={`w-7 h-7 flex items-center justify-center rounded-md transition-all ${showGrid ? "bg-indigo-500/30 text-indigo-300" : "text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"}`}
+                  className={`w-7 h-7 flex items-center justify-center rounded-md transition-all ${showGrid ? 'bg-indigo-500/30 text-indigo-300' : 'text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'}`}
                 >
                   <Layers size={18} strokeWidth={2} />
                 </button>
@@ -269,7 +245,7 @@ function Stage({
                 <button
                   onClick={() => onAlignGridToViewChange(!alignGridToView)}
                   disabled={!showGrid}
-                  className={`w-7 h-7 flex items-center justify-center rounded-md transition-all disabled:opacity-50 disabled:cursor-not-allowed ${alignGridToView ? "bg-indigo-500/30 text-indigo-300" : "text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"}`}
+                  className={`w-7 h-7 flex items-center justify-center rounded-md transition-all disabled:opacity-50 disabled:cursor-not-allowed ${alignGridToView ? 'bg-indigo-500/30 text-indigo-300' : 'text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'}`}
                 >
                   <Move3d size={18} strokeWidth={2} />
                 </button>
@@ -299,11 +275,7 @@ function Stage({
       {showStageUI && (
         <>
           <FrameCounter currentTime={currentTime} fps={fps} />
-          <CameraInfo
-            translateX={scene.translateX}
-            translateY={scene.translateY}
-            translateZ={scene.translateZ}
-          />
+          <CameraInfo translateX={scene.translateX} translateY={scene.translateY} translateZ={scene.translateZ} />
           <LiveAnimationInfo
             isPlaying={isPlaying}
             transforms={transforms}
@@ -329,7 +301,7 @@ function Stage({
         </>
       )}
 
-      {animationEngine === "threejs" ? (
+      {animationEngine === 'threejs' ? (
         <Suspense
           fallback={
             <div className="absolute inset-0 flex items-center justify-center text-zinc-500 text-sm">
@@ -357,10 +329,7 @@ function Stage({
         </Suspense>
       ) : (
         <>
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{ background: stageStyle.stage.background }}
-          />
+          <div className="absolute inset-0 pointer-events-none" style={{ background: stageStyle.stage.background }} />
           <div
             className="w-full h-full flex items-center justify-center preserve-3d pointer-events-none"
             style={perspectiveStyle}
@@ -375,7 +344,7 @@ function Stage({
                   style={{
                     left: `${perspectiveOriginX}%`,
                     top: `${perspectiveOriginY}%`,
-                    transform: "translate3d(-50%, -50%, 5000px)",
+                    transform: 'translate3d(-50%, -50%, 5000px)',
                   }}
                 >
                   <div className="absolute w-full h-0.5 bg-cyan-400 top-1/2 -translate-y-1/2" />
@@ -384,30 +353,26 @@ function Stage({
               </Tooltip>
             )}
             <div
-              className={`relative preserve-3d pointer-events-auto w-0 h-0 ${!isDragging && !isAdjusting ? "transition-transform duration-500 ease-in-out" : ""}`}
+              className={`relative preserve-3d pointer-events-auto w-0 h-0 ${!isDragging && !isAdjusting ? 'transition-transform duration-500 ease-in-out' : ''}`}
               style={sceneStyle}
             >
               {showGrid && (
-                <div
-                  className="absolute inset-0 pointer-events-none preserve-3d"
-                  style={gridContainerStyle}
-                >
+                <div className="absolute inset-0 pointer-events-none preserve-3d" style={gridContainerStyle}>
                   <div
                     className={`absolute transition-all duration-300 ${gridAndGuidelinesClass}`}
                     style={{
-                      width: "4000px",
-                      height: "4000px",
-                      top: "50%",
-                      left: "50%",
-                      transform: "translate(-50%, -50%) rotateX(90deg) translateZ(-200px)",
+                      width: '4000px',
+                      height: '4000px',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%) rotateX(90deg) translateZ(-200px)',
                       backgroundImage: `
                                     linear-gradient(${stageStyle.stage.gridColor} 2px, transparent 2px), 
                                     linear-gradient(90deg, ${stageStyle.stage.gridColor} 2px, transparent 2px)
                                 `,
-                      backgroundSize: "50px 50px",
-                      maskImage: "radial-gradient(circle at center, black 0%, transparent 55%)",
-                      WebkitMaskImage:
-                        "radial-gradient(circle at center, black 0%, transparent 55%)",
+                      backgroundSize: '50px 50px',
+                      maskImage: 'radial-gradient(circle at center, black 0%, transparent 55%)',
+                      WebkitMaskImage: 'radial-gradient(circle at center, black 0%, transparent 55%)',
                     }}
                   />
                   <div

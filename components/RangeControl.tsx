@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
-import KeyframeButton from "./KeyframeButton";
-import { TransformState, PROPERTY_COLORS } from "../types";
-import ActivationSwitch from "./ActivationSwitch";
-import Tooltip from "./Tooltip";
+import React, { useState, useEffect, useRef } from 'react';
+import KeyframeButton from './KeyframeButton';
+import { TransformState, PROPERTY_COLORS } from '../types';
+import ActivationSwitch from './ActivationSwitch';
+import Tooltip from './Tooltip';
 
 interface RangeControlProps {
   label: React.ReactNode;
@@ -31,7 +31,7 @@ function RangeControl({
   min,
   max,
   step = 1,
-  unit = "",
+  unit = '',
   onMouseDown,
   onMouseUp,
   propertyKey,
@@ -43,14 +43,14 @@ function RangeControl({
   onToggleEnabled,
   disabled,
 }: RangeControlProps) {
-  const color = PROPERTY_COLORS[propertyKey] || "#818cf8";
+  const color = PROPERTY_COLORS[propertyKey] || '#818cf8';
 
   // Extract RGB components for CSS variable usage (simple hex to rgb conversion)
   const hexToRgb = (hex: string) => {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     return result
       ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`
-      : "129, 140, 248";
+      : '129, 140, 248';
   };
   const colorRgb = hexToRgb(color);
 
@@ -88,21 +88,21 @@ function RangeControl({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       handleCommit();
-    } else if (e.key === "Escape") {
+    } else if (e.key === 'Escape') {
       setIsEditing(false);
       setInputValue(value.toFixed(step < 1 ? 2 : 0));
     }
   };
 
   return (
-    <div className={`space-y-2 py-1 ${isControlDisabled ? "opacity-40 pointer-events-none" : ""}`}>
+    <div className={`space-y-2 py-1 ${isControlDisabled ? 'opacity-40 pointer-events-none' : ''}`}>
       <div className="flex justify-between items-center text-[11px] leading-none">
         <div className="flex items-center gap-2">
           <div
             className="w-1 h-3 rounded-full transition-colors"
-            style={{ backgroundColor: isAnimated ? color : "transparent" }}
+            style={{ backgroundColor: isAnimated ? color : 'transparent' }}
           />
           <KeyframeButton
             onClick={onKeyframeToggle}
@@ -154,11 +154,11 @@ function RangeControl({
           onMouseUp={onMouseUp}
           onTouchStart={onMouseDown}
           onTouchEnd={onMouseUp}
-          className={`custom-slider ${isAnimated ? "is-animated" : ""}`}
+          className={`custom-slider ${isAnimated ? 'is-animated' : ''}`}
           style={
             {
-              "--slider-color": color,
-              "--slider-color-rgb": colorRgb,
+              '--slider-color': color,
+              '--slider-color-rgb': colorRgb,
               background: `linear-gradient(90deg, ${color} ${percentage}%, #18181b ${percentage}%)`,
             } as React.CSSProperties
           }

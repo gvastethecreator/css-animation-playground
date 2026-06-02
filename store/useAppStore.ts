@@ -1,11 +1,5 @@
-import { create } from "zustand";
-import {
-  StageStyleName,
-  AnimationEngine,
-  GizmoMode,
-  AnimationDirection,
-  EasingValue,
-} from "../types";
+import { create } from 'zustand';
+import { StageStyleName, AnimationEngine, GizmoMode, AnimationDirection, EasingValue } from '../types';
 
 interface UIState {
   sidebarWidth: number;
@@ -42,9 +36,7 @@ interface AppStore {
   setScene: (updates: Partial<SceneState> | ((prev: SceneState) => Partial<SceneState>)) => void;
 
   timelineState: TimelineState;
-  setTimelineState: (
-    updates: Partial<TimelineState> | ((prev: TimelineState) => Partial<TimelineState>),
-  ) => void;
+  setTimelineState: (updates: Partial<TimelineState> | ((prev: TimelineState) => Partial<TimelineState>)) => void;
 
   stageStyle: StageStyleName;
   setStageStyle: (style: StageStyleName) => void;
@@ -71,7 +63,7 @@ export const useAppStore = create<AppStore>((set) => ({
     set((state) => ({
       uiState: {
         ...state.uiState,
-        ...(typeof updates === "function" ? updates(state.uiState) : updates),
+        ...(typeof updates === 'function' ? updates(state.uiState) : updates),
       },
     })),
 
@@ -80,7 +72,7 @@ export const useAppStore = create<AppStore>((set) => ({
     set((state) => ({
       scene: {
         ...state.scene,
-        ...(typeof updates === "function" ? updates(state.scene) : updates),
+        ...(typeof updates === 'function' ? updates(state.scene) : updates),
       },
     })),
 
@@ -89,24 +81,24 @@ export const useAppStore = create<AppStore>((set) => ({
     duration: 2000,
     isPlaying: false,
     isLooping: true,
-    direction: "normal",
-    easing: "linear",
+    direction: 'normal',
+    easing: 'linear',
     fps: 60,
   },
   setTimelineState: (updates) =>
     set((state) => ({
       timelineState: {
         ...state.timelineState,
-        ...(typeof updates === "function" ? updates(state.timelineState) : updates),
+        ...(typeof updates === 'function' ? updates(state.timelineState) : updates),
       },
     })),
 
-  stageStyle: "Default",
+  stageStyle: 'Default',
   setStageStyle: (stageStyle) => set({ stageStyle }),
 
-  animationEngine: "css",
+  animationEngine: 'css',
   setAnimationEngine: (animationEngine) => set({ animationEngine }),
 
-  gizmoMode: "translate",
+  gizmoMode: 'translate',
   setGizmoMode: (gizmoMode) => set({ gizmoMode }),
 }));

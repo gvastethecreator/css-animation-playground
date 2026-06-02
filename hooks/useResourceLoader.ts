@@ -1,9 +1,9 @@
-import { useEffect } from "react";
-import * as THREE from "three";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { StageElement } from "../types";
-import { safeAdd, type ThreeSceneRefs } from "./useThreeSetup";
-import { reportRuntimeIssue } from "../utils/runtimeDiagnostics.ts";
+import { useEffect } from 'react';
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { StageElement } from '../types';
+import { safeAdd, type ThreeSceneRefs } from './useThreeSetup';
+import { reportRuntimeIssue } from '../utils/runtimeDiagnostics.ts';
 
 const textureLoader = new THREE.TextureLoader();
 const gltfLoader = new GLTFLoader();
@@ -70,7 +70,7 @@ export function useResourceLoader(
     };
 
     switch (stageElement) {
-      case "card": {
+      case 'card': {
         const group = new THREE.Group();
         const w = 288;
         const h = 384;
@@ -81,7 +81,7 @@ export function useResourceLoader(
           roughness: 0.5,
         });
         const backPlane = new THREE.Mesh(new THREE.PlaneGeometry(w, h), backMat);
-        backPlane.name = "card-back";
+        backPlane.name = 'card-back';
         backPlane.rotation.y = Math.PI;
         backPlane.castShadow = true;
 
@@ -93,13 +93,13 @@ export function useResourceLoader(
           roughness: 0.5,
         });
         const basePlane = new THREE.Mesh(new THREE.PlaneGeometry(w, h), baseMat);
-        basePlane.name = "card-base";
+        basePlane.name = 'card-base';
         basePlane.castShadow = true;
 
         safeAdd(group, backPlane, basePlane);
 
         textureLoader.load(
-          "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop",
+          'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop',
           (texture) => {
             if (isCancelled) return;
             texture.colorSpace = THREE.SRGBColorSpace;
@@ -109,7 +109,7 @@ export function useResourceLoader(
               opacity: 0.9,
             });
             const imagePlane = new THREE.Mesh(new THREE.PlaneGeometry(w, h * 0.6), imageMat);
-            imagePlane.name = "card-image";
+            imagePlane.name = 'card-image';
             imagePlane.position.y = h * 0.2;
             imagePlane.position.z = 0.5;
             safeAdd(group, imagePlane);
@@ -119,7 +119,7 @@ export function useResourceLoader(
         applyObject(group, w, h, 2);
         break;
       }
-      case "cube": {
+      case 'cube': {
         const size = 200;
         const geo = new THREE.BoxGeometry(size, size, size);
         const mat = new THREE.MeshStandardMaterial({
@@ -130,7 +130,7 @@ export function useResourceLoader(
         applyObject(new THREE.Mesh(geo, mat), size, size, size);
         break;
       }
-      case "text": {
+      case 'text': {
         const geo = new THREE.PlaneGeometry(1, 1);
         const mat = new THREE.MeshBasicMaterial({
           transparent: true,
@@ -139,7 +139,7 @@ export function useResourceLoader(
         applyObject(new THREE.Mesh(geo, mat), 1, 1, 1);
         break;
       }
-      case "image": {
+      case 'image': {
         applyObject(null, 0, 0, 0);
         if (imageDataUrl) {
           textureLoader.load(imageDataUrl, (texture) => {
@@ -160,7 +160,7 @@ export function useResourceLoader(
         }
         break;
       }
-      case "model": {
+      case 'model': {
         applyObject(null, 0, 0, 0);
         if (modelDataUrl) {
           gltfLoader.load(
@@ -185,7 +185,7 @@ export function useResourceLoader(
             },
             undefined,
             (error) => {
-              reportRuntimeIssue("three.model.load", error, "Error loading model.");
+              reportRuntimeIssue('three.model.load', error, 'Error loading model.');
             },
           );
         }

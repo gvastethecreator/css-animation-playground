@@ -1,6 +1,6 @@
-import React from "react";
-import { VIEW_PRESETS, PresetName } from "../types";
-import Tooltip from "./Tooltip";
+import React from 'react';
+import { VIEW_PRESETS, PresetName } from '../types';
+import Tooltip from './Tooltip';
 
 interface ViewPresetControlsProps {
   onViewPresetClick: (preset: PresetName) => void;

@@ -1,7 +1,7 @@
-import React from "react";
-import KeyframeButton from "./KeyframeButton";
-import { TransformState, PROPERTY_COLORS, PROPERTY_ICONS } from "../types";
-import Tooltip from "./Tooltip";
+import React from 'react';
+import KeyframeButton from './KeyframeButton';
+import { TransformState, PROPERTY_COLORS, PROPERTY_ICONS } from '../types';
+import Tooltip from './Tooltip';
 
 interface ToggleControlProps {
   label: React.ReactNode;
@@ -22,7 +22,7 @@ const ToggleControl: React.FC<ToggleControlProps> = ({
   hasKeyframeAtCurrentTime,
   onKeyframeToggle,
 }) => {
-  const color = PROPERTY_COLORS[propertyKey] || "#818cf8";
+  const color = PROPERTY_COLORS[propertyKey] || '#818cf8';
   const Icon = PROPERTY_ICONS[propertyKey];
 
   return (
@@ -30,7 +30,7 @@ const ToggleControl: React.FC<ToggleControlProps> = ({
       <div className="flex items-center gap-2 text-[11px] font-bold text-zinc-300">
         <div
           className="w-1 h-3 rounded-full transition-colors"
-          style={{ backgroundColor: isAnimated ? color : "transparent" }}
+          style={{ backgroundColor: isAnimated ? color : 'transparent' }}
         />
         <KeyframeButton
           onClick={onKeyframeToggle}
@@ -43,14 +43,14 @@ const ToggleControl: React.FC<ToggleControlProps> = ({
           {label}
         </div>
       </div>
-      <Tooltip content={value ? "Disable" : "Enable"}>
+      <Tooltip content={value ? 'Disable' : 'Enable'}>
         <button
           onClick={() => onChange(!value)}
           className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-all duration-200 ease-in-out focus:outline-none 
-            ${value ? "bg-indigo-500 shadow-glow-sm" : "bg-zinc-800 shadow-inner-depth"}`}
+            ${value ? 'bg-indigo-500 shadow-glow-sm' : 'bg-zinc-800 shadow-inner-depth'}`}
         >
           <span
-            className={`${value ? "translate-x-4 bg-white" : "translate-x-0 bg-zinc-500"}
+            className={`${value ? 'translate-x-4 bg-white' : 'translate-x-0 bg-zinc-500'}
                 pointer-events-none inline-block h-4 w-4 transform rounded-full shadow-lg ring-0 transition duration-200 ease-in-out`}
           />
         </button>

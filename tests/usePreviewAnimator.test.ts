@@ -1,12 +1,12 @@
 /**
  * @vitest-environment jsdom
  */
-import { describe, it, expect, beforeEach, afterEach, vi } from "vite-plus/test";
-import { act, renderHook } from "@testing-library/react";
-import { usePreviewAnimator } from "../hooks/usePreviewAnimator";
-import { defaultTransformState, type PresetAnimationName } from "../types";
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vite-plus/test';
+import { act, renderHook } from '@testing-library/react';
+import { usePreviewAnimator } from '../hooks/usePreviewAnimator';
+import { defaultTransformState, type PresetAnimationName } from '../types';
 
-describe("usePreviewAnimator", () => {
+describe('usePreviewAnimator', () => {
   const rafCallbacks = new Map<number, FrameRequestCallback>();
   let rafId = 1;
 
@@ -21,14 +21,12 @@ describe("usePreviewAnimator", () => {
   beforeEach(() => {
     rafCallbacks.clear();
     rafId = 1;
-    vi.spyOn(globalThis, "requestAnimationFrame").mockImplementation(
-      (callback: FrameRequestCallback) => {
-        const id = rafId++;
-        rafCallbacks.set(id, callback);
-        return id;
-      },
-    );
-    vi.spyOn(globalThis, "cancelAnimationFrame").mockImplementation((id: number) => {
+    vi.spyOn(globalThis, 'requestAnimationFrame').mockImplementation((callback: FrameRequestCallback) => {
+      const id = rafId++;
+      rafCallbacks.set(id, callback);
+      return id;
+    });
+    vi.spyOn(globalThis, 'cancelAnimationFrame').mockImplementation((id: number) => {
       rafCallbacks.delete(id);
     });
   });
@@ -37,12 +35,12 @@ describe("usePreviewAnimator", () => {
     vi.restoreAllMocks();
   });
 
-  it("returns null when no preset is active", () => {
+  it('returns null when no preset is active', () => {
     const { result } = renderHook(() => usePreviewAnimator(null, defaultTransformState));
     expect(result.current.previewTransforms).toBeNull();
   });
 
-  it("animates a preset and merges base + initialTransforms + animated values", () => {
+  it('animates a preset and merges base + initialTransforms + animated values', () => {
     const baseTransforms = {
       ...defaultTransformState,
       translateX: 99,
@@ -51,7 +49,7 @@ describe("usePreviewAnimator", () => {
       brightnessEnabled: false,
     };
 
-    const { result } = renderHook(() => usePreviewAnimator("Grow", baseTransforms));
+    const { result } = renderHook(() => usePreviewAnimator('Grow', baseTransforms));
 
     act(() => {
       runFrame(0);
@@ -72,11 +70,11 @@ describe("usePreviewAnimator", () => {
     expect(result.current.previewTransforms?.scaleX).toBeLessThan(1.1);
   });
 
-  it("cancels the scheduled frame when preset is cleared", () => {
+  it('cancels the scheduled frame when preset is cleared', () => {
     const { result, rerender } = renderHook(
       ({ presetName }: { presetName: PresetAnimationName | null }) =>
         usePreviewAnimator(presetName, defaultTransformState),
-      { initialProps: { presetName: "Grow" as PresetAnimationName | null } },
+      { initialProps: { presetName: 'Grow' as PresetAnimationName | null } },
     );
 
     act(() => {

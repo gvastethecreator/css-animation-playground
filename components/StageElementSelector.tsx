@@ -1,7 +1,7 @@
-import React from "react";
-import { StageElement } from "../types";
-import { Square, Type, GalleryVertical, Image as ImageIcon, VenetianMask } from "lucide-react";
-import Tooltip from "./Tooltip";
+import React from 'react';
+import { StageElement } from '../types';
+import { Square, Type, GalleryVertical, Image as ImageIcon, VenetianMask } from 'lucide-react';
+import Tooltip from './Tooltip';
 
 interface StageElementSelectorProps {
   selectedElement: StageElement;
@@ -10,11 +10,11 @@ interface StageElementSelectorProps {
 }
 
 const elements: { id: StageElement; icon: React.ElementType; label: string }[] = [
-  { id: "card", icon: GalleryVertical, label: "Card" },
-  { id: "cube", icon: Square, label: "Cube" },
-  { id: "text", icon: Type, label: "Text" },
-  { id: "image", icon: ImageIcon, label: "Image/Video" },
-  { id: "model", icon: VenetianMask, label: "3D Model" },
+  { id: 'card', icon: GalleryVertical, label: 'Card' },
+  { id: 'cube', icon: Square, label: 'Cube' },
+  { id: 'text', icon: Type, label: 'Text' },
+  { id: 'image', icon: ImageIcon, label: 'Image/Video' },
+  { id: 'model', icon: VenetianMask, label: '3D Model' },
 ];
 
 export default function StageElementSelector({
@@ -31,8 +31,8 @@ export default function StageElementSelector({
               onClick={() => onElementChange(id)}
               className={`w-7 h-7 flex items-center justify-center rounded-md transition-colors ${
                 selectedElement === id
-                  ? "bg-indigo-500/30 text-indigo-300"
-                  : "text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"
+                  ? 'bg-indigo-500/30 text-indigo-300'
+                  : 'text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
               }`}
             >
               <Icon size={18} strokeWidth={2} />
