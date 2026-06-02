@@ -1,8 +1,29 @@
 {
-  "name": "css-3d-animator",
+  "name": "css-animation-playground",
   "version": "0.2.0",
   "private": true,
+  "description": "Interactive playground to design, preview and export CSS and Three.js 3D animations with a visual editor and timeline.",
   "type": "module",
+  "homepage": "https://github.com/gvastethecreator/css-animation-playground#readme",
+  "bugs": {
+    "url": "https://github.com/gvastethecreator/css-animation-playground/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gvastethecreator/css-animation-playground.git"
+  },
+  "keywords": [
+    "css-3d",
+    "animation",
+    "three-js",
+    "react",
+    "vite",
+    "playground",
+    "gsap",
+    "bun",
+    "timeline",
+    "keyframes"
+  ],
   "scripts": {
     "dev": "vp dev",
     "build": "bun run ./scripts/run-with-log.mjs build \"vp build\"",

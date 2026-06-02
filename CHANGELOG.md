@@ -16,9 +16,11 @@ application surface allows.
 ### Changed
 
 - README and `architecture.md` translated to English.
-- Header "View on GitHub" link now points to a project-owned repository
-  placeholder.
+- Header "View source on GitHub" link now points to
+  `https://github.com/gvastethecreator/css-animation-playground`.
 - `.vscode/settings.json` no longer carries a personal local path.
+- `package.json` now declares the project name, description, keywords,
+  `repository`, `homepage`, and `bugs` fields for the public repository.
 
 ### Removed
 

@@ -208,7 +208,7 @@ const Header: React.FC<HeaderProps> = ({
         </Tooltip>
         <Tooltip content="View source on GitHub">
           <a
-            href="https://github.com/<owner>/<repo>"
+            href="https://github.com/gvastethecreator/css-animation-playground"
             target="_blank"
             rel="noopener noreferrer"
             className={btnClass}
