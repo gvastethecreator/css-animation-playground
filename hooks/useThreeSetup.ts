@@ -247,7 +247,6 @@ export function useThreeSetup(mountRef: React.RefObject<HTMLDivElement | null>, 
       cameraRef.current = null;
       transformControlsHelperRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {

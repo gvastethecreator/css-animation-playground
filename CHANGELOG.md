@@ -26,6 +26,9 @@ application surface allows.
 
 - `eslint.config.js` (empty stub; project uses OXC `oxlint`/`oxfmt`).
 - `metadata.json` (leftover from upstream scaffolding template; unused).
+- `.prettierrc` (dead config; referenced a `prettier-plugin-tailwindcss`
+  plugin that was not installed; project uses OXC `oxfmt` with
+  `.oxfmtrc.json`).
 - Personal Windows path and personal GitHub URL from git history via
   `git filter-repo`.
 
