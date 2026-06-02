@@ -1,17 +1,27 @@
-# Documentación del proyecto
+# Project documentation
 
-Este directorio reúne la documentación operativa y de mantenimiento del playground.
+This directory holds the operational and maintenance documentation for the
+playground.
 
-## Índice
+> The original Spanish versions are preserved for reference. New maintainers
+> are encouraged to add English summaries when they edit these files.
 
-- `../README.md`: vista general, stack, scripts y estado verificado.
-- `../architecture.md`: arquitectura técnica, flujo de datos y responsabilidades.
-- `USAGE.md`: guía rápida de uso del producto y del entorno local.
-- `WORKLOG.md`: resumen de mejoras aplicadas en la modernización reciente.
-- `../TECH-DEBT.md`: deuda técnica priorizada y siguientes pasos.
+## Index
 
-## Convención
+- `../README.md`: overview, stack, scripts, and verified status.
+- `../architecture.md`: technical architecture, data flow, and
+  responsibilities.
+- `USAGE.md`: quick guide to using the product and the local environment.
+- `WORKLOG.md`: summary of improvements from the most recent modernization
+  pass.
+- `../TECH-DEBT.md`: prioritized technical debt and follow-ups.
+- `../CONTRIBUTING.md`: how to contribute.
+- `../CHANGELOG.md`: release notes.
+- `../SECURITY.md`: how to report vulnerabilities.
 
-- La documentación de entrada vive en `README.md`.
-- La documentación técnica transversal vive en raíz si ya es parte del contrato histórico del repo.
-- Las guías operativas, bitácoras y material de soporte viven en `docs/`.
+## Conventions
+
+- The entry-level documentation lives in `README.md`.
+- Cross-cutting technical documentation lives at the repo root when it is
+  part of the historical contract of the repository.
+- Operational guides, work logs, and supporting material live in `docs/`.
