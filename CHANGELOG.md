@@ -21,6 +21,10 @@ application surface allows.
 - `.vscode/settings.json` no longer carries a personal local path.
 - `package.json` now declares the project name, description, keywords,
   `repository`, `homepage`, and `bugs` fields for the public repository.
+- Anime.js promoted to an officially supported code-export target
+  alongside CSS, GSAP, and Three.js. The "legacy" framing in `README.md`
+  is dropped; the open scope decision has been removed from
+  `TECH-DEBT.md`.
 
 ### Removed
 

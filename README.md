@@ -20,8 +20,7 @@ animation target.
 - **Local persistence** of the document and undo/redo history with
   automatic session restore.
 - **Media support**: image, video (`.webm`), and `.glb` / `.gltf` 3D models.
-- **Code export** to CSS, GSAP, and Three.js, with legacy Anime.js output
-  kept for backwards compatibility.
+- **Code export** to CSS, GSAP, Anime.js, and Three.js.
 - **Tokenized design system** in Tailwind for consistent visual utilities.
 - **Automated quality gates**: typecheck, lint, test, build, and local
   log files.
