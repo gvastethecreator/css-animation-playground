@@ -45,10 +45,16 @@ child.on('close', (code) => {
   stream.write(`\n[finishedAt] ${new Date().toISOString()}\n`);
   stream.write(`[exitCode] ${code ?? 1}\n`);
   stream.end(() => {
-    if (existsSync(latestPath)) {
-      rmSync(latestPath, { force: true });
+    try {
+      if (existsSync(latestPath)) {
+        rmSync(latestPath, { force: true });
+      }
+      copyFileSync(logPath, latestPath);
+    } catch {
+      // The wrapped command may have removed `logs/` (e.g. `bun run
+      // clean`). The per-run log is already on disk; only the
+      // `latest.log` shortcut is missing, which is not a failure.
     }
-    copyFileSync(logPath, latestPath);
     process.exit(code ?? 1);
   });
 });
