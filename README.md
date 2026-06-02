@@ -1,103 +1,112 @@
 # CSS 3D Playground
 
-Playground interactivo para diseñar, previsualizar y exportar animaciones 3D con una UI visual, timeline editable y soporte de render CSS y Three.js.
+An interactive playground to design, preview, and export 3D animations from a
+visual editor with a live timeline, dual rendering engines (CSS and Three.js),
+and code export for popular animation libraries.
 
-El proyecto quedó modernizado para trabajar con una base **Bun-first**, **Vite+ sobre Vite 8**, **React 19 + TypeScript**, **Tailwind CSS 4**, **Vitest 4**, **OXC** (`oxlint` + `oxfmt`) y **GSAP** como librería principal de exportación/animación recomendada.
+The project is built on a **Bun-first** toolchain: **Vite+ on Vite 8**,
+**React 19 + TypeScript**, **Tailwind CSS 4**, **Vitest 4**, **OXC**
+(`oxlint` + `oxfmt`), and recommends **GSAP** as the primary export /
+animation target.
 
-## ✨ Qué ofrece
+## Features
 
-- **Render dual**: edición y vista previa con motor **CSS** o **Three.js**.
-- **Timeline visual** con keyframes, selección múltiple, scrubbing y easing por propiedad.
-- **Controles de transformación** para perspectiva, translate, rotate, scale, skew, filtros y apariencia.
-- **Persistencia local** de estado e historial con restauración automática.
-- **Soporte para media**: imagen, video y modelos `.glb` / `.gltf`.
-- **Exportación de código** en CSS, GSAP, Three.js y compatibilidad heredada con Anime.js.
-- **Sistema de diseño tokenizado** con Tailwind y utilidades visuales consistentes.
-- **Calidad automatizada** con typecheck, lint, test, build y logs locales.
+- **Dual rendering**: edit and preview with the **CSS** engine or the
+  **Three.js** engine, on the same state.
+- **Visual timeline** with keyframes, multi-select, scrubbing, and per-track
+  easing controls.
+- **Transform controls** for perspective, translate, rotate, scale, skew,
+  filters, and appearance.
+- **Local persistence** of the document and undo/redo history with
+  automatic session restore.
+- **Media support**: image, video (`.webm`), and `.glb` / `.gltf` 3D models.
+- **Code export** to CSS, GSAP, and Three.js, with legacy Anime.js output
+  kept for backwards compatibility.
+- **Tokenized design system** in Tailwind for consistent visual utilities.
+- **Automated quality gates**: typecheck, lint, test, build, and local
+  log files.
 
-## 🧱 Stack actual
+## Stack
 
-| Capa                     | Herramienta                                                   |
-| ------------------------ | ------------------------------------------------------------- |
-| Runtime                  | React 19 + TypeScript 5.8                                     |
-| Dev / Build              | Vite+ + Vite 8                                                |
-| Estilos                  | Tailwind CSS 4                                                |
-| Estado global UI         | Zustand 5                                                     |
-| Historial / persistencia | hooks locales (`useHistoryManager`, `useStageElementManager`) |
-| 3D                       | Three.js                                                      |
-| Animación recomendada    | GSAP                                                          |
-| Tests                    | Vitest 4 + Testing Library + jsdom                            |
-| Lint / format            | OXC (`oxlint`, `oxfmt`)                                       |
-| Package manager          | Bun                                                           |
+| Layer                     | Tool                                                        |
+| ------------------------- | ----------------------------------------------------------- |
+| Runtime                   | React 19 + TypeScript                                       |
+| Dev / build               | Vite+ on Vite 8                                             |
+| Styling                   | Tailwind CSS 4                                              |
+| UI state                  | Zustand 5 (small, UI-only state)                            |
+| History / persistence     | Local hooks (`useHistoryManager`, `useStageElementManager`) |
+| 3D                        | Three.js                                                    |
+| Recommended animation lib | GSAP                                                        |
+| Tests                     | Vitest 4 + Testing Library + jsdom                          |
+| Lint / format             | OXC (`oxlint`, `oxfmt`)                                     |
+| Package manager           | Bun                                                         |
 
-## 🚀 Arranque rápido
+## Quick start
 
-### Requisitos
+### Requirements
 
 - **Bun** `>= 1.3.11`
-- **Node.js** `>= 20` para compatibilidad de herramientas auxiliares
+- **Node.js** `>= 20` for auxiliary tooling
 
-### Instalar dependencias
+### Install
 
 ```bash
 bun install
 ```
 
-### Desarrollo
+### Develop
 
 ```bash
 bun run dev
 ```
 
-Servidor local por defecto en `http://localhost:3000`.
+The local server defaults to `http://localhost:3000`.
 
-## 🛠 Scripts útiles
+## Scripts
 
-Todos los scripts de validación y build importantes generan archivos en `logs/` mediante `scripts/run-with-log.mjs`.
+The most important scripts are listed below. Several of them also write
+timestamped logs to `logs/` via `scripts/run-with-log.mjs`.
 
-| Script                  | Qué hace                                   |
-| ----------------------- | ------------------------------------------ |
-| `bun run dev`           | Levanta el entorno de desarrollo con Vite+ |
-| `bun run check`         | Ejecuta chequeos integrados de Vite+       |
-| `bun run typecheck`     | Ejecuta `tsc --noEmit`                     |
-| `bun run lint`          | Ejecuta `oxlint --deny-warnings`           |
-| `bun run lint:fix`      | Intenta correcciones automáticas de OXC    |
-| `bun run format`        | Formatea el proyecto con `oxfmt`           |
-| `bun run format:check`  | Verifica formato sin escribir              |
-| `bun run test`          | Ejecuta la suite con Vite+ / Vitest        |
-| `bun run test:watch`    | Ejecuta pruebas en modo watch              |
-| `bun run test:coverage` | Genera cobertura en `coverage/`            |
-| `bun run build`         | Compila producción en `dist/`              |
-| `bun run preview`       | Previsualiza la build local                |
-| `bun run clean`         | Limpia `dist/`, `coverage/` y `logs/`      |
+| Script                  | Description                              |
+| ----------------------- | ---------------------------------------- |
+| `bun run dev`           | Start the dev server with Vite+          |
+| `bun run check`         | Run the integrated Vite+ checks          |
+| `bun run typecheck`     | Run `tsc --noEmit`                       |
+| `bun run lint`          | Run `oxlint --deny-warnings`             |
+| `bun run lint:fix`      | Auto-fix lint issues with OXC            |
+| `bun run format`        | Format the project with `oxfmt`          |
+| `bun run format:check`  | Verify formatting without writing        |
+| `bun run test`          | Run the Vitest suite                     |
+| `bun run test:watch`    | Run the suite in watch mode              |
+| `bun run test:coverage` | Generate coverage reports in `coverage/` |
+| `bun run build`         | Build for production into `dist/`        |
+| `bun run preview`       | Preview the local production build       |
+| `bun run clean`         | Remove `dist/`, `coverage/`, and `logs/` |
 
-## 🧭 Flujo de uso
+## Usage flow
 
-1. **Elegí el elemento del stage**: card, cube, text, image o model.
-2. **Ajustá transforms y estilos** desde el sidebar.
-3. **Agregá keyframes** con el diamante junto a cada propiedad.
-4. **Editá easing y tiempo** directamente en la timeline.
-5. **Probá el resultado** con scrub, play/pause y loop.
-6. **Exportá el código** usando el panel inferior según el motor seleccionado.
+1. **Pick the stage element**: card, cube, text, image, or model.
+2. **Adjust transforms and styles** from the sidebar.
+3. **Add keyframes** with the diamond button next to each property.
+4. **Edit easing and time** directly on the timeline.
+5. **Preview the result** with scrub, play/pause, and loop.
+6. **Export the code** from the lower panel for the selected engine.
 
-## 🗂 Documentación adicional
+## Documentation
 
-- `architecture.md`: arquitectura y flujo de datos actualizado.
-- `docs/README.md`: índice de documentación del proyecto.
-- `docs/USAGE.md`: guía operativa rápida.
-- `docs/WORKLOG.md`: cambios aplicados en esta mejora integral.
-- `TECH-DEBT.md`: deuda técnica y próximos pasos recomendados.
+- `architecture.md`: architecture, data flow, and responsibilities.
+- `code-rules.md`: coding standards and contribution rules.
+- `design.md`: UX and interaction patterns.
+- `design-system.md`: visual tokens and component base styles.
+- `prd.md`: product requirements and roadmap.
+- `docs/README.md`: index of project documentation.
+- `docs/USAGE.md`: operational guide for the local environment.
+- `docs/WORKLOG.md`: changes from the most recent modernization pass.
+- `TECH-DEBT.md`: prioritized technical debt and follow-ups.
+- `CONTRIBUTING.md`: how to contribute.
+- `CHANGELOG.md`: release notes.
+- `SECURITY.md`: how to report vulnerabilities.
 
-## ✅ Estado verificado
+## License
 
-Última validación realizada en esta sesión:
-
-- `bun run typecheck` ✅
-- `bun run lint` ✅
-- `bun run test` ✅ (`109/109`)
-- `bun run build` ✅
-
-## ⚠️ Notas conocidas
-
-- En algunos entornos con Node 25 puede aparecer un warning relacionado con `--localstorage-file` al ejecutar tests; la suite sigue pasando y el comportamiento del proyecto no se ve afectado.
-- El chunk lazy de Three.js es intencionalmente más pesado que el resto del bundle, porque el canvas 3D sólo se carga cuando se usa ese modo.
+[MIT](./LICENSE).
