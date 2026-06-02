@@ -31,9 +31,20 @@ stream.write(`[cwd] ${process.cwd()}\n`);
 stream.write(`[command] ${command}\n`);
 stream.write(`[startedAt] ${new Date().toISOString()}\n\n`);
 
+// Silence Node 25's process warnings when this script spawns node
+// workers (e.g. `vp test` uses a forks pool and triggers a noisy
+// `--localstorage-file was provided without a valid path` warning).
+// The warning is harmless — the workers never read localStorage —
+// so suppressing it in test/lint/check scripts is preferable to
+// threading a valid path through vitest's worker config.
+const childEnv = { ...process.env };
+if (/^(test|coverage|lint|lint-fix|check)$/i.test(label)) {
+  childEnv.NODE_NO_WARNINGS = childEnv.NODE_NO_WARNINGS ?? '1';
+}
+
 const child = spawn(command, {
   cwd: process.cwd(),
-  env: process.env,
+  env: childEnv,
   shell: true,
   stdio: ['inherit', 'pipe', 'pipe'],
 });

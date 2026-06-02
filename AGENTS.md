@@ -43,4 +43,4 @@ Before making changes, understand the key patterns:
 - Typecheck must pass: `bun run typecheck` (`tsc --noEmit`).
 - The build must pass: `bun run build`.
 
-See `code-rules.md` for the full list of coding rules and `architecture.md` for the runtime architecture in more detail.
+See `docs/code-rules.md` for the full list of coding rules and `docs/architecture.md` for the runtime architecture in more detail.

@@ -9,8 +9,11 @@ playground.
 ## Index
 
 - `../README.md`: overview, stack, scripts, and verified status.
-- `../architecture.md`: technical architecture, data flow, and
-  responsibilities.
+- `architecture.md`: technical architecture, data flow, and responsibilities.
+- `code-rules.md`: coding standards and contribution rules.
+- `design.md`: UX and interaction patterns.
+- `design-system.md`: visual tokens and component base styles.
+- `prd.md`: product requirements and roadmap.
 - `USAGE.md`: quick guide to using the product and the local environment.
 - `WORKLOG.md`: summary of improvements from the most recent modernization
   pass.
@@ -22,6 +25,7 @@ playground.
 ## Conventions
 
 - The entry-level documentation lives in `README.md`.
-- Cross-cutting technical documentation lives at the repo root when it is
-  part of the historical contract of the repository.
+- All cross-cutting technical documentation lives in `docs/`. Historical
+  exceptions (changelog, contributing, security, top-level debt register)
+  stay at the repo root.
 - Operational guides, work logs, and supporting material live in `docs/`.

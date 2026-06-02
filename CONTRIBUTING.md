@@ -13,7 +13,7 @@ bug reports, fixes, and small features that match the existing scope.
 - `store/` keeps small, UI-only state in a Zustand store.
 - `tests/` runs with Vitest + Testing Library + jsdom.
 - `docs/` holds project documentation beyond the top-level README.
-- `architecture.md` and `code-rules.md` describe the contract for new code.
+- `docs/architecture.md` and `docs/code-rules.md` describe the contract for new code.
 
 ## Local setup
 
@@ -42,7 +42,7 @@ to `logs/` (already gitignored). If a command fails, the matching
 
 ## Coding rules
 
-- Follow `code-rules.md`. Highlights:
+- Follow `docs/code-rules.md`. Highlights:
   - TypeScript strict mode, no `any` without a justification comment.
   - Functional components only; props are typed with a dedicated interface.
   - `React.memo` for components that re-render often with stable props.

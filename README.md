@@ -93,11 +93,11 @@ timestamped logs to `logs/` via `scripts/run-with-log.mjs`.
 
 ## Documentation
 
-- `architecture.md`: architecture, data flow, and responsibilities.
-- `code-rules.md`: coding standards and contribution rules.
-- `design.md`: UX and interaction patterns.
-- `design-system.md`: visual tokens and component base styles.
-- `prd.md`: product requirements and roadmap.
+- `docs/architecture.md`: architecture, data flow, and responsibilities.
+- `docs/code-rules.md`: coding standards and contribution rules.
+- `docs/design.md`: UX and interaction patterns.
+- `docs/design-system.md`: visual tokens and component base styles.
+- `docs/prd.md`: product requirements and roadmap.
 - `docs/README.md`: index of project documentation.
 - `docs/USAGE.md`: operational guide for the local environment.
 - `docs/WORKLOG.md`: changes from the most recent modernization pass.
