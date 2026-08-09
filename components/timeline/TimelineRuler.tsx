@@ -1,4 +1,5 @@
 import React from 'react';
+import { timeToPixels } from '../../utils/timelineMath';
 
 interface RulerProps {
   duration: number;
@@ -18,7 +19,7 @@ const TimelineRuler = ({ duration, pixelsPerMs }: RulerProps) => {
 
   // Find optimal interval
   for (const interval of intervals) {
-    const spacing = interval * pixelsPerMs;
+    const spacing = timeToPixels(interval, pixelsPerMs);
     if (spacing >= targetSpacing) {
       majorTickIntervalMs = interval;
       break;
@@ -32,7 +33,7 @@ const TimelineRuler = ({ duration, pixelsPerMs }: RulerProps) => {
 
   for (let i = 0; i <= numMajorTicks; i++) {
     const time = i * majorTickIntervalMs;
-    const left = time * pixelsPerMs;
+    const left = timeToPixels(time, pixelsPerMs);
 
     ticks.push(
       <div key={`major-${i}`} className="absolute h-full w-px bg-zinc-600 top-0" style={{ left: `${left}px` }}>
@@ -44,13 +45,13 @@ const TimelineRuler = ({ duration, pixelsPerMs }: RulerProps) => {
 
     // Minor ticks
     if (i < numMajorTicks) {
-      const minorTickSpacing = (majorTickIntervalMs / minorTicksPerMajor) * pixelsPerMs;
+      const minorTickSpacing = timeToPixels(majorTickIntervalMs / minorTicksPerMajor, pixelsPerMs);
       if (minorTickSpacing > 6) {
         // Only draw if space permits
         for (let j = 1; j < minorTicksPerMajor; j++) {
           const minorTime = time + j * (majorTickIntervalMs / minorTicksPerMajor);
           if (minorTime > duration) break;
-          const minorLeft = minorTime * pixelsPerMs;
+          const minorLeft = timeToPixels(minorTime, pixelsPerMs);
           ticks.push(
             <div
               key={`minor-${i}-${j}`}

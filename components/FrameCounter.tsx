@@ -1,5 +1,6 @@
 import React from 'react';
 import { Clapperboard } from 'lucide-react';
+import { getTimelineFrame } from '../utils/timelineMath';
 
 interface FrameCounterProps {
   currentTime: number;
@@ -7,7 +8,7 @@ interface FrameCounterProps {
 }
 
 function FrameCounter({ currentTime, fps }: FrameCounterProps) {
-  const frame = Math.floor(currentTime / (1000 / fps));
+  const frame = getTimelineFrame(currentTime, fps);
 
   return (
     <div className="absolute bottom-4 right-4 bg-zinc-950/70 backdrop-blur-sm rounded-lg p-3 text-[13px] shadow-xl text-zinc-400 font-mono z-20 pointer-events-none">

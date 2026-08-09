@@ -1,5 +1,5 @@
 import React from 'react';
-import { TransformState } from '../types';
+import { StageMediaType, TransformState } from '../types';
 import { UploadCloud } from 'lucide-react';
 import StageLayers from './StageLayers';
 import { useStageDragHandlers } from '../hooks/useStageDragHandlers';
@@ -9,6 +9,7 @@ interface StageImageProps {
   isAdjusting: boolean;
   isPlaying: boolean;
   imageDataUrl: string | null;
+  mediaType: StageMediaType | null;
   onFileChange: (file: File) => void;
   showStageUI: boolean;
   willChangeString: string;
@@ -23,6 +24,7 @@ const StageImage = React.forwardRef<HTMLDivElement, StageImageProps>(
       isAdjusting,
       isPlaying,
       imageDataUrl,
+      mediaType,
       onFileChange,
       showStageUI,
       willChangeString,
@@ -56,7 +58,7 @@ const StageImage = React.forwardRef<HTMLDivElement, StageImageProps>(
       >
         {imageDataUrl ? (
           <div onMouseDown={(e) => e.stopPropagation()} className="overflow-hidden" style={{ borderRadius: 'inherit' }}>
-            {imageDataUrl.startsWith('data:video/webm') ? (
+            {mediaType === 'video' ? (
               <video
                 src={imageDataUrl}
                 autoPlay

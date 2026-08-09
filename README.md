@@ -4,7 +4,7 @@ An interactive playground to design, preview, and export 3D animations from a
 visual editor with a live timeline, dual rendering engines (CSS and Three.js),
 and code export for popular animation libraries.
 
-The project is built on a **Bun-first** toolchain: **Vite+ on Vite 8**,
+The project uses **pnpm on Node.js** with **Vite+ on Vite 8**,
 **React 19 + TypeScript**, **Tailwind CSS 4**, **Vitest 4**, **OXC**
 (`oxlint` + `oxfmt`), and recommends **GSAP** as the primary export /
 animation target.
@@ -38,25 +38,25 @@ animation target.
 | Recommended animation lib | GSAP                                                        |
 | Tests                     | Vitest 4 + Testing Library + jsdom                          |
 | Lint / format             | OXC (`oxlint`, `oxfmt`)                                     |
-| Package manager           | Bun                                                         |
+| Package manager           | pnpm                                                        |
 
 ## Quick start
 
 ### Requirements
 
-- **Bun** `>= 1.3.11`
-- **Node.js** `>= 20` for auxiliary tooling
+- **pnpm** `>= 11.20.0`
+- **Node.js** `>= 20`
 
 ### Install
 
 ```bash
-bun install
+pnpm install
 ```
 
 ### Develop
 
 ```bash
-bun run dev
+pnpm run dev
 ```
 
 The local server defaults to `http://localhost:3000`.
@@ -68,19 +68,19 @@ timestamped logs to `logs/` via `scripts/run-with-log.mjs`.
 
 | Script                  | Description                              |
 | ----------------------- | ---------------------------------------- |
-| `bun run dev`           | Start the dev server with Vite+          |
-| `bun run check`         | Run the integrated Vite+ checks          |
-| `bun run typecheck`     | Run `tsc --noEmit`                       |
-| `bun run lint`          | Run `oxlint --deny-warnings`             |
-| `bun run lint:fix`      | Auto-fix lint issues with OXC            |
-| `bun run format`        | Format the project with `oxfmt`          |
-| `bun run format:check`  | Verify formatting without writing        |
-| `bun run test`          | Run the Vitest suite                     |
-| `bun run test:watch`    | Run the suite in watch mode              |
-| `bun run test:coverage` | Generate coverage reports in `coverage/` |
-| `bun run build`         | Build for production into `dist/`        |
-| `bun run preview`       | Preview the local production build       |
-| `bun run clean`         | Remove `dist/`, `coverage/`, and `logs/` |
+| `pnpm run dev`           | Start the dev server with Vite+          |
+| `pnpm run check`         | Run the integrated Vite+ checks          |
+| `pnpm run typecheck`     | Run `tsc --noEmit`                       |
+| `pnpm run lint`          | Run `oxlint --deny-warnings`             |
+| `pnpm run lint:fix`      | Auto-fix lint issues with OXC            |
+| `pnpm run format`        | Format the project with `oxfmt`          |
+| `pnpm run format:check`  | Verify formatting without writing        |
+| `pnpm run test`          | Run the Vitest suite                     |
+| `pnpm run test:watch`    | Run the suite in watch mode              |
+| `pnpm run test:coverage` | Generate coverage reports in `coverage/` |
+| `pnpm run build`         | Build for production into `dist/`        |
+| `pnpm run preview`       | Preview the local production build       |
+| `pnpm run clean`         | Remove `dist/`, `coverage/`, and `logs/` |
 
 ## Usage flow
 

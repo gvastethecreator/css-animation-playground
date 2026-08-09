@@ -3,8 +3,10 @@
  */
 import { describe, it, expect, beforeEach, vi } from 'vite-plus/test';
 import { renderHook, act } from '@testing-library/react';
-import { useHistoryManager, HistoryState, defaultEngineConfig } from '../hooks/useHistoryManager';
+import { useHistoryManager } from '../hooks/useHistoryManager';
 import { defaultTransformState } from '../types';
+import type { HistoryState } from '../types';
+import { APP_STORAGE_KEY, defaultEngineConfig } from '../utils/historyState';
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -204,5 +206,39 @@ describe('useHistoryManager', () => {
 
     const { result } = renderHook(() => useHistoryManager());
     expect(result.current.currentState.transforms.translateZ).toBe(999);
+  });
+
+  it('restores partial older state through current nested defaults', () => {
+    localStorageMock.setItem(
+      APP_STORAGE_KEY,
+      JSON.stringify({
+        transforms: { translateX: 42 },
+        engineConfig: { gsap: { easeAmplitude: 2 } },
+      }),
+    );
+
+    const { result } = renderHook(() => useHistoryManager());
+
+    expect(result.current.currentState.transforms.translateX).toBe(42);
+    expect(result.current.currentState.transforms.rotateY).toBe(defaultTransformState.rotateY);
+    expect(result.current.currentState.engineConfig.gsap).toEqual({ easeAmplitude: 2, easePeriod: 0.3 });
+    expect(result.current.currentState.engineConfig.animejs).toEqual(defaultEngineConfig.animejs);
+  });
+
+  it('falls back safely when persisted state is malformed', () => {
+    localStorageMock.setItem(APP_STORAGE_KEY, JSON.stringify({ transforms: 'invalid', timelineDuration: 'fast' }));
+
+    const { result } = renderHook(() => useHistoryManager());
+
+    expect(result.current.currentState.transforms).toEqual(defaultTransformState);
+    expect(result.current.currentState.timelineDuration).toBe(5000);
+  });
+
+  it.each([0, -100])('rejects out-of-domain persisted timeline duration %s', (timelineDuration) => {
+    localStorageMock.setItem(APP_STORAGE_KEY, JSON.stringify({ timelineDuration }));
+
+    const { result } = renderHook(() => useHistoryManager());
+
+    expect(result.current.currentState.timelineDuration).toBe(5000);
   });
 });

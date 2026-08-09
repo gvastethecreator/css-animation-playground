@@ -5,7 +5,7 @@ import { spawn } from 'node:child_process';
 const [, , rawLabel, ...commandParts] = process.argv;
 
 if (!rawLabel || commandParts.length === 0) {
-  process.stderr.write('Usage: bun run ./scripts/run-with-log.mjs <label> <command>\n');
+  process.stderr.write('Usage: node ./scripts/run-with-log.mjs <label> <command>\n');
   process.exit(1);
 }
 
@@ -62,7 +62,7 @@ child.on('close', (code) => {
       }
       copyFileSync(logPath, latestPath);
     } catch {
-      // The wrapped command may have removed `logs/` (e.g. `bun run
+      // The wrapped command may have removed `logs/` (e.g. `pnpm run
       // clean`). The per-run log is already on disk; only the
       // `latest.log` shortcut is missing, which is not a failure.
     }

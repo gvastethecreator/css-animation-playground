@@ -38,9 +38,9 @@ Before making changes, understand the key patterns:
 
 ### 3.3. Quality Gates
 
-- Match the existing OXC tooling: format with `bun run format` (oxfmt) and lint with `bun run lint` (oxlint with `--deny-warnings`).
-- Keep tests green: `bun run test` (Vitest + Testing Library + jsdom). Add or update tests when you change behavior.
-- Typecheck must pass: `bun run typecheck` (`tsc --noEmit`).
-- The build must pass: `bun run build`.
+- Match the existing OXC tooling: format with `pnpm run format` (oxfmt) and lint with `pnpm run lint` (oxlint with `--deny-warnings`).
+- Keep tests green: `pnpm run test` (Vitest + Testing Library + jsdom). Add or update tests when you change behavior.
+- Typecheck must pass: `pnpm run typecheck` (`tsc --noEmit`).
+- The build must pass: `pnpm run build`.
 
 See `docs/code-rules.md` for the full list of coding rules and `docs/architecture.md` for the runtime architecture in more detail.

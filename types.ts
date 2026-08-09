@@ -174,6 +174,8 @@ export type PresetName = 'Front' | 'Isometric' | 'Top Down' | 'Side Look';
 
 export type StageElement = 'card' | 'cube' | 'text' | 'image' | 'model';
 
+export type StageMediaType = 'image' | 'video' | 'model';
+
 export const VIEW_PRESETS: Record<PresetName, Partial<TransformState>> = {
   Front: {
     rotateX: 0,
@@ -315,6 +317,25 @@ export interface TrackControlState {
 }
 
 export type AnimationDirection = 'normal' | 'alternate';
+
+export interface TimelineDocumentState {
+  duration: number;
+  isLooping: boolean;
+  direction: AnimationDirection;
+  easing: EasingValue;
+}
+
+export interface TimelineRuntimeState extends TimelineDocumentState {
+  currentTime: number;
+  isPlaying: boolean;
+  fps: number;
+}
+
+export interface StageViewportState {
+  translateX: number;
+  translateY: number;
+  translateZ: number;
+}
 
 export type AnimationData = {
   [K in keyof TransformState]?: AnimationTrack;
@@ -1562,6 +1583,18 @@ export interface AnimejsEngineConfig {
 export interface EngineConfig {
   gsap: GsapEngineConfig;
   animejs: AnimejsEngineConfig;
+}
+
+export interface HistoryState {
+  transforms: TransformState;
+  animationData: AnimationData;
+  timelineDuration: number;
+  timelineIsLooping: boolean;
+  timelineDirection: AnimationDirection;
+  timelineEasing: EasingValue;
+  trackControls: Partial<Record<keyof TransformState, TrackControlState>>;
+  engineConfig: EngineConfig;
+  timelinePlayOnClick: boolean;
 }
 
 export const ENGINE_COLORS: Record<AnimationEngine, { bg: string; text: string; border: string }> = {

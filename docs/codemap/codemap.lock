@@ -1,0 +1,92 @@
+{
+  "current_commit": "d721d163266232980ff6cdea2db0b0702ca9121d",
+  "working_tree_dirty": true,
+  "generated_at": "2026-08-08T11:55:00Z",
+  "scanned_scope": [
+    "."
+  ],
+  "excluded_directories": [
+    ".cache",
+    ".git",
+    ".hg",
+    ".next",
+    ".nuxt",
+    ".svn",
+    ".turbo",
+    ".venv",
+    "__pycache__",
+    "build",
+    "coverage",
+    "dist",
+    "docs/codemap",
+    "generated",
+    "node_modules",
+    "out",
+    "target",
+    "vendor",
+    "venv"
+  ],
+  "fingerprint_algorithm": "sha256-path-content-v1",
+  "modules": [
+    {
+      "id": ".",
+      "path": ".",
+      "file_count": 24,
+      "fingerprint": "820622edcdff20cf6f2ac09f4af3c08d524780553ffc8aa7acb2537581383ae6"
+    },
+    {
+      "id": ".github",
+      "path": ".github",
+      "file_count": 3,
+      "fingerprint": "ff5729bcc7df52d9c68a4b1b071197c336788b0c35c9cfec779f0499c5aed72e"
+    },
+    {
+      "id": ".vscode",
+      "path": ".vscode",
+      "file_count": 2,
+      "fingerprint": "0b4f12233f0ff8186a36034208c8504c2b3aaebedf93856f0557b6322f7294de"
+    },
+    {
+      "id": "components",
+      "path": "components",
+      "file_count": 47,
+      "fingerprint": "0624653be593a70d32feea766e3e03554716e50b74c07a93af81b9de61b219c9"
+    },
+    {
+      "id": "docs",
+      "path": "docs",
+      "file_count": 8,
+      "fingerprint": "7beafebb5e4503066e0c8825b03c3ca76f174a7eb7c7d821c58378d72669d110"
+    },
+    {
+      "id": "hooks",
+      "path": "hooks",
+      "file_count": 8,
+      "fingerprint": "0319e64383d0707a657aa4bc3b205c2850e9014a9be063ac866f088114d18007"
+    },
+    {
+      "id": "scripts",
+      "path": "scripts",
+      "file_count": 2,
+      "fingerprint": "93770753a53adf4dfef7ac05e19a7d659e07d91fa4b5a17a2d015a9d78abb08d"
+    },
+    {
+      "id": "store",
+      "path": "store",
+      "file_count": 1,
+      "fingerprint": "ac42d9e5578623a3cdb40d4097a9094b0ea5a2fe346a8fe5f028cce34a7f4b74"
+    },
+    {
+      "id": "tests",
+      "path": "tests",
+      "file_count": 13,
+      "fingerprint": "a10443a6d616be137911c37a8d9816a52a6e2b247ade1ea325d4f2ead784de3f"
+    },
+    {
+      "id": "utils",
+      "path": "utils",
+      "file_count": 4,
+      "fingerprint": "756d18103b759a03b423e388a31493420a02e5ae22c5a4795837e4936b71c251"
+    }
+  ]
+}

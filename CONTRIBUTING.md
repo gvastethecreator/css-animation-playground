@@ -17,11 +17,11 @@ bug reports, fixes, and small features that match the existing scope.
 
 ## Local setup
 
-Requirements: Bun `>= 1.3.11`, Node.js `>= 20` for auxiliary tooling.
+Requirements: pnpm `>= 11.20.0` and Node.js `>= 20`.
 
 ```bash
-bun install
-bun run dev
+pnpm install
+pnpm run dev
 ```
 
 ## Validation
@@ -29,13 +29,13 @@ bun run dev
 Before opening a pull request, please run the full set locally:
 
 ```bash
-bun run typecheck
-bun run lint
-bun run test
-bun run build
+pnpm run typecheck
+pnpm run lint
+pnpm run test
+pnpm run build
 ```
 
-`bun run check` runs the integrated Vite+ check. The `typecheck`, `lint`,
+`pnpm run check` runs the integrated Vite+ check. The `typecheck`, `lint`,
 `test`, `coverage`, `clean`, and `build` scripts also write timestamped logs
 to `logs/` (already gitignored). If a command fails, the matching
 `*.latest.log` shows the last output for quick triage.

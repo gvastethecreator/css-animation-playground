@@ -8,8 +8,8 @@
 
 - OS:
 - Browser (if applicable):
-- Bun version (`bun --version`):
-- Node version (`node --version`, if relevant):
+- pnpm version (`pnpm --version`):
+- Node version (`node --version`):
 - Commit / branch (`git rev-parse HEAD`):
 
 ## Steps to reproduce

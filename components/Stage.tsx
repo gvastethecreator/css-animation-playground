@@ -8,6 +8,8 @@ import {
   AnimationEngine,
   EasingValue,
   GizmoMode,
+  StageViewportState,
+  StageMediaType,
 } from '../types';
 import CameraInfo from './CameraInfo';
 import CameraControls from './CameraControls';
@@ -34,11 +36,7 @@ interface StageProps {
   showStageUI: boolean;
   alignGridToView: boolean;
   isExploded: boolean;
-  scene: {
-    translateX: number;
-    translateY: number;
-    translateZ: number;
-  };
+  scene: StageViewportState;
   isDragging: boolean;
   isAdjusting: boolean;
   onMouseDown: (e: React.MouseEvent) => void;
@@ -60,6 +58,7 @@ interface StageProps {
   stageElementRef: React.RefObject<HTMLDivElement | null>;
   imageDataUrl: string | null;
   modelDataUrl: string | null;
+  mediaType: StageMediaType | null;
   onFileChange: (file: File) => void;
   stageStyle: StageStyle;
   animationData: AnimationData;
@@ -106,6 +105,7 @@ function Stage({
   stageElementRef,
   imageDataUrl,
   modelDataUrl,
+  mediaType,
   onFileChange,
   stageStyle,
   animationData,
@@ -183,7 +183,14 @@ function Stage({
       case 'text':
         return <StageText {...cssElementProps} style={stageStyle.text} />;
       case 'image':
-        return <StageImage {...cssElementProps} imageDataUrl={imageDataUrl} onFileChange={onFileChange} />;
+        return (
+          <StageImage
+            {...cssElementProps}
+            imageDataUrl={imageDataUrl}
+            mediaType={mediaType}
+            onFileChange={onFileChange}
+          />
+        );
       case 'model':
         return <StageModel {...cssElementProps} modelDataUrl={modelDataUrl} onFileChange={onFileChange} />;
       default:

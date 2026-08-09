@@ -1,22 +1,15 @@
 import React, { useState } from 'react';
 import { Play, Pause, Rewind, RotateCw, Shuffle, StepBack, StepForward, Square, MousePointerClick } from 'lucide-react';
 import DraggableInput from './DraggableInput';
-import { EasingValue } from '../../types';
+import { TimelineRuntimeState } from '../../types';
 import Tooltip from '../Tooltip';
 import EasingEditor from './EasingEditor';
 import EasingCurve from './EasingCurve';
+import { stepTimelineFrame } from '../../utils/timelineMath';
 
 interface TimelineControlsProps {
-  timelineState: {
-    currentTime: number;
-    duration: number;
-    isPlaying: boolean;
-    isLooping: boolean;
-    direction: 'normal' | 'alternate';
-    easing: EasingValue;
-    fps: number;
-  };
-  onTimelineStateChange: React.Dispatch<React.SetStateAction<TimelineControlsProps['timelineState']>>;
+  timelineState: TimelineRuntimeState;
+  onTimelineStateChange: React.Dispatch<React.SetStateAction<TimelineRuntimeState>>;
   onStop: () => void;
   playOnClick: boolean;
   onPlayOnClickChange: () => void;
@@ -43,12 +36,12 @@ const TimelineControls: React.FC<TimelineControlsProps> = ({
   const nextFrame = () =>
     onTimelineStateChange((prev) => ({
       ...prev,
-      currentTime: Math.min(prev.duration, prev.currentTime + 1000 / prev.fps),
+      currentTime: stepTimelineFrame(prev.currentTime, prev.duration, prev.fps, 'next'),
     }));
   const prevFrame = () =>
     onTimelineStateChange((prev) => ({
       ...prev,
-      currentTime: Math.max(0, prev.currentTime - 1000 / prev.fps),
+      currentTime: stepTimelineFrame(prev.currentTime, prev.duration, prev.fps, 'prev'),
     }));
 
   const handleEasingClick = (event: React.MouseEvent<HTMLButtonElement>) => {

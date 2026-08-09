@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Code map · css-animation-playground</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #090c11;
+      --panel: #10151d;
+      --panel-2: #151c26;
+      --line: #293342;
+      --text: #e5edf7;
+      --muted: #8f9bae;
+      --accent: #63d9ff;
+      --up: #f5c76a;
+      --down: #72e0a4;
+      --flow: #d19cff;
+      --danger: #ff7c8f;
+      --module: #8ca9ff;
+      --service: #63d9ff;
+      --database: #72e0a4;
+      --queue: #f5c76a;
+      --interface: #d19cff;
+      --external: #ff9b73;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font: 12px/1.45 ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+    }
+    button, input { font: inherit; }
+    button { color: inherit; }
+    header {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #0d1118;
+    }
+    h1 { margin: 0; font-size: 16px; letter-spacing: -.02em; }
+    .meta { display: flex; gap: 18px; color: var(--muted); white-space: nowrap; }
+    .meta strong { display: block; color: var(--text); font-weight: 600; }
+    main { height: calc(100vh - 64px); display: grid; grid-template-columns: 248px minmax(0, 1fr) 280px; }
+    aside { min-width: 0; overflow: auto; background: var(--panel); }
+    .left { border-right: 1px solid var(--line); padding: 12px; }
+    .right { border-left: 1px solid var(--line); padding: 14px; }
+    .section { margin-bottom: 18px; }
+    .section-title {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    input[type="search"] {
+      width: 100%;
+      height: 32px;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      outline: none;
+      background: #0b1017;
+      color: var(--text);
+    }
+    input[type="search"]:focus { border-color: var(--accent); }
+    .filter, .legend-row { display: flex; align-items: center; gap: 8px; min-height: 26px; }
+    .filter input { accent-color: var(--accent); }
+    .swatch { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }
+    .flow-button {
+      width: 100%;
+      margin: 0 0 6px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--panel-2);
+      text-align: left;
+      cursor: pointer;
+    }
+    .flow-button:hover, .flow-button:focus-visible { border-color: var(--flow); outline: none; }
+    .flow-button.active { border-color: var(--flow); box-shadow: 0 0 0 1px var(--flow) inset; }
+    .flow-button.related { color: #f0dcff; }
+    .flow-button small { display: block; margin-top: 3px; color: var(--muted); }
+    .map-shell { position: relative; min-width: 0; overflow: hidden; }
+    .toolbar {
+      position: absolute;
+      z-index: 4;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      gap: 5px;
+      padding: 5px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(16, 21, 29, .92);
+      backdrop-filter: blur(8px);
+    }
+    .toolbar button {
+      min-width: 29px;
+      height: 28px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      background: #1a2330;
+      cursor: pointer;
+    }
+    .toolbar button:hover, .toolbar button:focus-visible { border-color: var(--accent); outline: none; }
+    #map-svg { width: 100%; height: 100%; display: block; background: #090d13; touch-action: none; }
+    .map-bg { fill: transparent; }
+    .boundary { fill: rgba(255, 255, 255, .018); stroke: #384557; stroke-width: 1; stroke-dasharray: 5 5; }
+    .boundary-label { fill: #69788d; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+    .edge { fill: none; stroke: #526176; stroke-width: 1.35; opacity: .72; marker-end: url(#arrow); }
+    .edge.unknown { stroke: var(--danger); stroke-dasharray: 4 5; opacity: .8; }
+    .edge.dim { opacity: .1; }
+    .edge.up { stroke: var(--up); stroke-width: 2.4; opacity: 1; }
+    .edge.down { stroke: var(--down); stroke-width: 2.4; opacity: 1; }
+    .edge.up.down { stroke: url(#up-down); stroke-width: 2.7; }
+    .edge.flow { stroke: var(--flow); stroke-width: 2.8; opacity: 1; }
+    .edge-label {
+      fill: #9caabd;
+      font-size: 9px;
+      paint-order: stroke;
+      stroke: #090d13;
+      stroke-width: 4px;
+      stroke-linejoin: round;
+    }
+    .edge-label.dim { opacity: .12; }
+    .node { cursor: grab; outline: none; }
+    .node:active { cursor: grabbing; }
+    .node rect { fill: #141b25; stroke: var(--node-color); stroke-width: 1.4; rx: 7; }
+    .node .type-bar { fill: var(--node-color); stroke: none; opacity: .9; }
+    .node .node-title { fill: var(--text); font-size: 12px; font-weight: 700; }
+    .node .node-path { fill: var(--muted); font-size: 9px; }
+    .node.dim { opacity: .16; }
+    .node.focus rect { stroke-width: 3; filter: drop-shadow(0 0 6px var(--node-color)); }
+    .node.up rect { stroke: var(--up); stroke-width: 2.5; }
+    .node.down rect { stroke: var(--down); stroke-width: 2.5; }
+    .node.up.down rect { stroke: url(#up-down); stroke-width: 2.7; stroke-dasharray: 8 3; }
+    .node.flow rect { stroke: var(--flow); stroke-width: 2.7; }
+    .node.match rect { stroke: var(--accent); stroke-width: 2.7; }
+    .empty { color: var(--muted); }
+    .detail-title { margin: 0 0 4px; font-size: 15px; }
+    .detail-path { margin: 0 0 14px; color: var(--muted); overflow-wrap: anywhere; }
+    .detail-block { margin: 0 0 15px; }
+    .detail-block h3 { margin: 0 0 5px; color: var(--muted); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; }
+    .detail-block p { margin: 0; }
+    .detail-block ul { margin: 0; padding-left: 17px; }
+    .test-list { padding: 8px 10px; border: 1px solid var(--flow); border-radius: 5px; background: rgba(209, 156, 255, .06); }
+    .badge { display: inline-block; padding: 2px 6px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); }
+    .status-line {
+      position: absolute;
+      left: 10px;
+      bottom: 10px;
+      padding: 5px 8px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      color: var(--muted);
+      background: rgba(16, 21, 29, .88);
+      pointer-events: none;
+    }
+    @media (max-width: 900px) {
+      main { grid-template-columns: 200px minmax(0, 1fr); }
+      .right { display: none; }
+      .right:not(:has(> .empty)) {
+        display: block;
+        position: fixed;
+        z-index: 8;
+        top: 72px;
+        right: 8px;
+        bottom: 8px;
+        width: min(280px, calc(100vw - 216px));
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        box-shadow: 0 18px 60px rgba(0, 0, 0, .48);
+      }
+      .meta { gap: 8px; font-size: 10px; }
+    }
+    @media (max-width: 600px) {
+      body { height: auto; min-height: 100vh; overflow: auto; }
+      header { height: 64px; gap: 8px; padding-inline: 10px; }
+      .badge, .meta div:last-child { display: none; }
+      main {
+        height: auto;
+        min-height: calc(100vh - 64px);
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: calc(100vh - 64px) auto;
+      }
+      .map-shell { grid-row: 1; min-height: 520px; }
+      .left { grid-row: 2; border-top: 1px solid var(--line); border-right: 0; }
+      .right:not(:has(> .empty)) {
+        top: auto;
+        left: 8px;
+        width: auto;
+        max-height: 65vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1 id="repo-name">css-animation-playground</h1>
+      <span class="badge">interactive code map</span>
+    </div>
+    <div class="meta">
+      <div>Generated<strong id="generated-at"></strong></div>
+      <div>Commit<strong id="generated-commit"></strong></div>
+      <div>Scope<strong id="scope"></strong></div>
+    </div>
+  </header>
+  <main>
+    <aside class="left">
+      <div class="section">
+        <h2 class="section-title">Search</h2>
+        <input id="search" type="search" placeholder="module, path, role" aria-label="Search modules" autocomplete="off">
+      </div>
+      <div class="section">
+        <h2 class="section-title">Module types</h2>
+        <div id="type-filters"></div>
+      </div>
+      <div class="section">
+        <h2 class="section-title">Legend</h2>
+        <div id="legend"></div>
+      </div>
+      <div class="section">
+        <h2 class="section-title">End-to-end flows</h2>
+        <div id="flow-list"></div>
+      </div>
+    </aside>
+    <section class="map-shell" aria-label="Code map canvas">
+      <div class="toolbar" aria-label="Map controls">
+        <button id="zoom-out" type="button" title="Zoom out">−</button>
+        <button id="fit" type="button" title="Fit map">Fit</button>
+        <button id="zoom-in" type="button" title="Zoom in">+</button>
+      </div>
+      <svg id="map-svg" role="img" aria-label="Interactive module dependency map">
+        <defs>
+          <linearGradient id="up-down" x1="0%" x2="100%">
+            <stop offset="0" stop-color="#f5c76a"></stop>
+            <stop offset="1" stop-color="#72e0a4"></stop>
+          </linearGradient>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#64738a"></path>
+          </marker>
+        </defs>
+        <rect class="map-bg" width="100%" height="100%"></rect>
+        <g id="viewport"></g>
+      </svg>
+      <div id="status" class="status-line"></div>
+    </section>
+    <aside class="right" id="details">
+      <p class="empty">Select a module to inspect its role, evidence, callers, dependencies, tests, and flows.</p>
+    </aside>
+  </main>
+  <script id="codemap-data" type="application/json">{"generated_at":"2026-08-08T11:55:00Z","generated_from_commit":"d721d163266232980ff6cdea2db0b0702ca9121d","scope":["."],"nodes":[{"id":"app","path":"App.tsx","role":"Owns the tracked files for the App module.","type":"module","boundary":"App","entrypoints":["App.tsx:stageElementRef"],"tests":[],"constraints":["This baseline uses tracked source and explicit dependency references only."],"evidence":{"status":"verified","locations":[{"path":"App.tsx","symbol":"stageElementRef"}]}},{"id":"components","path":"components","role":"Owns the tracked files for the components module.","type":"interface","boundary":"Components","entrypoints":["components/README.md:Components"],"tests":["tests/codeOutputPanel.test.tsx","tests/components.render.test.tsx"],"constraints":["This baseline uses tracked source and explicit dependency references only."],"evidence":{"status":"verified","locations":[{"path":"components/README.md","symbol":"Components"}]}},{"id":"easing","path":"easing.ts","role":"Owns the tracked files for the easing module.","type":"module","boundary":"Easing","entrypoints":["easing.ts:NEWTON_ITERATIONS"],"tests":["tests/easing.test.ts"],"constraints":["This baseline uses tracked source and explicit dependency references only."],"evidence":{"status":"verified","locations":[{"path":"easing.ts","symbol":"NEWTON_ITERATIONS"}]}},{"id":"external-dependencies","path":"App.tsx","role":"Represents external packages referenced by tracked source files.","type":"external","boundary":"External","entrypoints":["App.tsx:react"],"tests":[],"constraints":["Only dependencies with literal tracked-source references appear here."],"evidence":{"status":"verified","locations":[{"path":"App.tsx","symbol":"react"}]}},{"id":"global-d","path":"global.d.ts","role":"Owns the tracked files for the global.d module.","type":"module","boundary":"Global.D","entrypoints":["global.d.ts:/// <reference types=\"vite-plus\" />"],"tests":[],"constraints":["This baseline uses tracked source and explicit dependency references only."],"evidence":{"status":"verified","locations":[{"path":"global.d.ts","symbol":"/// <reference types=\"vite-plus\" />"}]}},{"id":"hooks","path":"hooks","role":"Owns the tracked files for the hooks module.","type":"module","boundary":"Hooks","entrypoints":["hooks/useAnimationPlayer.ts:useAnimationPlayer"],"tests":["tests/useAnimationPlayer.test.ts","tests/useHistoryManager.test.ts","tests/useHotkeys.test.ts","tests/usePreviewAnimator.test.ts","tests/useStageDragHandlers.test.ts"],"constraints":["This baseline uses tracked source and explicit dependency references only."],"evidence":{"status":"verified","locations":[{"path":"hooks/useAnimationPlayer.ts","symbol":"useAnimationPlayer"}]}},{"id":"index","path":"index.css","role":"Owns the tracked files for the index module.","type":"module","boundary":"Index","entrypoints":["index.css:@import 'tailwindcss';"],"tests":[],"constraints":["This baseline uses tracked source and explicit dependency references only."],"evidence":{"status":"verified","locations":[{"path":"index.css","symbol":"@import 'tailwindcss';"}]}},{"id":"repository","path":"README.md","role":"Owns the tracked files for the repository module.","type":"module","boundary":"Repository","entrypoints":["README.md:CSS 3D Playground"],"tests":[],"constraints":["This baseline uses tracked source and explicit dependency references only."],"evidence":{"status":"verified","locations":[{"path":"README.md","symbol":"CSS 3D Playground"}]}},{"id":"scripts","path":"scripts","role":"Owns the tracked files for the scripts module.","type":"service","boundary":"Scripts","entrypoints":["scripts/run-vp-check.mjs:env"],"tests":[],"constraints":["This baseline uses tracked source and explicit dependency references only."],"evidence":{"status":"verified","locations":[{"path":"scripts/run-vp-check.mjs","symbol":"env"}]}},{"id":"store","path":"store","role":"Owns the tracked files for the store module.","type":"database","boundary":"Store","entrypoints":["store/useAppStore.ts:UIState"],"tests":["tests/useAppStore.test.ts"],"constraints":["This baseline uses tracked source and explicit dependency references only."],"evidence":{"status":"verified","locations":[{"path":"store/useAppStore.ts","symbol":"UIState"}]}},{"id":"types","path":"types.ts","role":"Owns the tracked files for the types module.","type":"module","boundary":"Types","entrypoints":["types.ts:TransformState"],"tests":["tests/codeOutputPanel.test.tsx","tests/styleUtils.test.ts","tests/useAnimationPlayer.test.ts","tests/useHistoryManager.test.ts","tests/usePreviewAnimator.test.ts"],"constraints":["This baseline uses tracked source and explicit dependency references only."],"evidence":{"status":"verified","locations":[{"path":"types.ts","symbol":"TransformState"}]}},{"id":"utils","path":"utils","role":"Owns the tracked files for the utils module.","type":"module","boundary":"Utils","entrypoints":["utils/mathUtils.ts:lerp"],"tests":["tests/mathUtils.test.ts","tests/styleUtils.test.ts"],"constraints":["This baseline uses tracked source and explicit dependency references only."],"evidence":{"status":"verified","locations":[{"path":"utils/mathUtils.ts","symbol":"lerp"}]}},{"id":"vite-config","path":"vite.config.ts","role":"Owns the tracked files for the vite.config module.","type":"module","boundary":"Vite.Config","entrypoints":["vite.config.ts:rootDir"],"tests":[],"constraints":["This baseline uses tracked source and explicit dependency references only."],"evidence":{"status":"verified","locations":[{"path":"vite.config.ts","symbol":"rootDir"}]}}],"edges":[{"from":"app","to":"components","type":"imports","evidence":{"status":"verified","locations":[{"path":"App.tsx","symbol":"./components/Sidebar"},{"path":"App.tsx","symbol":"./components/Stage"},{"path":"App.tsx","symbol":"./components/timeline/Timeline"},{"path":"App.tsx","symbol":"./components/CodeOutputPanel"},{"path":"App.tsx","symbol":"./components/ShortcutHelp"},{"path":"App.tsx","symbol":"./components/Header"}]}},{"from":"app","to":"external-dependencies","type":"imports","evidence":{"status":"verified","locations":[{"path":"App.tsx","symbol":"react"}]}},{"from":"app","to":"hooks","type":"imports","evidence":{"status":"verified","locations":[{"path":"App.tsx","symbol":"./hooks/useHistoryManager"},{"path":"App.tsx","symbol":"./hooks/useAnimationPlayer"},{"path":"App.tsx","symbol":"./hooks/useStageElementManager"},{"path":"App.tsx","symbol":"./hooks/useHotkeys"},{"path":"App.tsx","symbol":"./hooks/usePreviewAnimator"}]}},{"from":"app","to":"store","type":"imports","evidence":{"status":"verified","locations":[{"path":"App.tsx","symbol":"./store/useAppStore"}]}},{"from":"app","to":"types","type":"imports","evidence":{"status":"verified","locations":[{"path":"App.tsx","symbol":"./types"}]}},{"from":"components","to":"easing","type":"imports","evidence":{"status":"verified","locations":[{"path":"components/BezierEditor.tsx","symbol":"../easing"},{"path":"components/LiveAnimationInfo.tsx","symbol":"../easing"},{"path":"components/timeline/CondensedTimelineView.tsx","symbol":"../../easing"},{"path":"components/timeline/EasingCurve.tsx","symbol":"../../easing"}]}},{"from":"components","to":"external-dependencies","type":"imports","evidence":{"status":"verified","locations":[{"path":"components/ActivationSwitch.tsx","symbol":"react"},{"path":"components/ActivationSwitch.tsx","symbol":"lucide-react"},{"path":"components/AnimationPresetPopover.tsx","symbol":"react"},{"path":"components/AnimationPresetPopover.tsx","symbol":"react-dom"},{"path":"components/BezierEditor.tsx","symbol":"react"},{"path":"components/CSSGizmo.tsx","symbol":"react"},{"path":"components/CameraControls.tsx","symbol":"react"},{"path":"components/CameraControls.tsx","symbol":"lucide-react"}]}},{"from":"components","to":"hooks","type":"imports","evidence":{"status":"verified","locations":[{"path":"components/StageImage.tsx","symbol":"../hooks/useStageDragHandlers"},{"path":"components/StageModel.tsx","symbol":"../hooks/useStageDragHandlers"},{"path":"components/ThreeCanvas.tsx","symbol":"../hooks/useThreeSetup"},{"path":"components/ThreeCanvas.tsx","symbol":"../hooks/useResourceLoader"}]}},{"from":"components","to":"types","type":"imports","evidence":{"status":"verified","locations":[{"path":"components/AnimationPresetPopover.tsx","symbol":"../types"},{"path":"components/BezierEditor.tsx","symbol":"../types"},{"path":"components/CSSGizmo.tsx","symbol":"../types"},{"path":"components/CodeOutputPanel.tsx","symbol":"../types"},{"path":"components/ColorControl.tsx","symbol":"../types"},{"path":"components/ElementControls.tsx","symbol":"../types"},{"path":"components/EngineSelector.tsx","symbol":"../types"},{"path":"components/Header.tsx","symbol":"../types"}]}},{"from":"components","to":"utils","type":"imports","evidence":{"status":"verified","locations":[{"path":"components/CSSGizmo.tsx","symbol":"../utils/styleUtils"},{"path":"components/StageLayers.tsx","symbol":"../utils/styleUtils"},{"path":"components/ThreeCanvas.tsx","symbol":"../utils/textureUtils"}]}},{"from":"easing","to":"types","type":"imports","evidence":{"status":"verified","locations":[{"path":"easing.ts","symbol":"./types"}]}},{"from":"easing","to":"utils","type":"imports","evidence":{"status":"verified","locations":[{"path":"easing.ts","symbol":"./utils/runtimeDiagnostics.ts"}]}},{"from":"hooks","to":"external-dependencies","type":"imports","evidence":{"status":"verified","locations":[{"path":"hooks/useAnimationPlayer.ts","symbol":"react"},{"path":"hooks/useHistoryManager.ts","symbol":"react"},{"path":"hooks/useHotkeys.ts","symbol":"react"},{"path":"hooks/usePreviewAnimator.ts","symbol":"react"},{"path":"hooks/useResourceLoader.ts","symbol":"react"},{"path":"hooks/useResourceLoader.ts","symbol":"three"},{"path":"hooks/useResourceLoader.ts","symbol":"three/addons/loaders/GLTFLoader.js"},{"path":"hooks/useStageDragHandlers.ts","symbol":"react"}]}},{"from":"hooks","to":"store","type":"imports","evidence":{"status":"verified","locations":[{"path":"hooks/useAnimationPlayer.ts","symbol":"../store/useAppStore"}]}},{"from":"hooks","to":"types","type":"imports","evidence":{"status":"verified","locations":[{"path":"hooks/useAnimationPlayer.ts","symbol":"../types"},{"path":"hooks/useHistoryManager.ts","symbol":"../types"},{"path":"hooks/usePreviewAnimator.ts","symbol":"../types"},{"path":"hooks/useResourceLoader.ts","symbol":"../types"},{"path":"hooks/useStageElementManager.ts","symbol":"../types"}]}},{"from":"hooks","to":"utils","type":"imports","evidence":{"status":"verified","locations":[{"path":"hooks/useAnimationPlayer.ts","symbol":"../utils/styleUtils"},{"path":"hooks/useResourceLoader.ts","symbol":"../utils/runtimeDiagnostics.ts"},{"path":"hooks/useStageElementManager.ts","symbol":"../utils/runtimeDiagnostics.ts"},{"path":"hooks/useThreeSetup.ts","symbol":"../utils/runtimeDiagnostics.ts"}]}},{"from":"index","to":"app","type":"imports","evidence":{"status":"verified","locations":[{"path":"index.tsx","symbol":"./App"}]}},{"from":"index","to":"external-dependencies","type":"imports","evidence":{"status":"verified","locations":[{"path":"index.html","symbol":"https://fonts.googleapis.com"},{"path":"index.html","symbol":"https://fonts.gstatic.com"},{"path":"index.html","symbol":"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500;700&display=swap"},{"path":"index.tsx","symbol":"react"},{"path":"index.tsx","symbol":"react-dom/client"}]}},{"from":"repository","to":"app","type":"reads","evidence":{"status":"verified","locations":[{"path":"AGENTS.md","symbol":"App.tsx"},{"path":"CONTRIBUTING.md","symbol":"App.tsx"}]}},{"from":"repository","to":"hooks","type":"reads","evidence":{"status":"verified","locations":[{"path":"AGENTS.md","symbol":"hooks/useHistoryManager.ts"},{"path":"AGENTS.md","symbol":"hooks/useStageElementManager.ts"}]}},{"from":"repository","to":"scripts","type":"calls","evidence":{"status":"verified","locations":[{"path":"package.json","symbol":"./scripts/run-with-log.mjs"}]}},{"from":"repository","to":"scripts","type":"reads","evidence":{"status":"verified","locations":[{"path":"CHANGELOG.md","symbol":"scripts/run-with-log.mjs"},{"path":"README.md","symbol":"scripts/run-with-log.mjs"},{"path":"TECH-DEBT.md","symbol":"scripts/run-with-log.mjs"}]}},{"from":"repository","to":"store","type":"reads","evidence":{"status":"verified","locations":[{"path":"AGENTS.md","symbol":"store/useAppStore.ts"}]}},{"from":"repository","to":"types","type":"reads","evidence":{"status":"verified","locations":[{"path":"AGENTS.md","symbol":"types.ts"}]}},{"from":"store","to":"external-dependencies","type":"imports","evidence":{"status":"verified","locations":[{"path":"store/useAppStore.ts","symbol":"zustand"}]}},{"from":"store","to":"types","type":"imports","evidence":{"status":"verified","locations":[{"path":"store/useAppStore.ts","symbol":"../types"}]}},{"from":"types","to":"external-dependencies","type":"imports","evidence":{"status":"verified","locations":[{"path":"types.ts","symbol":"react"},{"path":"types.ts","symbol":"lucide-react"}]}},{"from":"utils","to":"external-dependencies","type":"imports","evidence":{"status":"verified","locations":[{"path":"utils/textureUtils.ts","symbol":"three"}]}},{"from":"utils","to":"types","type":"imports","evidence":{"status":"verified","locations":[{"path":"utils/styleUtils.ts","symbol":"../types"},{"path":"utils/textureUtils.ts","symbol":"../types"}]}},{"from":"vite-config","to":"external-dependencies","type":"imports","evidence":{"status":"verified","locations":[{"path":"vite.config.ts","symbol":"@tailwindcss/vite"},{"path":"vite.config.ts","symbol":"@vitejs/plugin-react"},{"path":"vite.config.ts","symbol":"vite-plus"}]}}],"flows":[{"trigger":"Tracked reference App.tsx:./components/Sidebar","steps":["app","components","easing","utils","types","external-dependencies"],"outcome":"The verified dependency path reaches external-dependencies through 5 step(s)."},{"trigger":"Tracked reference App.tsx:./components/Sidebar to external-dependencies","steps":["app","components","hooks","store","types","external-dependencies"],"outcome":"The verified dependency path reaches external-dependencies through 5 step(s)."},{"trigger":"Tracked reference index.tsx:./App","steps":["index","app","components","easing","types","external-dependencies"],"outcome":"The verified dependency path reaches external-dependencies through 5 step(s)."},{"trigger":"Tracked reference index.tsx:./App to external-dependencies","steps":["index","app","components","easing","utils","external-dependencies"],"outcome":"The verified dependency path reaches external-dependencies through 5 step(s)."},{"trigger":"Tracked reference index.tsx:./App to types","steps":["index","app","components","easing","utils","types"],"outcome":"The verified dependency path reaches types through 5 step(s)."}]}</script>
+  <script>
+    (() => {
+      "use strict";
+
+      const data = JSON.parse(document.getElementById("codemap-data").textContent);
+      const svg = document.getElementById("map-svg");
+      const viewport = document.getElementById("viewport");
+      const nodeWidth = 190;
+      const nodeHeight = 70;
+      const colors = {
+        module: "var(--module)", service: "var(--service)", database: "var(--database)",
+        queue: "var(--queue)", interface: "var(--interface)", external: "var(--external)"
+      };
+      const types = [...new Set(data.nodes.map(node => node.type))].sort();
+      const state = {
+        enabledTypes: new Set(types), query: "", selectedNode: null, selectedFlow: null,
+        positions: new Map(), view: { x: 0, y: 0, k: 1 }, drag: null, pan: null, skipCanvasClick: false
+      };
+
+      document.getElementById("generated-at").textContent = data.generated_at;
+      document.getElementById("generated-commit").textContent = data.generated_from_commit.slice(0, 12);
+      document.getElementById("scope").textContent = data.scope.join(", ");
+
+      function htmlElement(tag, className, text) {
+        const element = document.createElement(tag);
+        if (className) element.className = className;
+        if (text !== undefined) element.textContent = text;
+        return element;
+      }
+
+      function svgElement(tag, attributes = {}) {
+        const element = document.createElementNS("http://www.w3.org/2000/svg", tag);
+        for (const [key, value] of Object.entries(attributes)) element.setAttribute(key, value);
+        return element;
+      }
+
+      function visibleNodes() {
+        return data.nodes.filter(node => state.enabledTypes.has(node.type));
+      }
+
+      function visibleEdges(ids) {
+        return data.edges.filter(edge => ids.has(edge.from) && ids.has(edge.to));
+      }
+
+      function averageNeighborOrder(id, neighbors, order) {
+        const values = neighbors.get(id)?.map(item => order.get(item)).filter(Number.isFinite) || [];
+        return values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : Number.MAX_SAFE_INTEGER;
+      }
+
+      function calculateLayout(nodes, edges) {
+        const ids = new Set(nodes.map(node => node.id));
+        const outgoing = new Map([...ids].map(id => [id, []]));
+        const incoming = new Map([...ids].map(id => [id, []]));
+        const indegree = new Map([...ids].map(id => [id, 0]));
+        const rank = new Map([...ids].map(id => [id, 0]));
+        for (const edge of edges) {
+          outgoing.get(edge.from).push(edge.to);
+          incoming.get(edge.to).push(edge.from);
+          indegree.set(edge.to, indegree.get(edge.to) + 1);
+        }
+        const queue = [...ids].filter(id => indegree.get(id) === 0).sort();
+        const visited = new Set();
+        while (queue.length) {
+          const id = queue.shift();
+          visited.add(id);
+          for (const target of outgoing.get(id)) {
+            rank.set(target, Math.max(rank.get(target), rank.get(id) + 1));
+            indegree.set(target, indegree.get(target) - 1);
+            if (indegree.get(target) === 0) queue.push(target);
+          }
+          queue.sort();
+        }
+        for (const id of ids) {
+          if (!visited.has(id)) {
+            const parentRanks = incoming.get(id).map(parent => rank.get(parent));
+            rank.set(id, parentRanks.length ? Math.min(5, Math.max(...parentRanks) + 1) : 0);
+          }
+        }
+        const layers = new Map();
+        for (const node of nodes) {
+          const layer = Math.min(rank.get(node.id), 5);
+          if (!layers.has(layer)) layers.set(layer, []);
+          layers.get(layer).push(node.id);
+        }
+        for (const layer of layers.values()) layer.sort();
+        for (let pass = 0; pass < 4; pass += 1) {
+          const layerKeys = [...layers.keys()].sort((a, b) => a - b);
+          const order = new Map();
+          for (const key of layerKeys) layers.get(key).forEach((id, index) => order.set(id, index));
+          for (const key of layerKeys.slice(1)) {
+            layers.get(key).sort((a, b) => averageNeighborOrder(a, incoming, order) - averageNeighborOrder(b, incoming, order));
+          }
+          for (const key of layerKeys.slice(0, -1).reverse()) {
+            layers.get(key).sort((a, b) => averageNeighborOrder(a, outgoing, order) - averageNeighborOrder(b, outgoing, order));
+          }
+        }
+        const largestLayer = Math.max(...[...layers.values()].map(layer => layer.length), 1);
+        for (const [layer, identifiers] of layers) {
+          const offset = (largestLayer - identifiers.length) * 58;
+          identifiers.forEach((id, index) => {
+            if (!state.positions.has(id)) state.positions.set(id, { x: 55 + layer * 270, y: 55 + offset + index * 116 });
+          });
+        }
+      }
+
+      function graphSets(ids, edges) {
+        const outgoing = new Map([...ids].map(id => [id, []]));
+        const incoming = new Map([...ids].map(id => [id, []]));
+        edges.forEach(edge => { outgoing.get(edge.from).push(edge.to); incoming.get(edge.to).push(edge.from); });
+        const walk = (start, adjacency) => {
+          const found = new Set();
+          const pending = [...(adjacency.get(start) || [])];
+          while (pending.length) {
+            const id = pending.shift();
+            if (found.has(id)) continue;
+            found.add(id);
+            pending.push(...(adjacency.get(id) || []));
+          }
+          found.delete(start);
+          return found;
+        };
+        return {
+          upstream: state.selectedNode ? walk(state.selectedNode, incoming) : new Set(),
+          downstream: state.selectedNode ? walk(state.selectedNode, outgoing) : new Set()
+        };
+      }
+
+      function flowPairs() {
+        if (state.selectedFlow === null) return new Set();
+        const steps = data.flows[state.selectedFlow].steps;
+        return new Set(steps.slice(0, -1).map((id, index) => `${id}\u0000${steps[index + 1]}`));
+      }
+
+      function boundaryBoxes(nodes) {
+        const groups = new Map();
+        for (const node of nodes) {
+          const position = state.positions.get(node.id);
+          if (!groups.has(node.boundary)) groups.set(node.boundary, []);
+          groups.get(node.boundary).push(position);
+        }
+        return [...groups].map(([name, positions]) => {
+          const minX = Math.min(...positions.map(position => position.x)) - 24;
+          const minY = Math.min(...positions.map(position => position.y)) - 32;
+          const maxX = Math.max(...positions.map(position => position.x)) + nodeWidth + 24;
+          const maxY = Math.max(...positions.map(position => position.y)) + nodeHeight + 24;
+          return { name, x: minX, y: minY, width: maxX - minX, height: maxY - minY };
+        });
+      }
+
+      function edgePath(source, target) {
+        const startX = source.x + nodeWidth;
+        const startY = source.y + nodeHeight / 2;
+        const endX = target.x;
+        const endY = target.y + nodeHeight / 2;
+        const bend = Math.max(45, Math.abs(endX - startX) * .48);
+        return `M ${startX} ${startY} C ${startX + bend} ${startY}, ${endX - bend} ${endY}, ${endX} ${endY}`;
+      }
+
+      function draw() {
+        const nodes = visibleNodes();
+        const ids = new Set(nodes.map(node => node.id));
+        const edges = visibleEdges(ids);
+        calculateLayout(nodes, edges);
+        viewport.replaceChildren();
+        const selection = graphSets(ids, edges);
+        const selectedFlow = state.selectedFlow === null ? null : data.flows[state.selectedFlow];
+        const selectedFlowNodes = new Set(selectedFlow?.steps || []);
+        const selectedFlowPairs = flowPairs();
+        const query = state.query.trim().toLowerCase();
+        const matches = new Set(nodes.filter(node => `${node.id} ${node.path} ${node.role}`.toLowerCase().includes(query)).map(node => node.id));
+        const hasFocus = Boolean(state.selectedNode || selectedFlow || query);
+
+        for (const box of boundaryBoxes(nodes)) {
+          viewport.append(svgElement("rect", { class: "boundary", x: box.x, y: box.y, width: box.width, height: box.height, rx: 12 }));
+          const label = svgElement("text", { class: "boundary-label", x: box.x + 10, y: box.y + 17 });
+          label.textContent = box.name;
+          viewport.append(label);
+        }
+
+        for (const edge of edges) {
+          const source = state.positions.get(edge.from);
+          const target = state.positions.get(edge.to);
+          const pair = `${edge.from}\u0000${edge.to}`;
+          const classes = ["edge"];
+          if (edge.evidence.status === "unknown") classes.push("unknown");
+          if (selectedFlowPairs.has(pair)) classes.push("flow");
+          else {
+            if (state.selectedNode && selection.upstream.has(edge.from) && (selection.upstream.has(edge.to) || edge.to === state.selectedNode)) classes.push("up");
+            if (state.selectedNode && (edge.from === state.selectedNode || selection.downstream.has(edge.from)) && selection.downstream.has(edge.to)) classes.push("down");
+            if (classes.length === (edge.evidence.status === "unknown" ? 2 : 1) && hasFocus) classes.push("dim");
+          }
+          viewport.append(svgElement("path", { class: classes.join(" "), d: edgePath(source, target) }));
+          const label = svgElement("text", {
+            class: `edge-label${classes.includes("dim") ? " dim" : ""}`,
+            x: (source.x + nodeWidth + target.x) / 2,
+            y: (source.y + target.y + nodeHeight) / 2 - 6,
+            "text-anchor": "middle"
+          });
+          label.textContent = edge.type;
+          viewport.append(label);
+        }
+
+        for (const node of nodes) {
+          const position = state.positions.get(node.id);
+          const classes = ["node"];
+          if (node.id === state.selectedNode) classes.push("focus");
+          else if (selectedFlowNodes.has(node.id)) classes.push("flow");
+          else {
+            if (selection.upstream.has(node.id)) classes.push("up");
+            if (selection.downstream.has(node.id)) classes.push("down");
+            if (query && matches.has(node.id)) classes.push("match");
+            if (classes.length === 1 && hasFocus) classes.push("dim");
+          }
+          const group = svgElement("g", {
+            class: classes.join(" "), transform: `translate(${position.x} ${position.y})`,
+            tabindex: "0", role: "button", "aria-label": `${node.id}: ${node.role}`,
+            style: `--node-color:${colors[node.type] || "var(--module)"}`
+          });
+          group.dataset.nodeId = node.id;
+          group.append(svgElement("rect", { width: nodeWidth, height: nodeHeight }));
+          group.append(svgElement("rect", { class: "type-bar", width: 5, height: nodeHeight, rx: 3 }));
+          const title = svgElement("text", { class: "node-title", x: 16, y: 27 });
+          title.textContent = node.id;
+          const path = svgElement("text", { class: "node-path", x: 16, y: 48 });
+          path.textContent = node.path.length > 29 ? `${node.path.slice(0, 27)}…` : node.path;
+          group.append(title, path);
+          group.addEventListener("click", event => {
+            event.stopPropagation();
+            if (state.skipCanvasClick) {
+              state.skipCanvasClick = false;
+              return;
+            }
+            selectNode(node.id);
+          });
+          group.addEventListener("keydown", event => {
+            if (event.key === "Enter" || event.key === " ") { event.preventDefault(); selectNode(node.id); }
+          });
+          group.addEventListener("pointerdown", event => {
+            event.stopPropagation();
+            svg.setPointerCapture(event.pointerId);
+            state.drag = { id: node.id, pointerId: event.pointerId, x: event.clientX, y: event.clientY, start: { ...position }, moved: false };
+          });
+          viewport.append(group);
+        }
+        applyTransform();
+        updateStatus(nodes.length, edges.length);
+      }
+
+      function applyTransform() {
+        viewport.setAttribute("transform", `translate(${state.view.x} ${state.view.y}) scale(${state.view.k})`);
+      }
+
+      function fitMap() {
+        const nodes = visibleNodes();
+        if (!nodes.length) return;
+        const boxes = boundaryBoxes(nodes);
+        const minX = Math.min(...boxes.map(box => box.x));
+        const minY = Math.min(...boxes.map(box => box.y));
+        const maxX = Math.max(...boxes.map(box => box.x + box.width));
+        const maxY = Math.max(...boxes.map(box => box.y + box.height));
+        const width = svg.clientWidth;
+        const height = svg.clientHeight;
+        state.view.k = Math.min(1.15, Math.max(.28, Math.min((width - 50) / (maxX - minX), (height - 50) / (maxY - minY))));
+        state.view.x = (width - (maxX - minX) * state.view.k) / 2 - minX * state.view.k;
+        state.view.y = (height - (maxY - minY) * state.view.k) / 2 - minY * state.view.k;
+        applyTransform();
+      }
+
+      function setZoom(factor) {
+        const next = Math.min(2.5, Math.max(.2, state.view.k * factor));
+        const centerX = svg.clientWidth / 2;
+        const centerY = svg.clientHeight / 2;
+        state.view.x = centerX - (centerX - state.view.x) * (next / state.view.k);
+        state.view.y = centerY - (centerY - state.view.y) * (next / state.view.k);
+        state.view.k = next;
+        applyTransform();
+      }
+
+      function selectNode(id) {
+        state.selectedNode = state.selectedNode === id ? null : id;
+        state.selectedFlow = null;
+        renderFlows();
+        renderDetails();
+        draw();
+      }
+
+      function renderDetails() {
+        const details = document.getElementById("details");
+        details.replaceChildren();
+        const node = data.nodes.find(item => item.id === state.selectedNode);
+        if (!node) {
+          details.append(htmlElement("p", "empty", "Select a module to inspect its role, evidence, callers, dependencies, tests, and flows."));
+          return;
+        }
+        details.append(htmlElement("h2", "detail-title", node.id));
+        details.append(htmlElement("p", "detail-path", node.path));
+        const blocks = [
+          ["Role", [node.role]], ["Entrypoints", node.entrypoints], ["Constraints", node.constraints],
+          ["Evidence", node.evidence.locations.map(item => `${item.path}:${item.symbol}`)]
+        ];
+        for (const [title, values] of blocks) {
+          const block = htmlElement("div", "detail-block");
+          block.append(htmlElement("h3", "", title));
+          if (values.length === 1) block.append(htmlElement("p", "", values[0]));
+          else {
+            const list = htmlElement("ul");
+            values.forEach(value => list.append(htmlElement("li", "", value)));
+            block.append(list);
+          }
+          details.append(block);
+        }
+        const tests = htmlElement("div", "detail-block test-list");
+        tests.append(htmlElement("h3", "", "Related tests"));
+        if (node.tests.length) {
+          const list = htmlElement("ul");
+          node.tests.forEach(value => list.append(htmlElement("li", "", value)));
+          tests.append(list);
+        } else tests.append(htmlElement("p", "empty", "No related test was found."));
+        details.append(tests);
+        const flowNames = data.flows.filter(flow => flow.steps.includes(node.id)).map(flow => flow.trigger);
+        const flowBlock = htmlElement("div", "detail-block");
+        flowBlock.append(htmlElement("h3", "", "Flow membership"));
+        flowBlock.append(htmlElement("p", "", flowNames.length ? flowNames.join(" · ") : "No selected flow includes this node."));
+        details.append(flowBlock);
+      }
+
+      function renderTypes() {
+        const filters = document.getElementById("type-filters");
+        const legend = document.getElementById("legend");
+        filters.replaceChildren();
+        legend.replaceChildren();
+        for (const type of types) {
+          const label = htmlElement("label", "filter");
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.checked = state.enabledTypes.has(type);
+          checkbox.addEventListener("change", () => {
+            checkbox.checked ? state.enabledTypes.add(type) : state.enabledTypes.delete(type);
+            draw();
+            fitMap();
+          });
+          label.append(checkbox, htmlElement("span", "swatch"), document.createTextNode(type));
+          label.querySelector(".swatch").style.background = colors[type];
+          filters.append(label);
+          const row = htmlElement("div", "legend-row");
+          const swatch = htmlElement("span", "swatch");
+          swatch.style.background = colors[type];
+          row.append(swatch, document.createTextNode(type));
+          legend.append(row);
+        }
+        const meanings = [["var(--up)", "upstream"], ["var(--down)", "downstream"], ["var(--flow)", "selected flow"], ["var(--danger)", "unknown edge"]];
+        meanings.forEach(([color, text]) => {
+          const row = htmlElement("div", "legend-row");
+          const swatch = htmlElement("span", "swatch");
+          swatch.style.background = color;
+          row.append(swatch, document.createTextNode(text));
+          legend.append(row);
+        });
+      }
+
+      function renderFlows() {
+        const list = document.getElementById("flow-list");
+        list.replaceChildren();
+        data.flows.forEach((flow, index) => {
+          const button = htmlElement("button", "flow-button", flow.trigger);
+          button.type = "button";
+          if (state.selectedFlow === index) button.classList.add("active");
+          if (state.selectedNode && flow.steps.includes(state.selectedNode)) button.classList.add("related");
+          button.append(htmlElement("small", "", `${flow.steps.join(" → ")} · ${flow.outcome}`));
+          button.addEventListener("click", () => {
+            state.selectedFlow = state.selectedFlow === index ? null : index;
+            state.selectedNode = null;
+            renderFlows();
+            renderDetails();
+            draw();
+          });
+          list.append(button);
+        });
+      }
+
+      function updateStatus(nodeCount, edgeCount) {
+        const unknown = data.edges.filter(edge => edge.evidence.status === "unknown").length;
+        document.getElementById("status").textContent = `${nodeCount} nodes · ${edgeCount} edges · ${unknown} unknown · zoom ${Math.round(state.view.k * 100)}%`;
+      }
+
+      document.getElementById("search").addEventListener("input", event => { state.query = event.target.value; draw(); });
+      document.getElementById("zoom-in").addEventListener("click", () => setZoom(1.2));
+      document.getElementById("zoom-out").addEventListener("click", () => setZoom(1 / 1.2));
+      document.getElementById("fit").addEventListener("click", fitMap);
+      svg.addEventListener("wheel", event => { event.preventDefault(); setZoom(event.deltaY < 0 ? 1.12 : 1 / 1.12); }, { passive: false });
+      svg.addEventListener("pointerdown", event => {
+        if (event.target.closest?.(".node")) return;
+        svg.setPointerCapture(event.pointerId);
+        state.pan = { pointerId: event.pointerId, x: event.clientX, y: event.clientY, start: { ...state.view } };
+      });
+      svg.addEventListener("pointermove", event => {
+        if (state.drag?.pointerId === event.pointerId) {
+          const position = state.drag.start;
+          if (Math.abs(event.clientX - state.drag.x) > 3 || Math.abs(event.clientY - state.drag.y) > 3) state.drag.moved = true;
+          state.positions.set(state.drag.id, {
+            x: position.x + (event.clientX - state.drag.x) / state.view.k,
+            y: position.y + (event.clientY - state.drag.y) / state.view.k
+          });
+          draw();
+        } else if (state.pan?.pointerId === event.pointerId) {
+          state.view.x = state.pan.start.x + event.clientX - state.pan.x;
+          state.view.y = state.pan.start.y + event.clientY - state.pan.y;
+          applyTransform();
+        }
+      });
+      svg.addEventListener("pointerup", event => {
+        if (state.drag?.pointerId === event.pointerId) {
+          const selectedId = state.drag.moved ? null : state.drag.id;
+          state.drag = null;
+          state.skipCanvasClick = true;
+          if (selectedId) selectNode(selectedId);
+        }
+        if (state.pan?.pointerId === event.pointerId) state.pan = null;
+      });
+      svg.addEventListener("click", event => {
+        if (state.skipCanvasClick) {
+          state.skipCanvasClick = false;
+          return;
+        }
+        if (event.target === svg || event.target.classList.contains("map-bg")) {
+          state.selectedNode = null;
+          state.selectedFlow = null;
+          renderDetails();
+          renderFlows();
+          draw();
+        }
+      });
+      window.addEventListener("resize", fitMap);
+      document.addEventListener("keydown", event => {
+        if (event.key !== "Escape" || (state.selectedNode === null && state.selectedFlow === null)) return;
+        const selectedNode = state.selectedNode;
+        const selectedFlow = state.selectedFlow;
+        state.selectedNode = null;
+        state.selectedFlow = null;
+        renderDetails();
+        renderFlows();
+        draw();
+        requestAnimationFrame(() => {
+          if (selectedNode) viewport.querySelector(`[data-node-id="${CSS.escape(selectedNode)}"]`)?.focus();
+          else if (selectedFlow !== null) document.querySelectorAll(".flow-button")[selectedFlow]?.focus();
+        });
+      });
+
+      renderTypes();
+      renderFlows();
+      draw();
+      requestAnimationFrame(fitMap);
+    })();
+  </script>
+</body>
+</html>

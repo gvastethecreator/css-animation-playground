@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { StageStyleName, AnimationEngine, GizmoMode, AnimationDirection, EasingValue } from '../types';
+import { StageStyleName, AnimationEngine, GizmoMode, StageViewportState, TimelineRuntimeState } from '../types';
 
 interface UIState {
   sidebarWidth: number;
@@ -12,31 +12,19 @@ interface UIState {
   showHelp: boolean;
 }
 
-interface SceneState {
-  translateX: number;
-  translateY: number;
-  translateZ: number;
-}
-
-interface TimelineState {
-  currentTime: number;
-  duration: number;
-  isPlaying: boolean;
-  isLooping: boolean;
-  direction: AnimationDirection;
-  easing: EasingValue;
-  fps: number;
-}
-
 interface AppStore {
   uiState: UIState;
   setUiState: (updates: Partial<UIState> | ((prev: UIState) => Partial<UIState>)) => void;
 
-  scene: SceneState;
-  setScene: (updates: Partial<SceneState> | ((prev: SceneState) => Partial<SceneState>)) => void;
+  scene: StageViewportState;
+  setScene: (
+    updates: Partial<StageViewportState> | ((prev: StageViewportState) => Partial<StageViewportState>),
+  ) => void;
 
-  timelineState: TimelineState;
-  setTimelineState: (updates: Partial<TimelineState> | ((prev: TimelineState) => Partial<TimelineState>)) => void;
+  timelineState: TimelineRuntimeState;
+  setTimelineState: (
+    updates: Partial<TimelineRuntimeState> | ((prev: TimelineRuntimeState) => Partial<TimelineRuntimeState>),
+  ) => void;
 
   stageStyle: StageStyleName;
   setStageStyle: (style: StageStyleName) => void;

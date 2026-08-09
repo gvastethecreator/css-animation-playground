@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { AnimationData, PROPERTY_COLORS, Keyframe, EasingValue } from '../../types';
 import EasingCurve from './EasingCurve';
 import { getEasingFunction } from '../../easing';
+import { clampTimelineTime, snapTimeToFrame } from '../../utils/timelineMath';
 
 interface CondensedTimelineViewProps {
   animationData: AnimationData;
@@ -45,10 +46,9 @@ const CondensedTimelineView: React.FC<CondensedTimelineViewProps> = ({
       let newTime = progress * duration;
 
       if (e.shiftKey) {
-        const frameDuration = 1000 / fps;
-        newTime = Math.round(newTime / frameDuration) * frameDuration;
+        newTime = snapTimeToFrame(newTime, fps);
       }
-      onCurrentTimeChange(newTime);
+      onCurrentTimeChange(clampTimelineTime(newTime, duration));
     },
     [duration, fps, onCurrentTimeChange],
   );

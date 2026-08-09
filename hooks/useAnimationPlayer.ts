@@ -1,21 +1,16 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { TransformState, AnimationData, EasingValue, TrackControlState } from '../types';
-import { getEasingFunction } from '../easing';
-import { lerp, lerpColor } from '../utils/mathUtils';
+import { TransformState, AnimationData, TimelineRuntimeState, TrackControlState } from '../types';
 import { getTransformString, getFilterString } from '../utils/styleUtils';
 import { useAppStore } from '../store/useAppStore';
+import { createAnimationSampler } from '../utils/animationSampling';
+import { getActiveAnimationProperties } from '../utils/trackControls';
+
+type PlaybackTimelineState = Omit<TimelineRuntimeState, 'fps'>;
 
 export function useAnimationPlayer(
   initialTransforms: TransformState,
   animationData: AnimationData,
-  timelineState: {
-    currentTime: number;
-    duration: number;
-    isPlaying: boolean;
-    isLooping: boolean;
-    direction: 'normal' | 'alternate';
-    easing: EasingValue;
-  },
+  timelineState: PlaybackTimelineState,
   onCurrentTimeChange: (time: number) => void,
   trackControls: Partial<Record<keyof TransformState, TrackControlState>>,
   onPlaybackComplete?: () => void,
@@ -24,21 +19,12 @@ export function useAnimationPlayer(
 ) {
   const [animatedTransforms, setAnimatedTransforms] = useState<TransformState>(initialTransforms);
 
-  // Pre-sort and cache animation tracks
-  const sortedAnimationData = useMemo(() => {
-    const sorted: AnimationData = {};
-    Object.keys(animationData).forEach((key) => {
-      const k = key as keyof TransformState;
-      if (animationData[k]) {
-        sorted[k] = [...animationData[k]!].sort((a, b) => a.time - b.time);
-      }
-    });
-    return sorted;
-  }, [animationData]);
+  const sampleAnimation = useMemo(() => createAnimationSampler(animationData), [animationData]);
 
   // Refs for the animation loop
   const stateRef = useRef(timelineState);
-  const sortedAnimationDataRef = useRef(sortedAnimationData);
+  const animationDataRef = useRef(animationData);
+  const sampleAnimationRef = useRef(sampleAnimation);
   const controlsRef = useRef(trackControls);
   const initialTransformsRef = useRef(initialTransforms);
   const onCurrentTimeChangeRef = useRef(onCurrentTimeChange);
@@ -49,8 +35,9 @@ export function useAnimationPlayer(
     stateRef.current = timelineState;
   }, [timelineState]);
   useEffect(() => {
-    sortedAnimationDataRef.current = sortedAnimationData;
-  }, [sortedAnimationData]);
+    animationDataRef.current = animationData;
+    sampleAnimationRef.current = sampleAnimation;
+  }, [animationData, sampleAnimation]);
   useEffect(() => {
     controlsRef.current = trackControls;
   }, [trackControls]);
@@ -89,10 +76,7 @@ export function useAnimationPlayer(
   }, [resetKey]);
 
   const activeAnimatedProperties = useMemo(() => {
-    const allAnimatedProps = Object.keys(animationData) as (keyof TransformState)[];
-    const soloedTracks = allAnimatedProps.filter((prop) => trackControls[prop]?.solo);
-    if (soloedTracks.length > 0) return soloedTracks;
-    return allAnimatedProps.filter((prop) => !trackControls[prop]?.mute);
+    return getActiveAnimationProperties(animationData, trackControls);
   }, [animationData, trackControls]);
 
   const willChangeString = useMemo(() => {
@@ -101,57 +85,13 @@ export function useAnimationPlayer(
   }, [activeAnimatedProperties]);
 
   const calculateAnimatedValues = useCallback((time: number): Partial<TransformState> => {
-    const newValues: Partial<TransformState> = {};
-    const currentAnimationData = sortedAnimationDataRef.current;
+    const currentAnimationData = animationDataRef.current;
     const currentTimelineState = stateRef.current;
     const currentControls = controlsRef.current;
 
-    const propsToAnimate = Object.keys(currentAnimationData) as (keyof TransformState)[];
-    const isAnySolo = Object.values(currentControls).some((c) => (c as TrackControlState)?.solo);
+    const activeProperties = getActiveAnimationProperties(currentAnimationData, currentControls);
 
-    for (const property of propsToAnimate) {
-      const control = currentControls[property];
-      if (control?.mute || (isAnySolo && !control?.solo)) continue;
-
-      const track = currentAnimationData[property];
-      if (!track || track.length === 0) continue;
-
-      const sortedTrack = track;
-
-      if (time <= sortedTrack[0].time) {
-        (newValues as any)[property] = sortedTrack[0].value;
-        continue;
-      }
-      if (time >= sortedTrack[sortedTrack.length - 1].time) {
-        (newValues as any)[property] = sortedTrack[sortedTrack.length - 1].value;
-        continue;
-      }
-
-      const p2Index = sortedTrack.findIndex((p) => p.time >= time);
-      const p1 = sortedTrack[p2Index - 1];
-      const p2 = sortedTrack[p2Index];
-
-      if (!p1 || !p2) continue;
-
-      const segmentDuration = p2.time - p1.time;
-      const progress = segmentDuration === 0 ? 1 : (time - p1.time) / segmentDuration;
-
-      const easingName = p1.easing || currentTimelineState.easing;
-      const easingFunc = getEasingFunction(easingName);
-      const easedProgress = easingFunc(progress);
-
-      const val1 = p1.value;
-      const val2 = p2.value;
-
-      if (typeof val1 === 'number' && typeof val2 === 'number') {
-        (newValues as any)[property] = lerp(val1, val2, easedProgress);
-      } else if (typeof val1 === 'string' && typeof val2 === 'string') {
-        (newValues as any)[property] = lerpColor(val1, val2, easedProgress);
-      } else if (typeof val1 === 'boolean' || typeof val2 === 'boolean') {
-        (newValues as any)[property] = easedProgress < 0.5 ? val1 : val2;
-      }
-    }
-    return newValues;
+    return sampleAnimationRef.current(time, currentTimelineState.easing, activeProperties);
   }, []);
 
   // Calculate visuals for current frame/time

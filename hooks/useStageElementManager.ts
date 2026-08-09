@@ -1,13 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
-import { StageElement } from '../types';
+import { StageElement, StageMediaType } from '../types';
 import { getErrorMessage, reportRuntimeIssue } from '../utils/runtimeDiagnostics.ts';
-
-const MEDIA_STORAGE_KEY = 'userUploadedMedia';
-
-interface StoredMedia {
-  type: 'image' | 'video' | 'model';
-  dataUrl: string;
-}
+import {
+  classifyStageMediaFile,
+  MEDIA_STORAGE_KEY,
+  parseStoredMedia,
+  projectStageMedia,
+  type StoredMedia,
+} from '../utils/stageMedia';
 
 const SAMPLE_MODELS = [
   'https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/models/gltf/Parrot.glb',
@@ -21,53 +21,49 @@ export function useStageElementManager() {
   const [stageElement, setStageElement] = useState<StageElement>('card');
   const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
   const [modelDataUrl, setModelDataUrl] = useState<string | null>(null);
+  const [mediaType, setMediaType] = useState<StageMediaType | null>(null);
   const [isLoadingModel, setIsLoadingModel] = useState(false);
 
-  const setMedia = useCallback((dataUrl: string, mediaType: StoredMedia['type']) => {
-    const mediaToStore: StoredMedia = { type: mediaType, dataUrl };
-    try {
-      localStorage.setItem(MEDIA_STORAGE_KEY, JSON.stringify(mediaToStore));
-      if (mediaType === 'model') {
-        setModelDataUrl(dataUrl);
-        setImageDataUrl(null);
-        setStageElement('model');
-      } else {
-        setImageDataUrl(dataUrl);
-        setModelDataUrl(null);
-        setStageElement('image');
-      }
-    } catch (error) {
-      reportRuntimeIssue('stage-media.save', error, 'Error saving media to localStorage.');
-      alert(
-        `Failed to save file. It might be too large for local storage (limit is ~5MB).\n\nError: ${getErrorMessage(error)}`,
-      );
-    }
+  const applyMedia = useCallback((media: StoredMedia) => {
+    const projection = projectStageMedia(media);
+    setImageDataUrl(projection.imageDataUrl);
+    setModelDataUrl(projection.modelDataUrl);
+    setMediaType(projection.mediaType);
+    setStageElement(projection.stageElement);
   }, []);
+
+  const setMedia = useCallback(
+    (dataUrl: string, mediaType: StageMediaType) => {
+      const mediaToStore: StoredMedia = { type: mediaType, dataUrl };
+      try {
+        localStorage.setItem(MEDIA_STORAGE_KEY, JSON.stringify(mediaToStore));
+        applyMedia(mediaToStore);
+      } catch (error) {
+        reportRuntimeIssue('stage-media.save', error, 'Error saving media to localStorage.');
+        alert(
+          `Failed to save file. It might be too large for local storage (limit is ~5MB).\n\nError: ${getErrorMessage(error)}`,
+        );
+      }
+    },
+    [applyMedia],
+  );
 
   useEffect(() => {
     try {
       const savedMediaJson = localStorage.getItem(MEDIA_STORAGE_KEY);
-      if (savedMediaJson) {
-        const savedMedia: StoredMedia = JSON.parse(savedMediaJson);
-        setMedia(savedMedia.dataUrl, savedMedia.type);
-      }
+      const savedMedia = parseStoredMedia(savedMediaJson);
+      if (savedMedia) applyMedia(savedMedia);
     } catch (error) {
       reportRuntimeIssue('stage-media.read', error, 'Error reading media from localStorage.');
     }
-  }, [setMedia]);
+  }, [applyMedia]);
 
   const handleFileChange = (file: File) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const result = e.target?.result as string;
       if (result) {
-        let mediaType: StoredMedia['type'] = 'image';
-        if (file.type.startsWith('video')) {
-          mediaType = 'video';
-        } else if (file.name.endsWith('.gltf') || file.name.endsWith('.glb')) {
-          mediaType = 'model';
-        }
-        setMedia(result, mediaType);
+        setMedia(result, classifyStageMediaFile(file));
       }
     };
     reader.readAsDataURL(file);
@@ -102,6 +98,7 @@ export function useStageElementManager() {
     localStorage.removeItem(MEDIA_STORAGE_KEY);
     setImageDataUrl(null);
     setModelDataUrl(null);
+    setMediaType(null);
     if (stageElement === 'image' || stageElement === 'model') {
       setStageElement('card');
     }
@@ -112,6 +109,7 @@ export function useStageElementManager() {
     setStageElement,
     imageDataUrl,
     modelDataUrl,
+    mediaType,
     handleFileChange,
     handleFileRemove,
     handleLoadRandomModel,

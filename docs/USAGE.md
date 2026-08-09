@@ -17,22 +17,22 @@
 ### Install
 
 ```bash
-bun install
+pnpm install
 ```
 
 ### Develop
 
 ```bash
-bun run dev
+pnpm run dev
 ```
 
 ### Quick validation
 
 ```bash
-bun run typecheck
-bun run lint
-bun run test
-bun run build
+pnpm run typecheck
+pnpm run lint
+pnpm run test
+pnpm run build
 ```
 
 ## Logs
@@ -85,22 +85,22 @@ The workspace includes short tasks with emoji prefixes for:
 #### Instalar
 
 ```bash
-bun install
+pnpm install
 ```
 
 #### Desarrollo
 
 ```bash
-bun run dev
+pnpm run dev
 ```
 
 #### Validación rápida
 
 ```bash
-bun run typecheck
-bun run lint
-bun run test
-bun run build
+pnpm run typecheck
+pnpm run lint
+pnpm run test
+pnpm run build
 ```
 
 ### Logs

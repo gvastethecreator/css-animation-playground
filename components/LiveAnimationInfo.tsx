@@ -11,6 +11,7 @@ import {
 import EasingCurve from './timeline/EasingCurve';
 import { SlidersHorizontal } from 'lucide-react';
 import { getEasingFunction } from '../easing';
+import { getActiveAnimationProperties } from '../utils/trackControls';
 
 interface LiveAnimationInfoProps {
   isPlaying: boolean;
@@ -50,10 +51,7 @@ export default function LiveAnimationInfo({
   globalEasing,
 }: LiveAnimationInfoProps) {
   const activeAnimatedProperties = useMemo(() => {
-    const allAnimatedProps = Object.keys(animationData) as (keyof TransformState)[];
-    const soloedTracks = allAnimatedProps.filter((prop) => trackControls[prop]?.solo);
-    if (soloedTracks.length > 0) return soloedTracks;
-    return allAnimatedProps.filter((prop) => !trackControls[prop]?.mute);
+    return getActiveAnimationProperties(animationData, trackControls);
   }, [animationData, trackControls]);
 
   const easingFunc = useMemo(() => getEasingFunction(globalEasing), [globalEasing]);

@@ -1,5 +1,6 @@
 # Dependencies
 node_modules/
+.scratch
 
 # Build outputs
 dist/
@@ -21,13 +22,13 @@ lerna-debug.log*
 .env.*
 !.env.example
 
-# Lock files from other package managers (we use bun)
+# Lock files from other package managers (we use pnpm)
 package-lock.json
 yarn.lock
-pnpm-lock.yaml
+bun.lock
+bun.lockb
 
-# Bun lock is tracked
-# bun.lock
+# pnpm-lock.yaml is tracked
 
 # IDE
 .idea/

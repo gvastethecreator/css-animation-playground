@@ -40,5 +40,6 @@
     "activityBar.activeBorder": "#7814db",
     "activityBarBadge.foreground": "#ffffff",
     "activityBarBadge.background": "#7814db"
-  }
+  },
+  "window.title": "d:\\DEV\\css-animation-playground"
 }

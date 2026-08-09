@@ -1,5 +1,12 @@
 import React, { useRef, useState, useMemo, useCallback, useLayoutEffect } from 'react';
-import { AnimationData, TransformState, Keyframe, EasingValue, PROPERTY_COLORS, TrackControlState } from '../../types';
+import {
+  AnimationData,
+  TransformState,
+  Keyframe,
+  PROPERTY_COLORS,
+  TimelineRuntimeState,
+  TrackControlState,
+} from '../../types';
 import { ChevronDown, ChevronUp, Film, GripHorizontal, Ear, Power, Rewind, Play, Pause, Square } from 'lucide-react';
 import TimelineRuler from './TimelineRuler';
 import EasingEditor from './EasingEditor';
@@ -7,22 +14,23 @@ import TimelineControls from './TimelineControls';
 import EasingCurve from './EasingCurve';
 import CondensedTimelineView from './CondensedTimelineView';
 import Tooltip from '../Tooltip';
+import { getActiveAnimationProperties } from '../../utils/trackControls';
+import {
+  clampTimelineTime,
+  getMagneticSnapTime,
+  pixelsToTime,
+  snapTimeToFrame,
+  timeToPixels,
+} from '../../utils/timelineMath';
+import { useVerticalResize } from '../../hooks/useVerticalResize';
 
 interface TimelineProps {
   height: number;
   onHeightChange: (height: number) => void;
   onToggle: () => void;
   animationData: AnimationData;
-  timelineState: {
-    currentTime: number;
-    duration: number;
-    isPlaying: boolean;
-    isLooping: boolean;
-    direction: 'normal' | 'alternate';
-    easing: EasingValue;
-    fps: number;
-  };
-  onTimelineStateChange: React.Dispatch<React.SetStateAction<TimelineProps['timelineState']>>;
+  timelineState: TimelineRuntimeState;
+  onTimelineStateChange: React.Dispatch<React.SetStateAction<TimelineRuntimeState>>;
   onCurrentTimeChange: (time: number) => void;
   onStop: () => void;
   onDeleteKeyframe: (property: keyof TransformState, keyframeId: string) => void;
@@ -87,45 +95,26 @@ function Timeline({
     () => Object.keys(animationData).sort() as (keyof TransformState)[],
     [animationData],
   );
+  const activeAnimatedProperties = useMemo(
+    () => new Set(getActiveAnimationProperties(animationData, trackControls)),
+    [animationData, trackControls],
+  );
+  const keyframeTimes = useMemo(
+    () => Object.values(animationData).flatMap((track) => track?.map((keyframe) => keyframe.time) ?? []),
+    [animationData],
+  );
   const isOpen = height > 37;
 
-  const totalTrackWidth = Math.max(100, timelineState.duration * pixelsPerMs);
+  const totalTrackWidth = Math.max(100, timeToPixels(timelineState.duration, pixelsPerMs));
 
-  const timeToPx = useCallback((time: number) => time * pixelsPerMs, [pixelsPerMs]);
-  const pxToTime = useCallback((px: number) => px / pixelsPerMs, [pixelsPerMs]);
+  const timeToPx = useCallback((time: number) => timeToPixels(time, pixelsPerMs), [pixelsPerMs]);
+  const pxToTime = useCallback((px: number) => pixelsToTime(px, pixelsPerMs), [pixelsPerMs]);
 
   // Helper for snapping
   const getSnappedTime = useCallback(
-    (rawTime: number, snapThresholdPx: number = 10): number => {
-      const snapThresholdMs = snapThresholdPx / pixelsPerMs;
-
-      // 1. Snap to Start/End
-      if (Math.abs(rawTime - 0) < snapThresholdMs) return 0;
-      if (Math.abs(rawTime - timelineState.duration) < snapThresholdMs) return timelineState.duration;
-
-      // 2. Snap to other Keyframes
-      let closestDist = Infinity;
-      let closestTime = rawTime;
-
-      for (const track of Object.values(animationData)) {
-        for (const kf of track || []) {
-          const dist = Math.abs(rawTime - kf.time);
-          if (dist < snapThresholdMs && dist < closestDist) {
-            closestDist = dist;
-            closestTime = kf.time;
-          }
-        }
-      }
-
-      if (closestDist !== Infinity) return closestTime;
-
-      // 3. Snap to grid (100ms major ticks)
-      const gridSnap = Math.round(rawTime / 100) * 100;
-      if (Math.abs(rawTime - gridSnap) < snapThresholdMs) return gridSnap;
-
-      return rawTime;
-    },
-    [animationData, timelineState.duration, timelineState.fps, pixelsPerMs],
+    (rawTime: number, snapThresholdPx = 10): number =>
+      getMagneticSnapTime(rawTime, timelineState.duration, keyframeTimes, pixelsPerMs, snapThresholdPx),
+    [keyframeTimes, timelineState.duration, pixelsPerMs],
   );
 
   useLayoutEffect(() => {
@@ -163,13 +152,11 @@ function Timeline({
       if (!trackAreaRef.current) return;
       const rect = trackAreaRef.current.getBoundingClientRect();
       const clickX = e.clientX - rect.left;
-      let newTime = pxToTime(clickX);
-      newTime = Math.max(0, Math.min(timelineState.duration, newTime));
+      let newTime = clampTimelineTime(pxToTime(clickX), timelineState.duration);
 
       if (e.shiftKey) {
         // Hard snap to frames with Shift
-        const frameDuration = 1000 / timelineState.fps;
-        newTime = Math.round(newTime / frameDuration) * frameDuration;
+        newTime = clampTimelineTime(snapTimeToFrame(newTime, timelineState.fps), timelineState.duration);
       } else {
         // Magnetic snap without Shift
         newTime = getSnappedTime(newTime);
@@ -312,8 +299,7 @@ function Timeline({
           let newTime = initialTime + allowedTimeDelta;
 
           if (moveEvent.shiftKey) {
-            const frameDuration = 1000 / timelineState.fps;
-            newTime = Math.round(newTime / frameDuration) * frameDuration;
+            newTime = snapTimeToFrame(newTime, timelineState.fps);
           } else if (currentDragState.keyframes.length === 1) {
             // Magnetic snap if dragging single keyframe
             newTime = getSnappedTime(newTime);
@@ -337,22 +323,7 @@ function Timeline({
     window.addEventListener('mouseup', handleMouseUp);
   };
 
-  const handleResizeMouseDown = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      e.preventDefault();
-      const startY = e.clientY;
-      const startHeight = height;
-      const handleMouseMove = (moveEvent: MouseEvent) =>
-        onHeightChange(Math.min(Math.max(startHeight + (startY - moveEvent.clientY), 100), 600));
-      const handleMouseUp = () => {
-        document.removeEventListener('mousemove', handleMouseMove);
-        document.removeEventListener('mouseup', handleMouseUp);
-      };
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
-    },
-    [height, onHeightChange],
-  );
+  const handleResizeMouseDown = useVerticalResize({ height, onHeightChange });
 
   const handleScroll = () => {
     if (labelsContainerRef.current && scrollContainerRef.current)
@@ -451,8 +422,7 @@ function Timeline({
           >
             {animatedProperties.map((prop) => {
               const controls = trackControls[prop] || { solo: false, mute: false };
-              const isAnyTrackSoloed = Object.values(trackControls).some((c) => c.solo);
-              const trackOpacity = (isAnyTrackSoloed && !controls.solo) || controls.mute ? 'opacity-40' : 'opacity-100';
+              const trackOpacity = activeAnimatedProperties.has(prop) ? 'opacity-100' : 'opacity-40';
               return (
                 <div
                   key={prop}
@@ -506,10 +476,7 @@ function Timeline({
                   <TimelineRuler duration={timelineState.duration} pixelsPerMs={pixelsPerMs} />
                   <div className="w-full">
                     {animatedProperties.map((prop) => {
-                      const controls = trackControls[prop] || { solo: false, mute: false };
-                      const isAnyTrackSoloed = Object.values(trackControls).some((c) => c.solo);
-                      const trackOpacity =
-                        (isAnyTrackSoloed && !controls.solo) || controls.mute ? 'opacity-30' : 'opacity-100';
+                      const trackOpacity = activeAnimatedProperties.has(prop) ? 'opacity-100' : 'opacity-30';
                       return (
                         <div
                           key={prop}

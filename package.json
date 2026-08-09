@@ -5,7 +5,6 @@
   "description": "Interactive playground to design, preview and export CSS and Three.js 3D animations with a visual editor and timeline.",
   "keywords": [
     "animation",
-    "bun",
     "css-3d",
     "gsap",
     "keyframes",
@@ -26,18 +25,18 @@
   "type": "module",
   "scripts": {
     "dev": "vp dev",
-    "build": "bun run ./scripts/run-with-log.mjs build \"vp build\"",
+    "build": "node ./scripts/run-with-log.mjs build \"vp build\"",
     "preview": "vp preview",
-    "check": "bun run ./scripts/run-with-log.mjs check \"bun run ./scripts/run-vp-check.mjs\"",
-    "typecheck": "bun run ./scripts/run-with-log.mjs typecheck \"tsc --noEmit\"",
-    "lint": "bun run ./scripts/run-with-log.mjs lint \"oxlint --deny-warnings\"",
-    "lint:fix": "bun run ./scripts/run-with-log.mjs lint-fix \"oxlint --fix\"",
-    "format": "bun run ./scripts/run-with-log.mjs format \"oxfmt --write .\"",
-    "format:check": "bun run ./scripts/run-with-log.mjs format-check \"oxfmt --check .\"",
-    "test": "bun run ./scripts/run-with-log.mjs test \"vp test\"",
+    "check": "node ./scripts/run-with-log.mjs check \"node ./scripts/run-vp-check.mjs\"",
+    "typecheck": "node ./scripts/run-with-log.mjs typecheck \"tsc --noEmit\"",
+    "lint": "node ./scripts/run-with-log.mjs lint \"oxlint --deny-warnings\"",
+    "lint:fix": "node ./scripts/run-with-log.mjs lint-fix \"oxlint --fix\"",
+    "format": "node ./scripts/run-with-log.mjs format \"oxfmt --write .\"",
+    "format:check": "node ./scripts/run-with-log.mjs format-check \"oxfmt --check .\"",
+    "test": "node ./scripts/run-with-log.mjs test \"vp test\"",
     "test:watch": "vp test watch",
-    "test:coverage": "bun run ./scripts/run-with-log.mjs coverage \"vp test run --coverage\"",
-    "clean": "bun run ./scripts/run-with-log.mjs clean \"bun -e \\\"import { existsSync, rmSync } from 'node:fs'; for (const dir of ['dist', 'coverage', 'logs']) { if (existsSync(dir)) rmSync(dir, { recursive: true, force: true }); }\\\"\""
+    "test:coverage": "node ./scripts/run-with-log.mjs coverage \"vp test run --coverage\"",
+    "clean": "node ./scripts/run-with-log.mjs clean \"node --input-type=module -e \\\"import { existsSync, rmSync } from 'node:fs'; for (const dir of ['dist', 'coverage', 'logs']) { if (existsSync(dir)) rmSync(dir, { recursive: true, force: true }); }\\\"\""
   },
   "dependencies": {
     "gsap": "^3.15.0",
@@ -66,8 +65,8 @@
     "vitest": "4.1.4"
   },
   "engines": {
-    "bun": ">=1.3.11",
-    "node": ">=20.0.0"
+    "node": ">=20.0.0",
+    "pnpm": ">=11.20.0"
   },
-  "packageManager": "bun@1.3.11"
+  "packageManager": "pnpm@11.20.0"
 }

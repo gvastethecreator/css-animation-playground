@@ -4,7 +4,7 @@
     {
       "label": "🚀 Dev",
       "type": "shell",
-      "command": "bun",
+      "command": "pnpm",
       "args": ["run", "dev"],
       "problemMatcher": [],
       "isBackground": true,
@@ -13,7 +13,7 @@
     {
       "label": "🏗️ Build",
       "type": "shell",
-      "command": "bun",
+      "command": "pnpm",
       "args": ["run", "build"],
       "group": {
         "kind": "build",
@@ -24,42 +24,42 @@
     {
       "label": "✅ Check",
       "type": "shell",
-      "command": "bun",
+      "command": "pnpm",
       "args": ["run", "check"],
       "problemMatcher": ["$tsc"]
     },
     {
       "label": "🧠 Typecheck",
       "type": "shell",
-      "command": "bun",
+      "command": "pnpm",
       "args": ["run", "typecheck"],
       "problemMatcher": ["$tsc"]
     },
     {
       "label": "🧹 Lint",
       "type": "shell",
-      "command": "bun",
+      "command": "pnpm",
       "args": ["run", "lint"],
       "problemMatcher": []
     },
     {
       "label": "✨ Format",
       "type": "shell",
-      "command": "bun",
+      "command": "pnpm",
       "args": ["run", "format"],
       "problemMatcher": []
     },
     {
       "label": "🧪 Test",
       "type": "shell",
-      "command": "bun",
+      "command": "pnpm",
       "args": ["run", "test"],
       "problemMatcher": []
     },
     {
       "label": "👀 Test Watch",
       "type": "shell",
-      "command": "bun",
+      "command": "pnpm",
       "args": ["run", "test:watch"],
       "problemMatcher": [],
       "isBackground": true
@@ -67,21 +67,21 @@
     {
       "label": "📊 Coverage",
       "type": "shell",
-      "command": "bun",
+      "command": "pnpm",
       "args": ["run", "test:coverage"],
       "problemMatcher": []
     },
     {
       "label": "👁️ Preview",
       "type": "shell",
-      "command": "bun",
+      "command": "pnpm",
       "args": ["run", "preview"],
       "problemMatcher": []
     },
     {
       "label": "🗑️ Clean",
       "type": "shell",
-      "command": "bun",
+      "command": "pnpm",
       "args": ["run", "clean"],
       "problemMatcher": []
     }

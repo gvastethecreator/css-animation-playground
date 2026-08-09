@@ -135,6 +135,27 @@ describe('useStageElementManager', () => {
     expect(result.current.stageElement).toBe('image');
   });
 
+  it('restores valid media without rewriting storage', () => {
+    const fakeDataUrl = 'data:image/png;base64,restored';
+    localStorage.setItem('userUploadedMedia', JSON.stringify({ type: 'image', dataUrl: fakeDataUrl }));
+    const setItemSpy = vi.spyOn(Storage.prototype, 'setItem');
+
+    const { result } = renderHook(() => useStageElementManager());
+
+    expect(result.current.imageDataUrl).toBe(fakeDataUrl);
+    expect(setItemSpy).not.toHaveBeenCalled();
+  });
+
+  it('ignores malformed persisted media', () => {
+    localStorage.setItem('userUploadedMedia', JSON.stringify({ type: 'audio', dataUrl: 'data:audio' }));
+
+    const { result } = renderHook(() => useStageElementManager());
+
+    expect(result.current.stageElement).toBe('card');
+    expect(result.current.imageDataUrl).toBeNull();
+    expect(result.current.modelDataUrl).toBeNull();
+  });
+
   it('restores model from localStorage on mount', () => {
     const fakeDataUrl = 'data:application/octet-stream;base64,modeldata';
     localStorage.setItem('userUploadedMedia', JSON.stringify({ type: 'model', dataUrl: fakeDataUrl }));
@@ -143,5 +164,37 @@ describe('useStageElementManager', () => {
 
     expect(result.current.modelDataUrl).toBe(fakeDataUrl);
     expect(result.current.stageElement).toBe('model');
+  });
+
+  it('loads a sample model through the existing fetch and FileReader path', async () => {
+    const reader = mockFileReader();
+    const blob = new Blob(['model'], { type: 'application/octet-stream' });
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      statusText: 'OK',
+      blob: vi.fn().mockResolvedValue(blob),
+    });
+    vi.stubGlobal('fetch', fetchMock);
+    vi.spyOn(Math, 'random').mockReturnValue(0);
+    const { result } = renderHook(() => useStageElementManager());
+
+    await act(async () => {
+      await result.current.handleLoadRandomModel();
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      'https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/models/gltf/Parrot.glb',
+    );
+    expect(reader.readAsDataURL).toHaveBeenCalledWith(blob);
+
+    act(() => {
+      reader.onload?.({
+        target: { result: 'data:application/octet-stream;base64,sample' },
+      } as ProgressEvent<FileReader>);
+    });
+
+    expect(result.current.modelDataUrl).toBe('data:application/octet-stream;base64,sample');
+    expect(result.current.stageElement).toBe('model');
+    expect(result.current.isLoadingModel).toBe(false);
   });
 });

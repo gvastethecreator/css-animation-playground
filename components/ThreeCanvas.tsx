@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useLayoutEffect, useState } from 'react';
 import * as THREE from 'three';
-import { StageStyle, TransformState, StageElement, GizmoMode } from '../types';
+import { StageStyle, TransformState, StageElement, GizmoMode, StageViewportState } from '../types';
 import { UploadCloud } from 'lucide-react';
 import { createTextTexture } from '../utils/textureUtils';
 import { useThreeSetup } from '../hooks/useThreeSetup';
@@ -10,7 +10,7 @@ interface ThreeCanvasProps {
   transforms: TransformState;
   modelDataUrl: string | null;
   imageDataUrl: string | null;
-  scene: { translateX: number; translateY: number; translateZ: number };
+  scene: StageViewportState;
   stageElement: StageElement;
   showGrid: boolean;
   alignGridToView: boolean;
