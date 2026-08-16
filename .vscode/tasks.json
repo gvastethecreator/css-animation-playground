@@ -2,7 +2,7 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "🚀 Dev",
+      "label": "🚀 dev",
       "type": "shell",
       "command": "pnpm",
       "args": ["run", "dev"],
@@ -11,7 +11,7 @@
       "group": "build"
     },
     {
-      "label": "🏗️ Build",
+      "label": "🏗️ build",
       "type": "shell",
       "command": "pnpm",
       "args": ["run", "build"],
@@ -22,42 +22,42 @@
       "problemMatcher": ["$tsc"]
     },
     {
-      "label": "✅ Check",
+      "label": "✅ check",
       "type": "shell",
       "command": "pnpm",
       "args": ["run", "check"],
       "problemMatcher": ["$tsc"]
     },
     {
-      "label": "🧠 Typecheck",
+      "label": "🧠 types",
       "type": "shell",
       "command": "pnpm",
       "args": ["run", "typecheck"],
       "problemMatcher": ["$tsc"]
     },
     {
-      "label": "🧹 Lint",
+      "label": "🧹 lint",
       "type": "shell",
       "command": "pnpm",
       "args": ["run", "lint"],
       "problemMatcher": []
     },
     {
-      "label": "✨ Format",
+      "label": "✨ format",
       "type": "shell",
       "command": "pnpm",
       "args": ["run", "format"],
       "problemMatcher": []
     },
     {
-      "label": "🧪 Test",
+      "label": "🧪 test",
       "type": "shell",
       "command": "pnpm",
       "args": ["run", "test"],
       "problemMatcher": []
     },
     {
-      "label": "👀 Test Watch",
+      "label": "👀 watch",
       "type": "shell",
       "command": "pnpm",
       "args": ["run", "test:watch"],
@@ -65,24 +65,45 @@
       "isBackground": true
     },
     {
-      "label": "📊 Coverage",
+      "label": "📊 coverage",
       "type": "shell",
       "command": "pnpm",
       "args": ["run", "test:coverage"],
       "problemMatcher": []
     },
     {
-      "label": "👁️ Preview",
+      "label": "👁️ preview",
       "type": "shell",
       "command": "pnpm",
       "args": ["run", "preview"],
       "problemMatcher": []
     },
     {
-      "label": "🗑️ Clean",
+      "label": "🗑️ clean",
       "type": "shell",
       "command": "pnpm",
       "args": ["run", "clean"],
+      "problemMatcher": []
+    },
+    {
+      "label": "📦 install",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["install", "--frozen-lockfile"],
+      "problemMatcher": []
+    },
+    {
+      "label": "⬆️ outdated",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["outdated"],
+      "problemMatcher": []
+    },
+    {
+      "label": "🛡️ audit",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["audit"],
       "problemMatcher": []
     }
   ]

@@ -54,6 +54,7 @@ const StageImage = React.forwardRef<HTMLDivElement, StageImageProps>(
         willChangeString={willChangeString}
         layerGap={0} // Image is a single layer
         className="w-auto h-auto"
+        sizeFromFirstLayer
         onClick={onClick}
       >
         {imageDataUrl ? (

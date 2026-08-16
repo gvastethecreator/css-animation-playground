@@ -1,13 +1,37 @@
-# CSS 3D Playground
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/header/document.svg?title=CSS+3D+Playground&subtitle=Design%2C+animate%2C+and+export+spatial+motion&logo=css3&theme=violet&align=center&mode=dark" />
+    <img alt="CSS 3D Playground — design, animate, and export spatial motion" src="https://shieldcn.dev/header/document.svg?title=CSS+3D+Playground&subtitle=Design%2C+animate%2C+and+export+spatial+motion&logo=css3&theme=violet&align=center&mode=light" />
+  </picture>
+</p>
+
+<p align="center">
+  <a href="https://github.com/gvastethecreator/css-animation-playground/actions/workflows/ci.yml"><img alt="CI status" src="https://shieldcn.dev/github/ci/gvastethecreator/css-animation-playground.svg?workflow=CI&branch=main&variant=secondary&size=xs" /></a>
+  <a href="https://gvastethecreator.github.io/css-animation-playground/"><img alt="Open the live playground" src="https://shieldcn.dev/badge/live-playground-7c3aed.svg?logo=githubpages&variant=branded&size=xs" /></a>
+  <a href="https://nodejs.org/"><img alt="Node.js 22 or newer" src="https://shieldcn.dev/badge/runtime-Node.js%2022%2B-339933.svg?logo=nodedotjs&logoColor=fff&variant=branded&size=xs" /></a>
+  <a href="https://github.com/gvastethecreator/css-animation-playground/stargazers"><img alt="GitHub stars" src="https://shieldcn.dev/github/stars/gvastethecreator/css-animation-playground.svg?variant=secondary&size=xs" /></a>
+  <a href="LICENSE"><img alt="MIT license" src="https://shieldcn.dev/github/license/gvastethecreator/css-animation-playground.svg?variant=secondary&size=xs" /></a>
+</p>
 
 An interactive playground to design, preview, and export 3D animations from a
 visual editor with a live timeline, dual rendering engines (CSS and Three.js),
 and code export for popular animation libraries.
 
+[Open the live playground](https://gvastethecreator.github.io/css-animation-playground/) ·
+[Source and issues](https://github.com/gvastethecreator/css-animation-playground)
+
 The project uses **pnpm on Node.js** with **Vite+ on Vite 8**,
 **React 19 + TypeScript**, **Tailwind CSS 4**, **Vitest 4**, **OXC**
 (`oxlint` + `oxfmt`), and recommends **GSAP** as the primary export /
 animation target.
+
+## Product tour
+
+| Card workbench                                                                                           | Image playground                                                                                                     |
+| -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| <img src="docs/assets/screenshots/card-workbench.webp" alt="CSS 3D card editor with stage controls" />   | <img src="docs/assets/screenshots/paper-media.webp" alt="Generated paper mechanism loaded into the image editor" />  |
+| **GSAP export**                                                                                          | **Responsive editor**                                                                                                |
+| <img src="docs/assets/screenshots/gsap-export.webp" alt="GSAP code export beside the live text stage" /> | <img src="docs/assets/screenshots/mobile-editor.webp" alt="Image playground controls on a narrow mobile viewport" /> |
 
 ## Features
 
@@ -44,8 +68,8 @@ animation target.
 
 ### Requirements
 
-- **pnpm** `>= 11.20.0`
-- **Node.js** `>= 20`
+- **pnpm** `>= 11.21.0`
+- **Node.js** `>= 22.22.2` (required by the current test environment)
 
 ### Install
 
@@ -59,15 +83,20 @@ pnpm install
 pnpm run dev
 ```
 
-The local server defaults to `http://localhost:3000`.
+The local server defaults to `http://127.0.0.1:3000`. Set `VITE_HOST` only
+when the development server must be reachable from another interface.
+
+The editor is local-first. Documents and history stay in browser storage, and
+uploaded media is processed in the current browser session. There are no
+accounts, analytics, or application telemetry.
 
 ## Scripts
 
 The most important scripts are listed below. Several of them also write
 timestamped logs to `logs/` via `scripts/run-with-log.mjs`.
 
-| Script                  | Description                              |
-| ----------------------- | ---------------------------------------- |
+| Script                   | Description                              |
+| ------------------------ | ---------------------------------------- |
 | `pnpm run dev`           | Start the dev server with Vite+          |
 | `pnpm run check`         | Run the integrated Vite+ checks          |
 | `pnpm run typecheck`     | Run `tsc --noEmit`                       |
@@ -94,6 +123,11 @@ timestamped logs to `logs/` via `scripts/run-with-log.mjs`.
 ## Documentation
 
 - `docs/architecture.md`: architecture, data flow, and responsibilities.
+- `docs/DEPENDENCIES.md`: dependency changelogs and migration notes.
+- `docs/MAINTENANCE_REPORT.md`: maintenance and repository hygiene result.
+- `docs/PERFORMANCE_REPORT.md`: measured performance and bundle output.
+- `docs/UX_REVIEW_2026-08-09.md`: responsive and accessibility review.
+- `docs/QUALITY_REVIEW_2026-08-09.md`: ten-pass quality evidence.
 - `docs/code-rules.md`: coding standards and contribution rules.
 - `docs/design.md`: UX and interaction patterns.
 - `docs/design-system.md`: visual tokens and component base styles.
@@ -105,6 +139,12 @@ timestamped logs to `logs/` via `scripts/run-with-log.mjs`.
 - `CONTRIBUTING.md`: how to contribute.
 - `CHANGELOG.md`: release notes.
 - `SECURITY.md`: how to report vulnerabilities.
+
+## Support
+
+If this playground helps your work, you can support its maintenance through
+[GitHub Sponsors](https://github.com/sponsors/gvastethecreator) or
+[Ko-fi](https://ko-fi.com/gvaste).
 
 ## License
 

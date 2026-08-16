@@ -1,7 +1,7 @@
 {
-  "current_commit": "d721d163266232980ff6cdea2db0b0702ca9121d",
+  "source_commit": "68d64f02aa70fa8e1ba6022361acd4f01300468e",
   "working_tree_dirty": true,
-  "generated_at": "2026-08-08T11:55:00Z",
+  "generated_at": "2026-08-15T09:31:20Z",
   "scanned_scope": [
     "."
   ],
@@ -11,6 +11,7 @@
     ".hg",
     ".next",
     ".nuxt",
+    ".scratch",
     ".svn",
     ".turbo",
     ".venv",
@@ -31,44 +32,44 @@
     {
       "id": ".",
       "path": ".",
-      "file_count": 24,
-      "fingerprint": "820622edcdff20cf6f2ac09f4af3c08d524780553ffc8aa7acb2537581383ae6"
+      "file_count": 25,
+      "fingerprint": "6a1914de3f55b92abbeafb4d879bb8747ca1e3a63e64a8e4ebd648a4da69a0a4"
     },
     {
       "id": ".github",
       "path": ".github",
       "file_count": 3,
-      "fingerprint": "ff5729bcc7df52d9c68a4b1b071197c336788b0c35c9cfec779f0499c5aed72e"
+      "fingerprint": "f3279acd08d537c5f98c35c18a9cdcc7290e88e8e0f51902614e05dcdb9c5a0a"
     },
     {
       "id": ".vscode",
       "path": ".vscode",
       "file_count": 2,
-      "fingerprint": "0b4f12233f0ff8186a36034208c8504c2b3aaebedf93856f0557b6322f7294de"
+      "fingerprint": "655b8c0ee4538bbe5e3de49cdb4db9eb1ad036db888632f16a4b43e93e6863d5"
     },
     {
       "id": "components",
       "path": "components",
       "file_count": 47,
-      "fingerprint": "0624653be593a70d32feea766e3e03554716e50b74c07a93af81b9de61b219c9"
+      "fingerprint": "59da096c032cb1125d8280653993b41492dfa816a5495a7dbe4fd9e345874210"
     },
     {
       "id": "docs",
       "path": "docs",
-      "file_count": 8,
-      "fingerprint": "7beafebb5e4503066e0c8825b03c3ca76f174a7eb7c7d821c58378d72669d110"
+      "file_count": 10,
+      "fingerprint": "1d773f40be54f037d54c4356a30fca018869ee2a7eaea0263d645d12989a4f87"
     },
     {
       "id": "hooks",
       "path": "hooks",
-      "file_count": 8,
-      "fingerprint": "0319e64383d0707a657aa4bc3b205c2850e9014a9be063ac866f088114d18007"
+      "file_count": 10,
+      "fingerprint": "8a8884685865d0ea141c860f7735bdcc69e61f818b81552783500551696dc83a"
     },
     {
       "id": "scripts",
       "path": "scripts",
       "file_count": 2,
-      "fingerprint": "93770753a53adf4dfef7ac05e19a7d659e07d91fa4b5a17a2d015a9d78abb08d"
+      "fingerprint": "7e2d8e9eb9a039bfcd4cb8607a46fa7b74af9b5f07e963a748d811712f8c4a66"
     },
     {
       "id": "store",
@@ -79,14 +80,14 @@
     {
       "id": "tests",
       "path": "tests",
-      "file_count": 13,
-      "fingerprint": "a10443a6d616be137911c37a8d9816a52a6e2b247ade1ea325d4f2ead784de3f"
+      "file_count": 22,
+      "fingerprint": "6655ed6fba936637a051a611f60f048dcf5d68be7bd8ef91f1f5cf39e386dbe4"
     },
     {
       "id": "utils",
       "path": "utils",
-      "file_count": 4,
-      "fingerprint": "756d18103b759a03b423e388a31493420a02e5ae22c5a4795837e4936b71c251"
+      "file_count": 12,
+      "fingerprint": "f329e512a317568fb31988352490b9446e318e447e26942ae17a10d986938ee2"
     }
   ]
 }

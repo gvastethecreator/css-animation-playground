@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-08T11:55:00Z",
-  "generated_from_commit": "d721d163266232980ff6cdea2db0b0702ca9121d",
+  "generated_at": "2026-08-15T09:31:20Z",
+  "generated_from_commit": "68d64f02aa70fa8e1ba6022361acd4f01300468e",
   "scope": [
     "."
   ],
@@ -39,7 +39,8 @@
       ],
       "tests": [
         "tests/codeOutputPanel.test.tsx",
-        "tests/components.render.test.tsx"
+        "tests/components.render.test.tsx",
+        "tests/stageImage.test.tsx"
       ],
       "constraints": [
         "This baseline uses tracked source and explicit dependency references only."
@@ -184,7 +185,7 @@
       "type": "module",
       "boundary": "Repository",
       "entrypoints": [
-        "README.md:CSS 3D Playground"
+        "README.md:Product tour"
       ],
       "tests": [],
       "constraints": [
@@ -195,7 +196,7 @@
         "locations": [
           {
             "path": "README.md",
-            "symbol": "CSS 3D Playground"
+            "symbol": "Product tour"
           }
         ]
       }
@@ -207,7 +208,7 @@
       "type": "service",
       "boundary": "Scripts",
       "entrypoints": [
-        "scripts/run-vp-check.mjs:env"
+        "scripts/run-with-log.mjs:label"
       ],
       "tests": [],
       "constraints": [
@@ -217,8 +218,8 @@
         "status": "verified",
         "locations": [
           {
-            "path": "scripts/run-vp-check.mjs",
-            "symbol": "env"
+            "path": "scripts/run-with-log.mjs",
+            "symbol": "label"
           }
         ]
       }
@@ -233,7 +234,8 @@
         "store/useAppStore.ts:UIState"
       ],
       "tests": [
-        "tests/useAppStore.test.ts"
+        "tests/useAppStore.test.ts",
+        "tests/useStageViewport.test.ts"
       ],
       "constraints": [
         "This baseline uses tracked source and explicit dependency references only."
@@ -258,11 +260,11 @@
         "types.ts:TransformState"
       ],
       "tests": [
+        "tests/animationEditing.test.ts",
+        "tests/animationSampling.test.ts",
         "tests/codeOutputPanel.test.tsx",
-        "tests/styleUtils.test.ts",
-        "tests/useAnimationPlayer.test.ts",
-        "tests/useHistoryManager.test.ts",
-        "tests/usePreviewAnimator.test.ts"
+        "tests/stageImage.test.tsx",
+        "tests/styleUtils.test.ts"
       ],
       "constraints": [
         "This baseline uses tracked source and explicit dependency references only."
@@ -284,10 +286,13 @@
       "type": "module",
       "boundary": "Utils",
       "entrypoints": [
-        "utils/mathUtils.ts:lerp"
+        "utils/animationEditing.ts:toggleKeyframe"
       ],
       "tests": [
+        "tests/animationEditing.test.ts",
+        "tests/animationSampling.test.ts",
         "tests/mathUtils.test.ts",
+        "tests/stageMedia.test.ts",
         "tests/styleUtils.test.ts"
       ],
       "constraints": [
@@ -297,8 +302,8 @@
         "status": "verified",
         "locations": [
           {
-            "path": "utils/mathUtils.ts",
-            "symbol": "lerp"
+            "path": "utils/animationEditing.ts",
+            "symbol": "toggleKeyframe"
           }
         ]
       }
@@ -397,6 +402,10 @@
           },
           {
             "path": "App.tsx",
+            "symbol": "./hooks/useStageViewport"
+          },
+          {
+            "path": "App.tsx",
             "symbol": "./hooks/useHotkeys"
           },
           {
@@ -430,6 +439,28 @@
           {
             "path": "App.tsx",
             "symbol": "./types"
+          }
+        ]
+      }
+    },
+    {
+      "from": "app",
+      "to": "utils",
+      "type": "imports",
+      "evidence": {
+        "status": "verified",
+        "locations": [
+          {
+            "path": "App.tsx",
+            "symbol": "./utils/animationEditing"
+          },
+          {
+            "path": "App.tsx",
+            "symbol": "./utils/timelineState"
+          },
+          {
+            "path": "App.tsx",
+            "symbol": "./utils/timelineMath"
           }
         ]
       }
@@ -510,6 +541,10 @@
         "status": "verified",
         "locations": [
           {
+            "path": "components/CodeOutputPanel.tsx",
+            "symbol": "../hooks/useVerticalResize"
+          },
+          {
             "path": "components/StageImage.tsx",
             "symbol": "../hooks/useStageDragHandlers"
           },
@@ -524,6 +559,10 @@
           {
             "path": "components/ThreeCanvas.tsx",
             "symbol": "../hooks/useResourceLoader"
+          },
+          {
+            "path": "components/timeline/Timeline.tsx",
+            "symbol": "../../hooks/useVerticalResize"
           }
         ]
       }
@@ -582,12 +621,32 @@
             "symbol": "../utils/styleUtils"
           },
           {
+            "path": "components/CodeOutputPanel.tsx",
+            "symbol": "../utils/codeExport"
+          },
+          {
+            "path": "components/CodeOutputPanel.tsx",
+            "symbol": "../utils/trackControls"
+          },
+          {
+            "path": "components/FrameCounter.tsx",
+            "symbol": "../utils/timelineMath"
+          },
+          {
+            "path": "components/LiveAnimationInfo.tsx",
+            "symbol": "../utils/trackControls"
+          },
+          {
             "path": "components/StageLayers.tsx",
             "symbol": "../utils/styleUtils"
           },
           {
             "path": "components/ThreeCanvas.tsx",
             "symbol": "../utils/textureUtils"
+          },
+          {
+            "path": "components/timeline/CondensedTimelineView.tsx",
+            "symbol": "../../utils/timelineMath"
           }
         ]
       }
@@ -672,6 +731,10 @@
           {
             "path": "hooks/useAnimationPlayer.ts",
             "symbol": "../store/useAppStore"
+          },
+          {
+            "path": "hooks/useStageViewport.ts",
+            "symbol": "../store/useAppStore"
           }
         ]
       }
@@ -718,6 +781,22 @@
             "symbol": "../utils/styleUtils"
           },
           {
+            "path": "hooks/useAnimationPlayer.ts",
+            "symbol": "../utils/animationSampling"
+          },
+          {
+            "path": "hooks/useAnimationPlayer.ts",
+            "symbol": "../utils/trackControls"
+          },
+          {
+            "path": "hooks/useHistoryManager.ts",
+            "symbol": "../utils/historyState"
+          },
+          {
+            "path": "hooks/usePreviewAnimator.ts",
+            "symbol": "../utils/animationSampling"
+          },
+          {
             "path": "hooks/useResourceLoader.ts",
             "symbol": "../utils/runtimeDiagnostics.ts"
           },
@@ -726,8 +805,8 @@
             "symbol": "../utils/runtimeDiagnostics.ts"
           },
           {
-            "path": "hooks/useThreeSetup.ts",
-            "symbol": "../utils/runtimeDiagnostics.ts"
+            "path": "hooks/useStageElementManager.ts",
+            "symbol": "../utils/stageMedia"
           }
         ]
       }
@@ -924,11 +1003,37 @@
     },
     {
       "from": "utils",
+      "to": "easing",
+      "type": "imports",
+      "evidence": {
+        "status": "verified",
+        "locations": [
+          {
+            "path": "utils/animationSampling.ts",
+            "symbol": "../easing"
+          },
+          {
+            "path": "utils/codeExport.ts",
+            "symbol": "../easing"
+          }
+        ]
+      }
+    },
+    {
+      "from": "utils",
       "to": "external-dependencies",
       "type": "imports",
       "evidence": {
         "status": "verified",
         "locations": [
+          {
+            "path": "utils/codeExport.ts",
+            "symbol": "three"
+          },
+          {
+            "path": "utils/codeExport.ts",
+            "symbol": "gsap"
+          },
           {
             "path": "utils/textureUtils.ts",
             "symbol": "three"
@@ -944,11 +1049,35 @@
         "status": "verified",
         "locations": [
           {
+            "path": "utils/animationEditing.ts",
+            "symbol": "../types"
+          },
+          {
+            "path": "utils/animationSampling.ts",
+            "symbol": "../types"
+          },
+          {
+            "path": "utils/codeExport.ts",
+            "symbol": "../types"
+          },
+          {
+            "path": "utils/historyState.ts",
+            "symbol": "../types"
+          },
+          {
+            "path": "utils/stageMedia.ts",
+            "symbol": "../types"
+          },
+          {
             "path": "utils/styleUtils.ts",
             "symbol": "../types"
           },
           {
             "path": "utils/textureUtils.ts",
+            "symbol": "../types"
+          },
+          {
+            "path": "utils/timelineState.ts",
             "symbol": "../types"
           }
         ]
@@ -1003,11 +1132,23 @@
       "outcome": "The verified dependency path reaches external-dependencies through 5 step(s)."
     },
     {
-      "trigger": "Tracked reference index.tsx:./App",
+      "trigger": "Tracked reference App.tsx:./components/Sidebar to types",
       "steps": [
-        "index",
         "app",
         "components",
+        "hooks",
+        "utils",
+        "easing",
+        "types"
+      ],
+      "outcome": "The verified dependency path reaches types through 5 step(s)."
+    },
+    {
+      "trigger": "Tracked reference App.tsx:./hooks/useHistoryManager",
+      "steps": [
+        "app",
+        "hooks",
+        "utils",
         "easing",
         "types",
         "external-dependencies"
@@ -1015,28 +1156,16 @@
       "outcome": "The verified dependency path reaches external-dependencies through 5 step(s)."
     },
     {
-      "trigger": "Tracked reference index.tsx:./App to external-dependencies",
+      "trigger": "Tracked reference components/CodeOutputPanel.tsx:../hooks/useVerticalResize",
       "steps": [
-        "index",
-        "app",
         "components",
-        "easing",
+        "hooks",
         "utils",
+        "easing",
+        "types",
         "external-dependencies"
       ],
       "outcome": "The verified dependency path reaches external-dependencies through 5 step(s)."
-    },
-    {
-      "trigger": "Tracked reference index.tsx:./App to types",
-      "steps": [
-        "index",
-        "app",
-        "components",
-        "easing",
-        "utils",
-        "types"
-      ],
-      "outcome": "The verified dependency path reaches types through 5 step(s)."
     }
   ]
 }

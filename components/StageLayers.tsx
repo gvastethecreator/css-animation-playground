@@ -13,6 +13,7 @@ interface StageLayersProps {
   layerGap?: number;
   showStageUI: boolean;
   willChangeString: string;
+  sizeFromFirstLayer?: boolean;
   onClick?: () => void;
 }
 
@@ -28,6 +29,7 @@ const StageLayers = React.forwardRef<HTMLDivElement, StageLayersProps>(
       layerGap = 20,
       showStageUI,
       willChangeString,
+      sizeFromFirstLayer = false,
       onClick,
     },
     ref,
@@ -75,10 +77,11 @@ const StageLayers = React.forwardRef<HTMLDivElement, StageLayersProps>(
         )}
         {layers.map((child, index) => {
           const zOffset = isExploded ? (index - midIndex) * layerGap : 0;
+          const positionClass = sizeFromFirstLayer && index === 0 ? 'relative' : 'absolute inset-0';
           return (
             <div
               key={index}
-              className={`absolute inset-0 preserve-3d ${explodeTransitionClass}`}
+              className={`${positionClass} preserve-3d ${explodeTransitionClass}`}
               style={{ transform: `translateZ(${zOffset}px)` }}
             >
               {child}

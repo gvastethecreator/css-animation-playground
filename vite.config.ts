@@ -7,9 +7,10 @@ import { defineConfig } from 'vite-plus';
 const rootDir = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
+  base: process.env.GITHUB_PAGES === 'true' ? '/css-animation-playground/' : '/',
   server: {
     port: 3000,
-    host: '0.0.0.0',
+    host: process.env.VITE_HOST || '127.0.0.1',
   },
   plugins: [react(), tailwindcss()],
   resolve: {
@@ -27,6 +28,14 @@ export default defineConfig({
       include: ['utils/**', 'hooks/**', 'store/**', 'easing.ts', 'components/**'],
       reportsDirectory: './coverage',
     },
+  },
+  fmt: {
+    semi: true,
+    singleQuote: true,
+    trailingComma: 'all',
+    printWidth: 120,
+    tabWidth: 2,
+    ignorePatterns: ['docs/codemap/**'],
   },
   lint: {
     options: {

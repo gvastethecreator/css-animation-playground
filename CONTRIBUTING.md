@@ -17,7 +17,7 @@ bug reports, fixes, and small features that match the existing scope.
 
 ## Local setup
 
-Requirements: pnpm `>= 11.20.0` and Node.js `>= 20`.
+Requirements: pnpm `>= 11.20.0` and Node.js `>= 22.22.2`.
 
 ```bash
 pnpm install

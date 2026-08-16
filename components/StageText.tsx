@@ -39,6 +39,7 @@ const StageText = React.forwardRef<HTMLDivElement, StageTextProps>(
         willChangeString={willChangeString}
         layerGap={0} // Text is a single layer, so no gap
         className="w-auto h-auto"
+        sizeFromFirstLayer
         onClick={onClick}
       >
         <h1 className="font-bold text-transparent bg-clip-text drop-shadow-xl whitespace-nowrap" style={textStyle}>

@@ -9,6 +9,10 @@ application surface allows.
 
 ### Added
 
+- Responsive compact editor layout, reduced-motion handling, and accessible
+  names for icon-only camera, timeline, history, and tooltip controls.
+- Dependency, maintenance, architecture, performance, UX, and quality reports.
+- Safe `clean` command and dependency maintenance VS Code tasks.
 - Minimal GitHub Actions CI running `typecheck`, `lint`, `test`, and `build`.
 - `CONTRIBUTING.md`, `SECURITY.md`, and `CODE_OF_CONDUCT.md`.
 - MIT `LICENSE`.
@@ -19,6 +23,12 @@ application surface allows.
 
 ### Changed
 
+- All direct dependencies moved to their latest releases, including
+  TypeScript 7, Vite+ 0.2.9, Three r185, jsdom 30, and jest-dom 7.0.1.
+- Vite, Vitest, Oxlint, and Oxfmt now come from the integrated Vite+
+  toolchain; `pnpm-workspace.yaml` keeps Vite core and Vite+ aligned.
+- The development server now binds to `127.0.0.1` by default.
+- The Node.js requirement is now `>=22.22.2` for the current test stack.
 - README and `architecture.md` translated to English.
 - Header "View source on GitHub" link now points to
   `https://github.com/gvastethecreator/css-animation-playground`.
@@ -33,7 +43,7 @@ application surface allows.
   `design-system.md`, `prd.md`) consolidated into `docs/`. The
   `docs/README.md` index, `README.md`, `AGENTS.md`, and `CONTRIBUTING.md`
   were updated to point at the new locations. Historical references in
-  `CHANGELOG.md` and `docs/WORKLOG.md` are intentionally left untouched.
+  `CHANGELOG.md` and `docs/WORKLOG.md` remain in English.
 
 ### Fixed
 
@@ -45,6 +55,9 @@ application surface allows.
 
 ### Removed
 
+- Superseded direct Vitest/Oxlint/Oxfmt dependencies and their duplicate
+  formatter configuration.
+- Obsolete `scripts/run-vp-check.mjs` wrapper.
 - `eslint.config.js` (empty stub; project uses OXC `oxlint`/`oxfmt`).
 - `metadata.json` (leftover from upstream scaffolding template; unused).
 - `.prettierrc` (dead config; referenced a `prettier-plugin-tailwindcss`

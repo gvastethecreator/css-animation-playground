@@ -124,8 +124,13 @@ const Tooltip: React.FC<TooltipProps> = ({ content, children, delay = 200 }) => 
     };
   }, [isVisible]);
 
-  // Usamos un wrapper div (con display: contents para no afectar layout) en lugar de cloneElement
-  // Esto es más seguro y funciona con cualquier hijo.
+  const labeledChild =
+    typeof content === 'string' && React.isValidElement<Record<string, unknown>>(children)
+      ? React.cloneElement(children, children.props['aria-label'] ? {} : { 'aria-label': content })
+      : children;
+
+  // The display: contents wrapper keeps tooltip events layout-neutral. Direct
+  // element children also receive the tooltip text as an accessible name.
   return (
     <>
       <div
@@ -136,7 +141,7 @@ const Tooltip: React.FC<TooltipProps> = ({ content, children, delay = 200 }) => 
         onBlur={handleMouseLeave}
         style={{ display: 'contents' }}
       >
-        {children}
+        {labeledChild}
       </div>
       {isVisible &&
         ReactDOM.createPortal(

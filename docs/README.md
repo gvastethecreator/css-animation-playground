@@ -3,13 +3,20 @@
 This directory holds the operational and maintenance documentation for the
 playground.
 
-> The original Spanish versions are preserved for reference. New maintainers
-> are encouraged to add English summaries when they edit these files.
+> Public product and maintenance documentation is kept in English so the
+> repository has one consistent language contract.
 
 ## Index
 
 - `../README.md`: overview, stack, scripts, and verified status.
 - `architecture.md`: technical architecture, data flow, and responsibilities.
+- `ARCHITECTURE_REVIEW_2026-08-09.md`: current architecture findings and
+  decisions.
+- `DEPENDENCIES.md`: dependency versions, changelogs, migrations, and impact.
+- `MAINTENANCE_REPORT.md`: repository and tooling maintenance result.
+- `PERFORMANCE_REPORT.md`: measured development and production performance.
+- `UX_REVIEW_2026-08-09.md`: responsive and accessibility review.
+- `QUALITY_REVIEW_2026-08-09.md`: ten-pass final quality review and evidence.
 - `code-rules.md`: coding standards and contribution rules.
 - `design.md`: UX and interaction patterns.
 - `design-system.md`: visual tokens and component base styles.

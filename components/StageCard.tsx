@@ -15,6 +15,8 @@ interface StageCardProps {
   imageDataUrl?: string | null;
 }
 
+const defaultCardImage = `${import.meta.env.BASE_URL}samples/paper-mechanism.webp`;
+
 const StageCard = React.forwardRef<HTMLDivElement, StageCardProps>(
   (
     { transforms, isExploded, isAdjusting, isPlaying, style, showStageUI, willChangeString, onClick, imageDataUrl },
@@ -52,7 +54,7 @@ const StageCard = React.forwardRef<HTMLDivElement, StageCardProps>(
               Backend
             </p>
             <p className="font-mono text-[10px] mt-2 opacity-50" style={{ color: style.textSecondary }}>
-              SISTEMA: V-2.0
+              SYSTEM: V-2.0
             </p>
           </div>
         </div>
@@ -67,11 +69,10 @@ const StageCard = React.forwardRef<HTMLDivElement, StageCardProps>(
         <div className="absolute inset-0 rounded-2xl overflow-hidden backface-hidden">
           <div className="h-2/3 relative w-full">
             <img
-              src={
-                imageDataUrl ||
-                'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop'
-              }
-              alt="Card Cover"
+              src={imageDataUrl || defaultCardImage}
+              alt="Abstract paper mechanism card cover"
+              width={1254}
+              height={1254}
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90" />
@@ -93,10 +94,10 @@ const StageCard = React.forwardRef<HTMLDivElement, StageCardProps>(
               </span>
             </div>
             <h3 className="text-2xl font-bold leading-tight mb-1 text-white drop-shadow-sm">
-              Dimensiones <br /> <span style={{ color: style.accent }}>Interactivas</span>
+              Interactive <br /> <span style={{ color: style.accent }}>Dimensions</span>
             </h3>
             <p className="text-sm font-medium text-zinc-400 leading-snug max-w-[90%]">
-              Explora transformaciones espaciales en tiempo real.
+              Explore spatial transforms in real time.
             </p>
           </div>
         </div>
@@ -106,7 +107,9 @@ const StageCard = React.forwardRef<HTMLDivElement, StageCardProps>(
           className="absolute -bottom-4 -right-4 w-16 h-16 rounded-full backface-hidden border-4 border-zinc-900"
           style={{ backgroundColor: style.accent }}
         >
-          <div className="w-full h-full flex items-center justify-center text-white font-bold text-xs">3D</div>
+          <div className="w-full h-full flex items-center justify-center">
+            <span className="rounded-full bg-zinc-950 px-2 py-1 text-[10px] font-bold text-zinc-100">3D</span>
+          </div>
         </div>
       </StageLayers>
     );

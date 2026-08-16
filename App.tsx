@@ -384,7 +384,7 @@ export default function App() {
 
   return (
     // Applied deep radial gradient here for the main background
-    <div className="flex flex-col h-screen bg-[radial-gradient(circle_at_top_left,#18181b,#09090b)] text-white font-sans overflow-hidden">
+    <div className="app-shell flex flex-col h-screen bg-[radial-gradient(circle_at_top_left,#18181b,#09090b)] text-white font-sans overflow-hidden">
       <Header
         onUndo={handleUndoAction}
         canUndo={canUndo}
@@ -404,9 +404,9 @@ export default function App() {
         onAnimationEngineChange={setAnimationEngine}
       />
 
-      <div className="flex flex-1 min-h-0">
+      <div className="workspace-shell flex flex-1 min-h-0">
         <aside
-          className="glass-panel border-r border-zinc-700/50 overflow-y-auto custom-scrollbar z-10"
+          className="controls-sidebar glass-panel border-r border-zinc-700/50 overflow-y-auto custom-scrollbar z-10"
           style={{ width: `${uiState.sidebarWidth}px` }}
         >
           <Sidebar
@@ -427,7 +427,7 @@ export default function App() {
           />
         </aside>
 
-        <main className="flex-1 flex flex-col min-w-0 relative">
+        <main className="stage-shell flex-1 flex flex-col min-w-0 relative">
           <Stage
             transforms={previewTransforms ?? displayedTransforms}
             showGrid={uiState.showGrid}

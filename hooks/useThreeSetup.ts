@@ -89,7 +89,7 @@ export function useThreeSetup(mountRef: React.RefObject<HTMLDivElement | null>, 
     renderer.setSize(mountNode.clientWidth, mountNode.clientHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.type = THREE.PCFShadowMap;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     mountNode.appendChild(renderer.domElement);
 

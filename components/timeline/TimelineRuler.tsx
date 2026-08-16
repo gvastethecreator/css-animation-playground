@@ -37,7 +37,7 @@ const TimelineRuler = ({ duration, pixelsPerMs }: RulerProps) => {
 
     ticks.push(
       <div key={`major-${i}`} className="absolute h-full w-px bg-zinc-600 top-0" style={{ left: `${left}px` }}>
-        <span className="absolute top-full mt-0.5 -translate-x-1/2 text-[10px] text-zinc-500 font-mono whitespace-nowrap">
+        <span className="absolute top-full mt-0.5 -translate-x-1/2 text-[10px] text-zinc-300 font-mono whitespace-nowrap">
           {time >= 1000 ? `${(time / 1000).toFixed(1).replace(/\.0$/, '')}s` : `${time}ms`}
         </span>
       </div>,

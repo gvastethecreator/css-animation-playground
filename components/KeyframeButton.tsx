@@ -33,7 +33,7 @@ export default function KeyframeButton({
 
   return (
     <Tooltip content={title}>
-      <button onClick={onClick} className="flex items-center justify-center w-4 h-4 rounded-full group">
+      <button onClick={onClick} className="flex items-center justify-center w-6 h-6 rounded-full group">
         <div className={`${baseClasses} group-hover:bg-[var(--keyframe-button-color)]`} style={style} />
       </button>
     </Tooltip>

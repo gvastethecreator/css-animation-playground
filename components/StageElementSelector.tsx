@@ -26,7 +26,7 @@ export default function StageElementSelector({
     <div className="flex items-center gap-1 p-1 bg-zinc-900/80 backdrop-blur-sm rounded-lg shadow-lg">
       {elements.map(({ id, icon: Icon, label }) => {
         return (
-          <Tooltip key={id} content={`Animate a ${label}`}>
+          <Tooltip key={id} content={`Animate ${label}`}>
             <button
               onClick={() => onElementChange(id)}
               className={`w-7 h-7 flex items-center justify-center rounded-md transition-colors ${

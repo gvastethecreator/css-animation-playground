@@ -25,48 +25,46 @@
   "type": "module",
   "scripts": {
     "dev": "vp dev",
-    "build": "node ./scripts/run-with-log.mjs build \"vp build\"",
+    "build": "node ./scripts/run-with-log.mjs build vp build",
     "preview": "vp preview",
-    "check": "node ./scripts/run-with-log.mjs check \"node ./scripts/run-vp-check.mjs\"",
-    "typecheck": "node ./scripts/run-with-log.mjs typecheck \"tsc --noEmit\"",
-    "lint": "node ./scripts/run-with-log.mjs lint \"oxlint --deny-warnings\"",
-    "lint:fix": "node ./scripts/run-with-log.mjs lint-fix \"oxlint --fix\"",
-    "format": "node ./scripts/run-with-log.mjs format \"oxfmt --write .\"",
-    "format:check": "node ./scripts/run-with-log.mjs format-check \"oxfmt --check .\"",
-    "test": "node ./scripts/run-with-log.mjs test \"vp test\"",
+    "check": "node ./scripts/run-with-log.mjs check vp check",
+    "typecheck": "node ./scripts/run-with-log.mjs typecheck tsc --noEmit",
+    "lint": "node ./scripts/run-with-log.mjs lint vp lint --deny-warnings",
+    "lint:fix": "node ./scripts/run-with-log.mjs lint-fix vp lint --fix",
+    "format": "node ./scripts/run-with-log.mjs format vp fmt . --write",
+    "format:check": "node ./scripts/run-with-log.mjs format-check vp fmt . --check",
+    "test": "node ./scripts/run-with-log.mjs test vp test",
     "test:watch": "vp test watch",
-    "test:coverage": "node ./scripts/run-with-log.mjs coverage \"vp test run --coverage\"",
-    "clean": "node ./scripts/run-with-log.mjs clean \"node --input-type=module -e \\\"import { existsSync, rmSync } from 'node:fs'; for (const dir of ['dist', 'coverage', 'logs']) { if (existsSync(dir)) rmSync(dir, { recursive: true, force: true }); }\\\"\""
+    "test:coverage": "node ./scripts/run-with-log.mjs coverage vp test run --coverage",
+    "clean": "node ./scripts/clean-generated.mjs"
   },
   "dependencies": {
     "gsap": "^3.15.0",
-    "lucide-react": "^1.17.0",
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6",
-    "three": "^0.184.0",
-    "zustand": "^5.0.14"
+    "lucide-react": "^1.31.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "three": "^0.185.1",
+    "zustand": "^5.0.15"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.3.0",
-    "@testing-library/jest-dom": "^6.9.1",
+    "@tailwindcss/vite": "^4.3.3",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.2",
-    "@types/node": "25.6.0",
-    "@types/react": "^19.2.15",
-    "@types/react-dom": "^19.2.3",
-    "@types/three": "^0.184.1",
-    "@vitejs/plugin-react": "6.0.1",
-    "jsdom": "29.0.2",
-    "oxfmt": "0.45.0",
-    "oxlint": "1.60.0",
-    "tailwindcss": "^4.3.0",
-    "typescript": "~6.0.3",
-    "vite": "8.0.8",
-    "vite-plus": "^0.1.23",
-    "vitest": "4.1.4"
+    "@types/node": "26.2.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@types/three": "^0.185.4",
+    "@vitejs/plugin-react": "6.0.5",
+    "jsdom": "30.0.1",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~7.0.2",
+    "vite": "catalog:",
+    "vite-plus": "catalog:"
   },
   "engines": {
-    "node": ">=20.0.0",
-    "pnpm": ">=11.20.0"
+    "node": ">=22.22.2",
+    "pnpm": ">=11.21.0"
   },
-  "packageManager": "pnpm@11.20.0"
+  "packageManager": "pnpm@11.21.0"
 }

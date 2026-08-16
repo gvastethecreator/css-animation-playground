@@ -1,5 +1,6 @@
 {
   "projectColors.mainColor": "#7814db",
+  "oxc.fmt.configPath": "./vite.config.ts",
   "workbench.colorCustomizations": {
     "[Bearded Theme Black & Gold]": {},
     "statusBarItem.warningBackground": "#7814db",
@@ -40,6 +41,5 @@
     "activityBar.activeBorder": "#7814db",
     "activityBarBadge.foreground": "#ffffff",
     "activityBarBadge.background": "#7814db"
-  },
-  "window.title": "d:\\DEV\\css-animation-playground"
+  }
 }

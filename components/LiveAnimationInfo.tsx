@@ -77,7 +77,7 @@ export default function LiveAnimationInfo({
   };
 
   return (
-    <div className="absolute top-36 right-4 bg-zinc-950/70 backdrop-blur-sm rounded-lg p-3 text-[13px] shadow-xl text-zinc-400 font-mono z-20 pointer-events-none max-w-xs">
+    <div className="live-animation-info absolute top-36 right-4 bg-zinc-950/70 backdrop-blur-sm rounded-lg p-3 text-[13px] shadow-xl text-zinc-400 font-mono z-20 pointer-events-none max-w-xs">
       <div className="flex items-center gap-2 mb-2">
         <SlidersHorizontal size={16} strokeWidth={2} className="text-indigo-500" />
         <h3 className="font-bold text-zinc-300 uppercase tracking-wider text-[12px]">Live Animation Values</h3>

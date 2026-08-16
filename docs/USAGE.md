@@ -1,8 +1,5 @@
 # Usage guide
 
-> English summary. The original Spanish guide is preserved below for the
-> maintainer's reference.
-
 ## Product flow
 
 1. Pick the element on the stage.
@@ -16,6 +13,8 @@
 
 ### Install
 
+Node.js `>=22.22.2` and pnpm `>=11.21.0` are required.
+
 ```bash
 pnpm install
 ```
@@ -25,6 +24,9 @@ pnpm install
 ```bash
 pnpm run dev
 ```
+
+The server binds to `127.0.0.1:3000` by default. Set `VITE_HOST` to opt into
+another interface.
 
 ### Quick validation
 
@@ -60,77 +62,10 @@ The workspace includes short tasks with emoji prefixes for:
 - coverage
 - clean
 - preview
+- dependency install, outdated check, and audit
 
 ## Operational notes
 
 - The Three.js engine is loaded on demand.
 - 3D models are only visualized correctly in Three.js mode.
 - Local persistence saves history, configuration, and selected media.
-
----
-
-## (Original Spanish — preserved for reference)
-
-### Flujo de producto
-
-1. Elegí el elemento del escenario.
-2. Ajustá transforms, filtros y apariencia en el sidebar.
-3. Agregá keyframes desde los controles de propiedad.
-4. Editá easing, duración y reproducción en la timeline.
-5. Probá el resultado en CSS o Three.js.
-6. Exportá el código desde el panel inferior.
-
-### Flujo de desarrollo local
-
-#### Instalar
-
-```bash
-pnpm install
-```
-
-#### Desarrollo
-
-```bash
-pnpm run dev
-```
-
-#### Validación rápida
-
-```bash
-pnpm run typecheck
-pnpm run lint
-pnpm run test
-pnpm run build
-```
-
-### Logs
-
-Los scripts principales escriben salidas en `logs/`:
-
-- `typecheck.latest.log`
-- `lint.latest.log`
-- `test.latest.log`
-- `build.latest.log`
-
-También se guardan versiones con timestamp para auditoría local.
-
-### Tareas de VS Code
-
-El workspace incluye tareas cortas con emojis para:
-
-- desarrollo
-- build
-- check
-- typecheck
-- lint
-- format
-- test
-- coverage
-- clean
-- preview
-
-### Notas de operación
-
-- El modo Three.js se carga de forma diferida.
-- Los modelos 3D sólo se visualizan correctamente en el modo Three.js.
-- La persistencia local guarda historial, configuración y media seleccionada.

@@ -87,27 +87,25 @@ const Header: React.FC<HeaderProps> = ({
     'p-2 rounded-lg text-zinc-400 hover:text-zinc-100 btn-tactile disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:transform-none disabled:hover:bg-transparent';
 
   return (
-    <header className="flex items-center justify-between px-4 py-2 glass-panel border-b border-zinc-700/50 shrink-0 h-16 z-30">
+    <header className="app-header flex items-center justify-between px-4 py-2 glass-panel border-b border-zinc-700/50 shrink-0 h-16 z-30">
       {/* Left Section */}
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2 mr-2">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-xs shadow-glow bg-linear-to-br from-indigo-500 to-purple-600 border border-white/10">
+      <div className="header-left flex items-center gap-4">
+        <div className="header-brand flex items-center gap-2 mr-2">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-xs shadow-raised bg-linear-to-br from-indigo-700 to-purple-800 border border-white/10">
             3D
           </div>
           <div>
-            <h1 className="text-sm font-bold text-transparent bg-clip-text bg-linear-to-r from-zinc-100 to-zinc-400 tracking-tight leading-none">
-              CSS
-            </h1>
+            <h1 className="text-sm font-bold text-zinc-100 tracking-tight leading-none">CSS</h1>
             <h1 className="text-xs font-semibold text-zinc-500 tracking-wider leading-none">PLAYGROUND</h1>
           </div>
         </div>
 
-        <div className="h-6 w-px bg-zinc-700/50" />
+        <div className="header-divider h-6 w-px bg-zinc-700/50" />
 
         <Tooltip content="Browse animation presets">
           <button
             onClick={handleOpenPresets}
-            className={`btn-tactile px-3 py-1.5 rounded-lg flex items-center gap-2 text-xs font-medium text-zinc-300 ${isPresetPopoverOpen ? 'active' : ''}`}
+            className={`header-presets btn-tactile px-3 py-1.5 rounded-lg flex items-center gap-2 text-xs font-medium text-zinc-300 ${isPresetPopoverOpen ? 'active' : ''}`}
           >
             <Sparkles size={14} strokeWidth={2} className="text-indigo-400" />
             Presets
@@ -122,11 +120,11 @@ const Header: React.FC<HeaderProps> = ({
           anchorEl={popoverAnchorEl}
         />
 
-        <div className="flex items-center gap-2">
+        <div className="header-media flex items-center gap-2">
           <Tooltip content="Upload Image, Video (.webm), or 3D Model (.glb, .gltf)">
             <label
               htmlFor="header-file-upload"
-              className="btn-tactile px-3 py-1.5 rounded-lg flex items-center gap-2 text-xs font-medium text-zinc-300 cursor-pointer"
+              className="header-upload btn-tactile px-3 py-1.5 rounded-lg flex items-center gap-2 text-xs font-medium text-zinc-300 cursor-pointer"
             >
               <Upload size={14} strokeWidth={2} />
               Upload
@@ -143,7 +141,7 @@ const Header: React.FC<HeaderProps> = ({
             <button
               onClick={onLoadRandomModel}
               disabled={isLoadingModel}
-              className="btn-tactile px-3 py-1.5 rounded-lg flex items-center gap-2 text-xs font-medium text-zinc-300 disabled:opacity-50"
+              className="header-sample btn-tactile px-3 py-1.5 rounded-lg flex items-center gap-2 text-xs font-medium text-zinc-300 disabled:opacity-50"
             >
               {isLoadingModel ? (
                 <Loader size={14} strokeWidth={2} className="animate-spin" />
@@ -167,17 +165,18 @@ const Header: React.FC<HeaderProps> = ({
       </div>
 
       {/* Center Section */}
-      <div className="absolute left-1/2 -translate-x-1/2">
+      <div className="header-engine absolute left-1/2">
         <EngineSelector engine={animationEngine} onEngineChange={onAnimationEngineChange} />
       </div>
 
       {/* Right Section */}
-      <div className="flex items-center gap-2">
-        <div className="flex items-center gap-1 bg-zinc-900/50 p-1 rounded-lg border border-white/5 shadow-inner-depth">
+      <div className="header-right flex items-center gap-2">
+        <div className="header-history flex items-center gap-1 bg-zinc-900/50 p-1 rounded-lg border border-white/5 shadow-inner-depth">
           <Tooltip content="Undo (⌘Z)">
             <button
               onClick={onUndo}
               disabled={!canUndo}
+              aria-label="Undo"
               className="p-1.5 rounded hover:bg-white/5 text-zinc-400 hover:text-zinc-100 transition-colors disabled:opacity-30"
             >
               <CornerUpLeft size={16} strokeWidth={2} />
@@ -187,6 +186,7 @@ const Header: React.FC<HeaderProps> = ({
             <button
               onClick={onRedo}
               disabled={!canRedo}
+              aria-label="Redo"
               className="p-1.5 rounded hover:bg-white/5 text-zinc-400 hover:text-zinc-100 transition-colors disabled:opacity-30"
             >
               <CornerUpRight size={16} strokeWidth={2} />

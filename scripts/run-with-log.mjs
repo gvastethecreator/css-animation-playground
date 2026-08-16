@@ -1,16 +1,26 @@
-import { createWriteStream, existsSync, mkdirSync, rmSync, copyFileSync } from 'node:fs';
+import { copyFileSync, createWriteStream, existsSync, mkdirSync, rmSync } from 'node:fs';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 
-const [, , rawLabel, ...commandParts] = process.argv;
+const [, , rawLabel, rawTool, ...toolArgs] = process.argv;
 
-if (!rawLabel || commandParts.length === 0) {
-  process.stderr.write('Usage: node ./scripts/run-with-log.mjs <label> <command>\n');
+if (!rawLabel || !rawTool) {
+  process.stderr.write('Usage: node ./scripts/run-with-log.mjs <label> <vp|tsc> [...args]\n');
   process.exit(1);
 }
 
 const label = rawLabel.replace(/[^a-z0-9-_]/gi, '-').toLowerCase();
-const command = commandParts.join(' ');
+const toolEntrypoints = {
+  vp: path.resolve(process.cwd(), 'node_modules', 'vite-plus', 'bin', 'vp'),
+  tsc: path.resolve(process.cwd(), 'node_modules', 'typescript', 'bin', 'tsc'),
+};
+const entrypoint = toolEntrypoints[rawTool];
+if (!entrypoint || !existsSync(entrypoint)) {
+  process.stderr.write(`Unsupported or missing tool: ${rawTool}\n`);
+  process.exit(1);
+}
+
+const command = `${rawTool} ${toolArgs.join(' ')}`.trim();
 const logsDir = path.resolve(process.cwd(), 'logs');
 const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
 const logPath = path.join(logsDir, `${label}-${timestamp}.log`);
@@ -42,10 +52,10 @@ if (/^(test|coverage|lint|lint-fix|check)$/i.test(label)) {
   childEnv.NODE_NO_WARNINGS = childEnv.NODE_NO_WARNINGS ?? '1';
 }
 
-const child = spawn(command, {
+const child = spawn(process.execPath, [entrypoint, ...toolArgs], {
   cwd: process.cwd(),
   env: childEnv,
-  shell: true,
+  shell: false,
   stdio: ['inherit', 'pipe', 'pipe'],
 });
 

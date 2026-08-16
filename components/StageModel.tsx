@@ -45,6 +45,7 @@ const StageModel = React.forwardRef<HTMLDivElement, StageModelProps>(
         willChangeString={willChangeString}
         layerGap={0} // Model is a single layer
         className="w-auto h-auto"
+        sizeFromFirstLayer
         onClick={onClick}
       >
         {modelDataUrl ? (
