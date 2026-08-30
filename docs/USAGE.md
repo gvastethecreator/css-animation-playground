@@ -1,5 +1,7 @@
 # Usage guide
 
+How to run the local editor and the quality scripts.
+
 ## Product flow
 
 1. Pick the element on the stage.
@@ -13,7 +15,7 @@
 
 ### Install
 
-Node.js `>=22.22.2` and pnpm `>=11.21.0` are required.
+Node.js `>=22.22.2` and pnpm `>=12` are required.
 
 ```bash
 pnpm install
@@ -25,8 +27,7 @@ pnpm install
 pnpm run dev
 ```
 
-The server binds to `127.0.0.1:3000` by default. Set `VITE_HOST` to opt into
-another interface.
+The server binds to `127.0.0.1:3000` by default. Set `VITE_HOST` if the server must listen on another interface.
 
 ### Quick validation
 
@@ -39,33 +40,21 @@ pnpm run build
 
 ## Logs
 
-The main scripts write outputs to `logs/`:
+The main scripts write output to `logs/`:
 
 - `typecheck.latest.log`
 - `lint.latest.log`
 - `test.latest.log`
 - `build.latest.log`
 
-Timestamped versions are also kept for local auditing.
+Timestamped copies stay on disk for local audit.
 
 ## VS Code tasks
 
-The workspace includes short tasks with emoji prefixes for:
-
-- development
-- build
-- check
-- typecheck
-- lint
-- format
-- test
-- coverage
-- clean
-- preview
-- dependency install, outdated check, and audit
+`.vscode/tasks.json` lists daily tasks first: Dev, Test, Watch, Lint, Format, Types, Check, Build. Preview, Coverage, Clean, Install, Outdated, and Audit follow.
 
 ## Operational notes
 
-- The Three.js engine is loaded on demand.
-- 3D models are only visualized correctly in Three.js mode.
+- The Three.js engine loads on demand.
+- 3D models visualize correctly only in Three.js mode.
 - Local persistence saves history, configuration, and selected media.

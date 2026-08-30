@@ -68,7 +68,7 @@ animation target.
 
 ### Requirements
 
-- **pnpm** `>= 11.21.0`
+- **pnpm** `>=12`
 - **Node.js** `>= 22.22.2` (required by the current test environment)
 
 ### Install
@@ -123,18 +123,14 @@ timestamped logs to `logs/` via `scripts/run-with-log.mjs`.
 ## Documentation
 
 - `docs/architecture.md`: architecture, data flow, and responsibilities.
+- `CONTEXT.md`: timeline, track, and stage-media terms.
 - `docs/DEPENDENCIES.md`: dependency changelogs and migration notes.
-- `docs/MAINTENANCE_REPORT.md`: maintenance and repository hygiene result.
-- `docs/PERFORMANCE_REPORT.md`: measured performance and bundle output.
-- `docs/UX_REVIEW_2026-08-09.md`: responsive and accessibility review.
-- `docs/QUALITY_REVIEW_2026-08-09.md`: ten-pass quality evidence.
 - `docs/code-rules.md`: coding standards and contribution rules.
 - `docs/design.md`: UX and interaction patterns.
 - `docs/design-system.md`: visual tokens and component base styles.
 - `docs/prd.md`: product requirements and roadmap.
 - `docs/README.md`: index of project documentation.
 - `docs/USAGE.md`: operational guide for the local environment.
-- `docs/WORKLOG.md`: changes from the most recent modernization pass.
 - `TECH-DEBT.md`: prioritized technical debt and follow-ups.
 - `CONTRIBUTING.md`: how to contribute.
 - `CHANGELOG.md`: release notes.

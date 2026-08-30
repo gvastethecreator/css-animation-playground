@@ -2,62 +2,26 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "🚀 dev",
+      "label": "▶️ Dev",
       "type": "shell",
       "command": "pnpm",
       "args": ["run", "dev"],
       "problemMatcher": [],
-      "isBackground": true,
-      "group": "build"
+      "isBackground": true
     },
     {
-      "label": "🏗️ build",
-      "type": "shell",
-      "command": "pnpm",
-      "args": ["run", "build"],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "problemMatcher": ["$tsc"]
-    },
-    {
-      "label": "✅ check",
-      "type": "shell",
-      "command": "pnpm",
-      "args": ["run", "check"],
-      "problemMatcher": ["$tsc"]
-    },
-    {
-      "label": "🧠 types",
-      "type": "shell",
-      "command": "pnpm",
-      "args": ["run", "typecheck"],
-      "problemMatcher": ["$tsc"]
-    },
-    {
-      "label": "🧹 lint",
-      "type": "shell",
-      "command": "pnpm",
-      "args": ["run", "lint"],
-      "problemMatcher": []
-    },
-    {
-      "label": "✨ format",
-      "type": "shell",
-      "command": "pnpm",
-      "args": ["run", "format"],
-      "problemMatcher": []
-    },
-    {
-      "label": "🧪 test",
+      "label": "🧪 Test",
       "type": "shell",
       "command": "pnpm",
       "args": ["run", "test"],
-      "problemMatcher": []
+      "problemMatcher": [],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
     },
     {
-      "label": "👀 watch",
+      "label": "👀 Watch",
       "type": "shell",
       "command": "pnpm",
       "args": ["run", "test:watch"],
@@ -65,42 +29,81 @@
       "isBackground": true
     },
     {
-      "label": "📊 coverage",
+      "label": "🧹 Lint",
       "type": "shell",
       "command": "pnpm",
-      "args": ["run", "test:coverage"],
+      "args": ["run", "lint"],
       "problemMatcher": []
     },
     {
-      "label": "👁️ preview",
+      "label": "✨ Format",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["run", "format"],
+      "problemMatcher": []
+    },
+    {
+      "label": "🧠 Types",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["run", "typecheck"],
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "✅ Check",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["run", "check"],
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "🏗️ Build",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["run", "build"],
+      "problemMatcher": ["$tsc"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "👁️ Preview",
       "type": "shell",
       "command": "pnpm",
       "args": ["run", "preview"],
       "problemMatcher": []
     },
     {
-      "label": "🗑️ clean",
+      "label": "📊 Coverage",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["run", "test:coverage"],
+      "problemMatcher": []
+    },
+    {
+      "label": "🗑️ Clean",
       "type": "shell",
       "command": "pnpm",
       "args": ["run", "clean"],
       "problemMatcher": []
     },
     {
-      "label": "📦 install",
+      "label": "📦 Install",
       "type": "shell",
       "command": "pnpm",
       "args": ["install", "--frozen-lockfile"],
       "problemMatcher": []
     },
     {
-      "label": "⬆️ outdated",
+      "label": "⬆️ Outdated",
       "type": "shell",
       "command": "pnpm",
       "args": ["outdated"],
       "problemMatcher": []
     },
     {
-      "label": "🛡️ audit",
+      "label": "🛡️ Audit",
       "type": "shell",
       "command": "pnpm",
       "args": ["audit"],

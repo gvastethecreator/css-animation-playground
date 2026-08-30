@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-15T09:31:20Z",
-  "generated_from_commit": "68d64f02aa70fa8e1ba6022361acd4f01300468e",
+  "generated_at": "2026-08-29T18:00:00Z",
+  "generated_from_commit": "8d3b41cd6ea26d2360870619d7d2e94ba6aac75a",
   "scope": [
     "."
   ],
@@ -8,15 +8,43 @@
     {
       "id": "app",
       "path": "App.tsx",
-      "role": "Owns the tracked files for the App module.",
       "type": "module",
       "boundary": "App",
       "entrypoints": [
         "App.tsx:stageElementRef"
       ],
       "tests": [],
-      "constraints": [
-        "This baseline uses tracked source and explicit dependency references only."
+      "callers": [
+        {
+          "id": "index",
+          "type": "imports"
+        }
+      ],
+      "callees": [
+        {
+          "id": "components",
+          "type": "imports"
+        },
+        {
+          "id": "external-dependencies",
+          "type": "imports"
+        },
+        {
+          "id": "hooks",
+          "type": "imports"
+        },
+        {
+          "id": "store",
+          "type": "imports"
+        },
+        {
+          "id": "types",
+          "type": "imports"
+        },
+        {
+          "id": "utils",
+          "type": "imports"
+        }
       ],
       "evidence": {
         "status": "verified",
@@ -31,26 +59,50 @@
     {
       "id": "components",
       "path": "components",
-      "role": "Owns the tracked files for the components module.",
       "type": "interface",
       "boundary": "Components",
       "entrypoints": [
-        "components/README.md:Components"
+        "components/ActivationSwitch.tsx:ActivationSwitchProps"
       ],
       "tests": [
         "tests/codeOutputPanel.test.tsx",
         "tests/components.render.test.tsx",
         "tests/stageImage.test.tsx"
       ],
-      "constraints": [
-        "This baseline uses tracked source and explicit dependency references only."
+      "callers": [
+        {
+          "id": "app",
+          "type": "imports"
+        }
+      ],
+      "callees": [
+        {
+          "id": "easing",
+          "type": "imports"
+        },
+        {
+          "id": "external-dependencies",
+          "type": "imports"
+        },
+        {
+          "id": "hooks",
+          "type": "imports"
+        },
+        {
+          "id": "types",
+          "type": "imports"
+        },
+        {
+          "id": "utils",
+          "type": "imports"
+        }
       ],
       "evidence": {
         "status": "verified",
         "locations": [
           {
-            "path": "components/README.md",
-            "symbol": "Components"
+            "path": "components/ActivationSwitch.tsx",
+            "symbol": "ActivationSwitchProps"
           }
         ]
       }
@@ -58,7 +110,6 @@
     {
       "id": "easing",
       "path": "easing.ts",
-      "role": "Owns the tracked files for the easing module.",
       "type": "module",
       "boundary": "Easing",
       "entrypoints": [
@@ -67,8 +118,25 @@
       "tests": [
         "tests/easing.test.ts"
       ],
-      "constraints": [
-        "This baseline uses tracked source and explicit dependency references only."
+      "callers": [
+        {
+          "id": "components",
+          "type": "imports"
+        },
+        {
+          "id": "utils",
+          "type": "imports"
+        }
+      ],
+      "callees": [
+        {
+          "id": "types",
+          "type": "imports"
+        },
+        {
+          "id": "utils",
+          "type": "imports"
+        }
       ],
       "evidence": {
         "status": "verified",
@@ -83,16 +151,47 @@
     {
       "id": "external-dependencies",
       "path": "App.tsx",
-      "role": "Represents external packages referenced by tracked source files.",
       "type": "external",
       "boundary": "External",
       "entrypoints": [
         "App.tsx:react"
       ],
       "tests": [],
-      "constraints": [
-        "Only dependencies with literal tracked-source references appear here."
+      "callers": [
+        {
+          "id": "app",
+          "type": "imports"
+        },
+        {
+          "id": "components",
+          "type": "imports"
+        },
+        {
+          "id": "hooks",
+          "type": "imports"
+        },
+        {
+          "id": "index",
+          "type": "imports"
+        },
+        {
+          "id": "store",
+          "type": "imports"
+        },
+        {
+          "id": "types",
+          "type": "imports"
+        },
+        {
+          "id": "utils",
+          "type": "imports"
+        },
+        {
+          "id": "vite-config",
+          "type": "imports"
+        }
       ],
+      "callees": [],
       "evidence": {
         "status": "verified",
         "locations": [
@@ -106,16 +205,14 @@
     {
       "id": "global-d",
       "path": "global.d.ts",
-      "role": "Owns the tracked files for the global.d module.",
       "type": "module",
       "boundary": "Global.D",
       "entrypoints": [
         "global.d.ts:/// <reference types=\"vite-plus\" />"
       ],
       "tests": [],
-      "constraints": [
-        "This baseline uses tracked source and explicit dependency references only."
-      ],
+      "callers": [],
+      "callees": [],
       "evidence": {
         "status": "verified",
         "locations": [
@@ -129,7 +226,6 @@
     {
       "id": "hooks",
       "path": "hooks",
-      "role": "Owns the tracked files for the hooks module.",
       "type": "module",
       "boundary": "Hooks",
       "entrypoints": [
@@ -142,8 +238,33 @@
         "tests/usePreviewAnimator.test.ts",
         "tests/useStageDragHandlers.test.ts"
       ],
-      "constraints": [
-        "This baseline uses tracked source and explicit dependency references only."
+      "callers": [
+        {
+          "id": "app",
+          "type": "imports"
+        },
+        {
+          "id": "components",
+          "type": "imports"
+        }
+      ],
+      "callees": [
+        {
+          "id": "external-dependencies",
+          "type": "imports"
+        },
+        {
+          "id": "store",
+          "type": "imports"
+        },
+        {
+          "id": "types",
+          "type": "imports"
+        },
+        {
+          "id": "utils",
+          "type": "imports"
+        }
       ],
       "evidence": {
         "status": "verified",
@@ -157,46 +278,56 @@
     },
     {
       "id": "index",
-      "path": "index.css",
-      "role": "Owns the tracked files for the index module.",
+      "path": "index.tsx",
       "type": "module",
       "boundary": "Index",
       "entrypoints": [
-        "index.css:@import 'tailwindcss';"
+        "index.tsx:rootElement"
       ],
       "tests": [],
-      "constraints": [
-        "This baseline uses tracked source and explicit dependency references only."
+      "callers": [],
+      "callees": [
+        {
+          "id": "app",
+          "type": "imports"
+        },
+        {
+          "id": "external-dependencies",
+          "type": "imports"
+        }
       ],
       "evidence": {
         "status": "verified",
         "locations": [
           {
-            "path": "index.css",
-            "symbol": "@import 'tailwindcss';"
+            "path": "index.tsx",
+            "symbol": "rootElement"
           }
         ]
       }
     },
     {
       "id": "repository",
-      "path": "README.md",
-      "role": "Owns the tracked files for the repository module.",
+      "path": "package.json",
       "type": "module",
       "boundary": "Repository",
       "entrypoints": [
-        "README.md:Product tour"
+        "package.json:{"
       ],
       "tests": [],
-      "constraints": [
-        "This baseline uses tracked source and explicit dependency references only."
+      "callers": [],
+      "callees": [
+        {
+          "id": "scripts",
+          "type": "calls"
+        }
       ],
       "evidence": {
         "status": "verified",
         "locations": [
           {
-            "path": "README.md",
-            "symbol": "Product tour"
+            "path": "package.json",
+            "symbol": "{"
           }
         ]
       }
@@ -204,22 +335,25 @@
     {
       "id": "scripts",
       "path": "scripts",
-      "role": "Owns the tracked files for the scripts module.",
       "type": "service",
       "boundary": "Scripts",
       "entrypoints": [
-        "scripts/run-with-log.mjs:label"
+        "scripts/clean-generated.mjs:projectRoot"
       ],
       "tests": [],
-      "constraints": [
-        "This baseline uses tracked source and explicit dependency references only."
+      "callers": [
+        {
+          "id": "repository",
+          "type": "calls"
+        }
       ],
+      "callees": [],
       "evidence": {
         "status": "verified",
         "locations": [
           {
-            "path": "scripts/run-with-log.mjs",
-            "symbol": "label"
+            "path": "scripts/clean-generated.mjs",
+            "symbol": "projectRoot"
           }
         ]
       }
@@ -227,7 +361,6 @@
     {
       "id": "store",
       "path": "store",
-      "role": "Owns the tracked files for the store module.",
       "type": "database",
       "boundary": "Store",
       "entrypoints": [
@@ -237,8 +370,25 @@
         "tests/useAppStore.test.ts",
         "tests/useStageViewport.test.ts"
       ],
-      "constraints": [
-        "This baseline uses tracked source and explicit dependency references only."
+      "callers": [
+        {
+          "id": "app",
+          "type": "imports"
+        },
+        {
+          "id": "hooks",
+          "type": "imports"
+        }
+      ],
+      "callees": [
+        {
+          "id": "external-dependencies",
+          "type": "imports"
+        },
+        {
+          "id": "types",
+          "type": "imports"
+        }
       ],
       "evidence": {
         "status": "verified",
@@ -253,7 +403,6 @@
     {
       "id": "types",
       "path": "types.ts",
-      "role": "Owns the tracked files for the types module.",
       "type": "module",
       "boundary": "Types",
       "entrypoints": [
@@ -266,8 +415,37 @@
         "tests/stageImage.test.tsx",
         "tests/styleUtils.test.ts"
       ],
-      "constraints": [
-        "This baseline uses tracked source and explicit dependency references only."
+      "callers": [
+        {
+          "id": "app",
+          "type": "imports"
+        },
+        {
+          "id": "components",
+          "type": "imports"
+        },
+        {
+          "id": "easing",
+          "type": "imports"
+        },
+        {
+          "id": "hooks",
+          "type": "imports"
+        },
+        {
+          "id": "store",
+          "type": "imports"
+        },
+        {
+          "id": "utils",
+          "type": "imports"
+        }
+      ],
+      "callees": [
+        {
+          "id": "external-dependencies",
+          "type": "imports"
+        }
       ],
       "evidence": {
         "status": "verified",
@@ -282,7 +460,6 @@
     {
       "id": "utils",
       "path": "utils",
-      "role": "Owns the tracked files for the utils module.",
       "type": "module",
       "boundary": "Utils",
       "entrypoints": [
@@ -295,8 +472,37 @@
         "tests/stageMedia.test.ts",
         "tests/styleUtils.test.ts"
       ],
-      "constraints": [
-        "This baseline uses tracked source and explicit dependency references only."
+      "callers": [
+        {
+          "id": "app",
+          "type": "imports"
+        },
+        {
+          "id": "components",
+          "type": "imports"
+        },
+        {
+          "id": "easing",
+          "type": "imports"
+        },
+        {
+          "id": "hooks",
+          "type": "imports"
+        }
+      ],
+      "callees": [
+        {
+          "id": "easing",
+          "type": "imports"
+        },
+        {
+          "id": "external-dependencies",
+          "type": "imports"
+        },
+        {
+          "id": "types",
+          "type": "imports"
+        }
       ],
       "evidence": {
         "status": "verified",
@@ -311,15 +517,18 @@
     {
       "id": "vite-config",
       "path": "vite.config.ts",
-      "role": "Owns the tracked files for the vite.config module.",
       "type": "module",
       "boundary": "Vite.Config",
       "entrypoints": [
         "vite.config.ts:rootDir"
       ],
       "tests": [],
-      "constraints": [
-        "This baseline uses tracked source and explicit dependency references only."
+      "callers": [],
+      "callees": [
+        {
+          "id": "external-dependencies",
+          "type": "imports"
+        }
       ],
       "evidence": {
         "status": "verified",
@@ -351,18 +560,6 @@
           {
             "path": "App.tsx",
             "symbol": "./components/timeline/Timeline"
-          },
-          {
-            "path": "App.tsx",
-            "symbol": "./components/CodeOutputPanel"
-          },
-          {
-            "path": "App.tsx",
-            "symbol": "./components/ShortcutHelp"
-          },
-          {
-            "path": "App.tsx",
-            "symbol": "./components/Header"
           }
         ]
       }
@@ -399,18 +596,6 @@
           {
             "path": "App.tsx",
             "symbol": "./hooks/useStageElementManager"
-          },
-          {
-            "path": "App.tsx",
-            "symbol": "./hooks/useStageViewport"
-          },
-          {
-            "path": "App.tsx",
-            "symbol": "./hooks/useHotkeys"
-          },
-          {
-            "path": "App.tsx",
-            "symbol": "./hooks/usePreviewAnimator"
           }
         ]
       }
@@ -483,10 +668,6 @@
           {
             "path": "components/timeline/CondensedTimelineView.tsx",
             "symbol": "../../easing"
-          },
-          {
-            "path": "components/timeline/EasingCurve.tsx",
-            "symbol": "../../easing"
           }
         ]
       }
@@ -509,26 +690,6 @@
           {
             "path": "components/AnimationPresetPopover.tsx",
             "symbol": "react"
-          },
-          {
-            "path": "components/AnimationPresetPopover.tsx",
-            "symbol": "react-dom"
-          },
-          {
-            "path": "components/BezierEditor.tsx",
-            "symbol": "react"
-          },
-          {
-            "path": "components/CSSGizmo.tsx",
-            "symbol": "react"
-          },
-          {
-            "path": "components/CameraControls.tsx",
-            "symbol": "react"
-          },
-          {
-            "path": "components/CameraControls.tsx",
-            "symbol": "lucide-react"
           }
         ]
       }
@@ -551,18 +712,6 @@
           {
             "path": "components/StageModel.tsx",
             "symbol": "../hooks/useStageDragHandlers"
-          },
-          {
-            "path": "components/ThreeCanvas.tsx",
-            "symbol": "../hooks/useThreeSetup"
-          },
-          {
-            "path": "components/ThreeCanvas.tsx",
-            "symbol": "../hooks/useResourceLoader"
-          },
-          {
-            "path": "components/timeline/Timeline.tsx",
-            "symbol": "../../hooks/useVerticalResize"
           }
         ]
       }
@@ -584,26 +733,6 @@
           },
           {
             "path": "components/CSSGizmo.tsx",
-            "symbol": "../types"
-          },
-          {
-            "path": "components/CodeOutputPanel.tsx",
-            "symbol": "../types"
-          },
-          {
-            "path": "components/ColorControl.tsx",
-            "symbol": "../types"
-          },
-          {
-            "path": "components/ElementControls.tsx",
-            "symbol": "../types"
-          },
-          {
-            "path": "components/EngineSelector.tsx",
-            "symbol": "../types"
-          },
-          {
-            "path": "components/Header.tsx",
             "symbol": "../types"
           }
         ]
@@ -627,26 +756,6 @@
           {
             "path": "components/CodeOutputPanel.tsx",
             "symbol": "../utils/trackControls"
-          },
-          {
-            "path": "components/FrameCounter.tsx",
-            "symbol": "../utils/timelineMath"
-          },
-          {
-            "path": "components/LiveAnimationInfo.tsx",
-            "symbol": "../utils/trackControls"
-          },
-          {
-            "path": "components/StageLayers.tsx",
-            "symbol": "../utils/styleUtils"
-          },
-          {
-            "path": "components/ThreeCanvas.tsx",
-            "symbol": "../utils/textureUtils"
-          },
-          {
-            "path": "components/timeline/CondensedTimelineView.tsx",
-            "symbol": "../../utils/timelineMath"
           }
         ]
       }
@@ -697,26 +806,6 @@
           {
             "path": "hooks/useHotkeys.ts",
             "symbol": "react"
-          },
-          {
-            "path": "hooks/usePreviewAnimator.ts",
-            "symbol": "react"
-          },
-          {
-            "path": "hooks/useResourceLoader.ts",
-            "symbol": "react"
-          },
-          {
-            "path": "hooks/useResourceLoader.ts",
-            "symbol": "three"
-          },
-          {
-            "path": "hooks/useResourceLoader.ts",
-            "symbol": "three/addons/loaders/GLTFLoader.js"
-          },
-          {
-            "path": "hooks/useStageDragHandlers.ts",
-            "symbol": "react"
           }
         ]
       }
@@ -757,14 +846,6 @@
           {
             "path": "hooks/usePreviewAnimator.ts",
             "symbol": "../types"
-          },
-          {
-            "path": "hooks/useResourceLoader.ts",
-            "symbol": "../types"
-          },
-          {
-            "path": "hooks/useStageElementManager.ts",
-            "symbol": "../types"
           }
         ]
       }
@@ -787,26 +868,6 @@
           {
             "path": "hooks/useAnimationPlayer.ts",
             "symbol": "../utils/trackControls"
-          },
-          {
-            "path": "hooks/useHistoryManager.ts",
-            "symbol": "../utils/historyState"
-          },
-          {
-            "path": "hooks/usePreviewAnimator.ts",
-            "symbol": "../utils/animationSampling"
-          },
-          {
-            "path": "hooks/useResourceLoader.ts",
-            "symbol": "../utils/runtimeDiagnostics.ts"
-          },
-          {
-            "path": "hooks/useStageElementManager.ts",
-            "symbol": "../utils/runtimeDiagnostics.ts"
-          },
-          {
-            "path": "hooks/useStageElementManager.ts",
-            "symbol": "../utils/stageMedia"
           }
         ]
       }
@@ -833,60 +894,12 @@
         "status": "verified",
         "locations": [
           {
-            "path": "index.html",
-            "symbol": "https://fonts.googleapis.com"
-          },
-          {
-            "path": "index.html",
-            "symbol": "https://fonts.gstatic.com"
-          },
-          {
-            "path": "index.html",
-            "symbol": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500;700&display=swap"
-          },
-          {
             "path": "index.tsx",
             "symbol": "react"
           },
           {
             "path": "index.tsx",
             "symbol": "react-dom/client"
-          }
-        ]
-      }
-    },
-    {
-      "from": "repository",
-      "to": "app",
-      "type": "reads",
-      "evidence": {
-        "status": "verified",
-        "locations": [
-          {
-            "path": "AGENTS.md",
-            "symbol": "App.tsx"
-          },
-          {
-            "path": "CONTRIBUTING.md",
-            "symbol": "App.tsx"
-          }
-        ]
-      }
-    },
-    {
-      "from": "repository",
-      "to": "hooks",
-      "type": "reads",
-      "evidence": {
-        "status": "verified",
-        "locations": [
-          {
-            "path": "AGENTS.md",
-            "symbol": "hooks/useHistoryManager.ts"
-          },
-          {
-            "path": "AGENTS.md",
-            "symbol": "hooks/useStageElementManager.ts"
           }
         ]
       }
@@ -901,56 +914,10 @@
           {
             "path": "package.json",
             "symbol": "./scripts/run-with-log.mjs"
-          }
-        ]
-      }
-    },
-    {
-      "from": "repository",
-      "to": "scripts",
-      "type": "reads",
-      "evidence": {
-        "status": "verified",
-        "locations": [
-          {
-            "path": "CHANGELOG.md",
-            "symbol": "scripts/run-with-log.mjs"
           },
           {
-            "path": "README.md",
-            "symbol": "scripts/run-with-log.mjs"
-          },
-          {
-            "path": "TECH-DEBT.md",
-            "symbol": "scripts/run-with-log.mjs"
-          }
-        ]
-      }
-    },
-    {
-      "from": "repository",
-      "to": "store",
-      "type": "reads",
-      "evidence": {
-        "status": "verified",
-        "locations": [
-          {
-            "path": "AGENTS.md",
-            "symbol": "store/useAppStore.ts"
-          }
-        ]
-      }
-    },
-    {
-      "from": "repository",
-      "to": "types",
-      "type": "reads",
-      "evidence": {
-        "status": "verified",
-        "locations": [
-          {
-            "path": "AGENTS.md",
-            "symbol": "types.ts"
+            "path": "package.json",
+            "symbol": "./scripts/clean-generated.mjs"
           }
         ]
       }
@@ -1059,26 +1026,6 @@
           {
             "path": "utils/codeExport.ts",
             "symbol": "../types"
-          },
-          {
-            "path": "utils/historyState.ts",
-            "symbol": "../types"
-          },
-          {
-            "path": "utils/stageMedia.ts",
-            "symbol": "../types"
-          },
-          {
-            "path": "utils/styleUtils.ts",
-            "symbol": "../types"
-          },
-          {
-            "path": "utils/textureUtils.ts",
-            "symbol": "../types"
-          },
-          {
-            "path": "utils/timelineState.ts",
-            "symbol": "../types"
           }
         ]
       }
@@ -1106,66 +1053,5 @@
       }
     }
   ],
-  "flows": [
-    {
-      "trigger": "Tracked reference App.tsx:./components/Sidebar",
-      "steps": [
-        "app",
-        "components",
-        "easing",
-        "utils",
-        "types",
-        "external-dependencies"
-      ],
-      "outcome": "The verified dependency path reaches external-dependencies through 5 step(s)."
-    },
-    {
-      "trigger": "Tracked reference App.tsx:./components/Sidebar to external-dependencies",
-      "steps": [
-        "app",
-        "components",
-        "hooks",
-        "store",
-        "types",
-        "external-dependencies"
-      ],
-      "outcome": "The verified dependency path reaches external-dependencies through 5 step(s)."
-    },
-    {
-      "trigger": "Tracked reference App.tsx:./components/Sidebar to types",
-      "steps": [
-        "app",
-        "components",
-        "hooks",
-        "utils",
-        "easing",
-        "types"
-      ],
-      "outcome": "The verified dependency path reaches types through 5 step(s)."
-    },
-    {
-      "trigger": "Tracked reference App.tsx:./hooks/useHistoryManager",
-      "steps": [
-        "app",
-        "hooks",
-        "utils",
-        "easing",
-        "types",
-        "external-dependencies"
-      ],
-      "outcome": "The verified dependency path reaches external-dependencies through 5 step(s)."
-    },
-    {
-      "trigger": "Tracked reference components/CodeOutputPanel.tsx:../hooks/useVerticalResize",
-      "steps": [
-        "components",
-        "hooks",
-        "utils",
-        "easing",
-        "types",
-        "external-dependencies"
-      ],
-      "outcome": "The verified dependency path reaches external-dependencies through 5 step(s)."
-    }
-  ]
+  "flows": []
 }
