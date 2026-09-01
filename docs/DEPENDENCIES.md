@@ -1,6 +1,6 @@
 # Dependency notes
 
-Reviewed on 2026-08-29. pnpm is the only package manager. `packageManager` is `pnpm@12.0.0`.
+Checked on 2026-08-29. pnpm is the only package manager. `packageManager` is `pnpm@12.0.0`.
 
 `pnpm outdated` was empty after this pass. `pnpm audit --prod` reported no known vulnerabilities.
 

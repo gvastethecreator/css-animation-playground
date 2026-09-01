@@ -1,6 +1,6 @@
 # Components
 
-React UI for CSS 3D Playground. One job per component.
+React UI for CSS 3D Playground. Each file has one job.
 
 ## Structure
 

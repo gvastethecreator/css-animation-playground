@@ -10,8 +10,6 @@ This project welcomes bug reports, fixes, and small features that match the exis
 - `store/` keeps small, UI-only state in Zustand.
 - `tests/` runs with Vitest + Testing Library + jsdom.
 - `docs/` holds project documentation beyond the root README.
-- `docs/architecture.md` and `docs/code-rules.md` describe the contract for new code.
-- `CONTEXT.md` defines timeline, track, and stage-media terms.
 
 ## Local setup
 
@@ -37,7 +35,7 @@ pnpm run build
 
 ## Coding rules
 
-Follow `docs/code-rules.md`. Highlights:
+Highlights:
 
 - TypeScript strict mode. No `any` without a justification comment.
 - Functional components only. Type props with a dedicated interface.
@@ -59,7 +57,7 @@ Do not mention publication status or external hosting in commit messages.
 ## Pull requests
 
 - One focused change per PR.
-- Include or update tests for behavior changes.
+- Include or update tests for behavior changes. For new export branches, extend the nearest `CodeOutputPanel` test.
 - Update `docs/` or the root `README.md` if the user-facing surface changes.
 - Link any issue or discussion the PR closes.
 

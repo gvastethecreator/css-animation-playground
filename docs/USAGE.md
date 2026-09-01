@@ -53,7 +53,7 @@ Timestamped copies stay on disk for local audit.
 
 `.vscode/tasks.json` lists daily tasks first: Dev, Test, Watch, Lint, Format, Types, Check, Build. Preview, Coverage, Clean, Install, Outdated, and Audit follow.
 
-## Operational notes
+## Notes
 
 - The Three.js engine loads on demand.
 - 3D models visualize correctly only in Three.js mode.

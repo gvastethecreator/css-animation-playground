@@ -56,6 +56,7 @@ application surface allows.
 
 ### Removed
 
+- Operator internals `CONTEXT.md`, `TECH-DEBT.md`, `docs/architecture.md`, `docs/code-rules.md`, `docs/design.md`, `docs/design-system.md`, and `docs/prd.md` from the tracked tree.
 - Dated operator reviews and the work log from tracked `docs/` (local archive only).
 - Superseded direct Vitest/Oxlint/Oxfmt dependencies and their duplicate
   formatter configuration.

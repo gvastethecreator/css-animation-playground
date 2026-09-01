@@ -122,16 +122,9 @@ timestamped logs to `logs/` via `scripts/run-with-log.mjs`.
 
 ## Documentation
 
-- `docs/architecture.md`: architecture, data flow, and responsibilities.
-- `CONTEXT.md`: timeline, track, and stage-media terms.
-- `docs/DEPENDENCIES.md`: dependency changelogs and migration notes.
-- `docs/code-rules.md`: coding standards and contribution rules.
-- `docs/design.md`: UX and interaction patterns.
-- `docs/design-system.md`: visual tokens and component base styles.
-- `docs/prd.md`: product requirements and roadmap.
 - `docs/README.md`: index of project documentation.
-- `docs/USAGE.md`: operational guide for the local environment.
-- `TECH-DEBT.md`: prioritized technical debt and follow-ups.
+- `docs/USAGE.md`: how to run the local editor.
+- `docs/DEPENDENCIES.md`: dependency notes and migrations.
 - `CONTRIBUTING.md`: how to contribute.
 - `CHANGELOG.md`: release notes.
 - `SECURITY.md`: how to report vulnerabilities.
