@@ -42,6 +42,12 @@ export default defineConfig({
       typeAware: true,
       typeCheck: true,
     },
+    ignorePatterns: ['dist', 'node_modules', 'logs', '*.config.*'],
+    rules: {
+      'no-debugger': 'error',
+      eqeqeq: 'error',
+      'no-var': 'error',
+    },
   },
   build: {
     target: 'es2022',

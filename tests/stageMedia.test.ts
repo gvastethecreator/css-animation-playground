@@ -7,6 +7,8 @@ describe('stage media core', () => {
     expect(classifyStageMediaFile({ name: 'clip.bin', type: 'video/webm' })).toBe('video');
     expect(classifyStageMediaFile({ name: 'mesh.GLB', type: 'application/octet-stream' })).toBe('model');
     expect(classifyStageMediaFile({ name: 'scene.gltf', type: 'model/gltf+json' })).toBe('model');
+    expect(classifyStageMediaFile({ name: 'notes.pdf', type: 'application/pdf' })).toBeNull();
+    expect(classifyStageMediaFile({ name: 'readme.txt', type: 'text/plain' })).toBeNull();
   });
 
   it('parses only complete supported persisted payloads', () => {

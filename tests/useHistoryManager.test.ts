@@ -170,6 +170,32 @@ describe('useHistoryManager', () => {
     expect(result.current.canRedo).toBe(false);
   });
 
+  it('keeps one undo step for a drag gesture of many patches', () => {
+    const { result } = renderHook(() => useHistoryManager());
+
+    act(() => {
+      result.current.beginHistoryGesture();
+    });
+    for (let i = 1; i <= 8; i++) {
+      act(() => {
+        result.current.patchHistory(makeState({ transforms: { ...defaultTransformState, translateX: i } }));
+      });
+    }
+    act(() => {
+      result.current.commitHistoryGesture();
+    });
+
+    expect(result.current.currentState.transforms.translateX).toBe(8);
+    expect(result.current.canUndo).toBe(true);
+
+    act(() => {
+      result.current.handleUndo();
+    });
+
+    expect(result.current.currentState.transforms.translateX).toBe(defaultTransformState.translateX);
+    expect(result.current.canUndo).toBe(false);
+  });
+
   it('handleUndo returns null when at first state', () => {
     const { result } = renderHook(() => useHistoryManager());
     let undoResult: HistoryState | null = null;

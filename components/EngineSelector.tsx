@@ -19,8 +19,10 @@ const EngineSelector: React.FC<EngineSelectorProps> = ({ engine: currentEngine, 
         return (
           <button
             key={engine}
+            type="button"
             onClick={() => onEngineChange(engine)}
             title={`Use ${engine} engine`}
+            aria-pressed={isActive}
             disabled={disabled}
             className={`relative flex-1 text-center text-[11px] font-bold uppercase tracking-wider px-2 py-1.5 rounded-md transition-all ${
               isActive ? `${colors.bg} ${colors.text}` : 'text-zinc-500 hover:bg-zinc-800'

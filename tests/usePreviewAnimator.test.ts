@@ -70,6 +70,25 @@ describe('usePreviewAnimator', () => {
     expect(result.current.previewTransforms?.scaleX).toBeLessThan(1.1);
   });
 
+  it('does not commit React state on every animation frame', () => {
+    const { result } = renderHook(() => usePreviewAnimator('Grow', defaultTransformState));
+
+    act(() => {
+      runFrame(0);
+    });
+    const firstScale = result.current.previewTransforms?.scaleX;
+
+    act(() => {
+      runFrame(16);
+    });
+    expect(result.current.previewTransforms?.scaleX).toBe(firstScale);
+
+    act(() => {
+      runFrame(80);
+    });
+    expect(result.current.previewTransforms?.scaleX).not.toBe(firstScale);
+  });
+
   it('cancels the scheduled frame when preset is cleared', () => {
     const { result, rerender } = renderHook(
       ({ presetName }: { presetName: PresetAnimationName | null }) =>

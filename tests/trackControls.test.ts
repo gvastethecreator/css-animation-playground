@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vite-plus/test';
 import type { AnimationData } from '../types';
-import { getActiveAnimationProperties, isAnimationTrackActive } from '../utils/trackControls';
+import { getActiveAnimationProperties, isAnimationTrackActive, toggleTrackControl } from '../utils/trackControls';
 
 const animationData: AnimationData = {
   translateX: [{ id: 'x', time: 0, value: 0, easing: 'linear' }],
@@ -40,5 +40,19 @@ describe('track activation policy', () => {
         scaleX: { solo: true, mute: false },
       }),
     ).toEqual(['translateX', 'rotateZ']);
+  });
+
+  it('toggles solo without mutating the previous snapshot', () => {
+    const previous = {
+      translateX: { solo: false, mute: false },
+      rotateZ: { solo: true, mute: false },
+    };
+    const next = toggleTrackControl(previous, 'translateX', 'solo');
+
+    expect(next).toEqual({
+      translateX: { solo: true, mute: false },
+      rotateZ: { solo: false, mute: false },
+    });
+    expect(previous.rotateZ.solo).toBe(true);
   });
 });

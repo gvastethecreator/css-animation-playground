@@ -19,10 +19,13 @@ interface MediaFileDescriptor {
   type: string;
 }
 
-export function classifyStageMediaFile(file: MediaFileDescriptor): StageMediaType {
-  if (file.type.toLowerCase().startsWith('video')) return 'video';
+export function classifyStageMediaFile(file: MediaFileDescriptor): StageMediaType | null {
+  const mime = file.type.toLowerCase();
+  if (mime.startsWith('video')) return 'video';
   const fileName = file.name.toLowerCase();
-  return fileName.endsWith('.gltf') || fileName.endsWith('.glb') ? 'model' : 'image';
+  if (fileName.endsWith('.gltf') || fileName.endsWith('.glb')) return 'model';
+  if (mime.startsWith('image') || /\.(png|jpe?g|gif|webp|avif|svg|bmp|ico)$/i.test(fileName)) return 'image';
+  return null;
 }
 
 export function parseStoredMedia(serializedMedia: string | null): StoredMedia | null {

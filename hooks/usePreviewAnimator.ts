@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { TransformState, PresetAnimationName, ANIMATION_PRESETS } from '../types';
 import { createAnimationSampler } from '../utils/animationSampling';
+import { mapElapsedToTimelineTime } from '../utils/playbackClock';
 
 export function usePreviewAnimator(presetName: PresetAnimationName | null, baseTransforms: TransformState) {
   const [previewTransforms, setPreviewTransforms] = useState<TransformState | null>(null);
@@ -17,38 +18,30 @@ export function usePreviewAnimator(presetName: PresetAnimationName | null, baseT
     if (!preset) return;
 
     let startTime: number | null = null;
+    let lastCommit = Number.NEGATIVE_INFINITY;
     const { duration, isLooping, direction } = preset.timelineState;
     const sampleAnimation = createAnimationSampler(preset.animationData);
 
     const animate = (timestamp: number) => {
       if (startTime === null) startTime = timestamp;
-      const elapsed = timestamp - startTime;
-
-      let effectiveTime = elapsed;
-      if (isLooping) {
-        effectiveTime = elapsed % duration;
-        if (direction === 'alternate') {
-          const cycle = Math.floor(elapsed / duration);
-          if (cycle % 2 !== 0) {
-            // If it's an odd cycle (e.g., 1, 3, 5...), reverse the time
-            effectiveTime = duration - effectiveTime;
-          }
-        }
-      } else {
-        effectiveTime = Math.min(elapsed, duration);
-      }
-
-      const animatedValues = sampleAnimation(effectiveTime);
-      setPreviewTransforms({
+      const { time: effectiveTime, shouldStop } = mapElapsedToTimelineTime(
+        timestamp - startTime,
+        duration,
+        isLooping,
+        direction,
+      );
+      const nextTransforms = {
         ...baseTransforms,
         ...preset.initialTransforms,
-        ...animatedValues,
-      });
+        ...sampleAnimation(effectiveTime),
+      };
 
-      if (!isLooping && elapsed >= duration) {
-        startTime = null; // Reset for next loop if re-hovered
+      if (lastCommit < 0 || timestamp - lastCommit > 66 || shouldStop) {
+        lastCommit = timestamp;
+        setPreviewTransforms(nextTransforms);
       }
 
+      if (shouldStop) return;
       animationFrameId.current = requestAnimationFrame(animate);
     };
 

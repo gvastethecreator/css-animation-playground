@@ -34,6 +34,18 @@ export function useHistoryManager() {
     dispatch({ type: 'PUSH', state: newState });
   }, []);
 
+  const beginHistoryGesture = useCallback(() => {
+    dispatch({ type: 'BEGIN_GESTURE' });
+  }, []);
+
+  const patchHistory = useCallback((newState: HistoryState) => {
+    dispatch({ type: 'PATCH', state: newState });
+  }, []);
+
+  const commitHistoryGesture = useCallback(() => {
+    dispatch({ type: 'COMMIT_GESTURE' });
+  }, []);
+
   const handleUndo = useCallback((): HistoryState | null => {
     if (stack.index <= 0) return null;
     isRestoringHistoryRef.current = true;
@@ -64,6 +76,9 @@ export function useHistoryManager() {
   return {
     currentState,
     saveStateToHistory,
+    beginHistoryGesture,
+    patchHistory,
+    commitHistoryGesture,
     handleUndo,
     handleRedo,
     resetHistory,

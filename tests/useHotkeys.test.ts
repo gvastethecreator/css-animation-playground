@@ -47,6 +47,13 @@ describe('useHotkeys', () => {
     expect(handler).toHaveBeenCalledOnce();
   });
 
+  it('matches a shifted punctuation key without listing shift in the binding', () => {
+    const handler = vi.fn();
+    renderHook(() => useHotkeys({ '?': handler }));
+    fireKey('?', { shiftKey: true });
+    expect(handler).toHaveBeenCalledOnce();
+  });
+
   it('does not fire when target is INPUT', () => {
     const handler = vi.fn();
     renderHook(() => useHotkeys({ a: handler }));

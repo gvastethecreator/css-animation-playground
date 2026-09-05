@@ -44,6 +44,8 @@ interface TimelineProps {
   onSelectedKeyframeIdsChange: (ids: Set<string>) => void;
   timelinePlayOnClick: boolean;
   onPlayOnClickToggle: () => void;
+  onGestureStart: () => void;
+  onGestureEnd: () => void;
 }
 
 const formatTime = (ms: number) => (ms / 1000).toFixed(2) + 's';
@@ -66,6 +68,8 @@ function Timeline({
   onSelectedKeyframeIdsChange,
   timelinePlayOnClick,
   onPlayOnClickToggle,
+  onGestureStart,
+  onGestureEnd,
 }: TimelineProps) {
   const trackAreaRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -284,6 +288,7 @@ function Timeline({
     setDragState({ startX: e.clientX, keyframes: selectedKeyframes });
     setActiveKeyframe(null);
     document.body.style.cursor = 'grabbing';
+    onGestureStart();
 
     const handleMouseMove = (moveEvent: MouseEvent) => {
       setDragState((currentDragState) => {
@@ -315,6 +320,7 @@ function Timeline({
     const handleMouseUp = () => {
       setDragState(null);
       document.body.style.cursor = 'default';
+      onGestureEnd();
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
     };

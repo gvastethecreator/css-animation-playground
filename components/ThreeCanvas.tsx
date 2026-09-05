@@ -5,6 +5,7 @@ import { UploadCloud } from 'lucide-react';
 import { createTextTexture } from '../utils/textureUtils';
 import { useThreeSetup } from '../hooks/useThreeSetup';
 import { useResourceLoader } from '../hooks/useResourceLoader';
+import { documentToThreePose } from '../utils/threeTransform';
 
 interface ThreeCanvasProps {
   transforms: TransformState;
@@ -240,15 +241,20 @@ const ThreeCanvas: React.FC<ThreeCanvasProps> = ({
         transformOriginZ,
       } = transforms;
 
-      mainContainer.position.set(translateX, -translateY, translateZ);
-
-      pivotGroup.rotation.set(
-        THREE.MathUtils.degToRad(-rotateX),
-        THREE.MathUtils.degToRad(-rotateY),
-        THREE.MathUtils.degToRad(-rotateZ),
-        'YXZ',
-      );
-      pivotGroup.scale.set(scaleX, scaleY, scaleZ);
+      const pose = documentToThreePose({
+        translateX,
+        translateY,
+        translateZ,
+        rotateX,
+        rotateY,
+        rotateZ,
+        scaleX,
+        scaleY,
+        scaleZ,
+      });
+      mainContainer.position.set(pose.position.x, pose.position.y, pose.position.z);
+      pivotGroup.rotation.set(pose.rotationRad.x, pose.rotationRad.y, pose.rotationRad.z, 'YXZ');
+      pivotGroup.scale.set(pose.scale.x, pose.scale.y, pose.scale.z);
 
       // Calculate offset to simulate transform-origin
       offsetGroup.position.x = -(((transformOriginX - 50) / 100) * refs.dimensions.current.width);

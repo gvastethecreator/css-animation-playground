@@ -3,6 +3,8 @@ catalog:
   vite-plus: 0.3.0
 overrides:
   vite: 'catalog:'
+  vitest: 5.0.0
+  '@vitest/mocker': 5.0.0
 peerDependencyRules:
   allowAny:
     - vite

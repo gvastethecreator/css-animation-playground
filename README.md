@@ -21,7 +21,7 @@ and code export for popular animation libraries.
 [Source and issues](https://github.com/gvastethecreator/css-animation-playground)
 
 The project uses **pnpm on Node.js** with **Vite+ on Vite 8**,
-**React 19 + TypeScript**, **Tailwind CSS 4**, **Vitest 4**, **OXC**
+**React 19 + TypeScript**, **Tailwind CSS 4**, **Vitest 5**, **OXC**
 (`oxlint` + `oxfmt`), and recommends **GSAP** as the primary export /
 animation target.
 
@@ -60,7 +60,7 @@ animation target.
 | History / persistence     | Local hooks (`useHistoryManager`, `useStageElementManager`) |
 | 3D                        | Three.js                                                    |
 | Recommended animation lib | GSAP                                                        |
-| Tests                     | Vitest 4 + Testing Library + jsdom                          |
+| Tests                     | Vitest 5 + Testing Library + jsdom                          |
 | Lint / format             | OXC (`oxlint`, `oxfmt`)                                     |
 | Package manager           | pnpm                                                        |
 

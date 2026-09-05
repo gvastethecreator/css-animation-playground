@@ -14,6 +14,7 @@ interface StageModelProps {
   willChangeString: string;
   isExploded: boolean; // Added for StageLayers
   onClick?: () => void;
+  onSwitchToThreeJs?: () => void;
 }
 
 const StageModel = React.forwardRef<HTMLDivElement, StageModelProps>(
@@ -28,6 +29,7 @@ const StageModel = React.forwardRef<HTMLDivElement, StageModelProps>(
       willChangeString,
       isExploded,
       onClick,
+      onSwitchToThreeJs,
     },
     ref,
   ) => {
@@ -53,9 +55,21 @@ const StageModel = React.forwardRef<HTMLDivElement, StageModelProps>(
             <VenetianMask size={48} className="text-zinc-600" />
             <p className="mt-4 font-bold text-lg text-zinc-500">3D Model View</p>
             <p className="mt-1 text-sm text-zinc-600">
-              This element is only visible with the <b className="text-zinc-400">Three.js</b> engine. Please select it
-              from the header.
+              This element is only visible with the <b className="text-zinc-400">Three.js</b> engine.
             </p>
+            {onSwitchToThreeJs && (
+              <button
+                type="button"
+                className="mt-3 px-3 py-1.5 rounded-lg text-sm bg-zinc-800 text-zinc-100 hover:bg-zinc-700"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onSwitchToThreeJs();
+                }}
+                onMouseDown={(event) => event.stopPropagation()}
+              >
+                Switch to Three.js
+              </button>
+            )}
           </div>
         ) : (
           <label

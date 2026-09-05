@@ -1,13 +1,10 @@
-import type { AnimationData, Keyframe, TrackControlState, TransformState } from '../types';
+import type { AnimationData, Keyframe, TransformState } from '../types';
 
 export interface KeyframeUpdate {
   property: keyof TransformState;
   keyframeId: string;
   newValues: Partial<Keyframe>;
 }
-
-export type TrackControlAction = 'solo' | 'mute';
-export type TrackControls = Partial<Record<keyof TransformState, TrackControlState>>;
 
 const createKeyframeId = () => `${Date.now()}-${Math.random()}`;
 
@@ -75,25 +72,4 @@ export function updateMultipleKeyframes(
     nextAnimationData = updateKeyframe(nextAnimationData, update.property, update.keyframeId, update.newValues);
   }
   return nextAnimationData;
-}
-
-export function toggleTrackControl(
-  trackControls: TrackControls,
-  property: keyof TransformState,
-  action: TrackControlAction,
-): TrackControls {
-  const nextTrackControls = Object.fromEntries(
-    Object.entries(trackControls).map(([key, control]) => [key, { ...control }]),
-  ) as TrackControls;
-  const current = nextTrackControls[property] ?? { solo: false, mute: false };
-
-  if (action === 'solo') {
-    const shouldSolo = !current.solo;
-    for (const control of Object.values(nextTrackControls)) control.solo = false;
-    nextTrackControls[property] = { solo: shouldSolo, mute: false };
-  } else {
-    nextTrackControls[property] = { solo: false, mute: !current.mute };
-  }
-
-  return nextTrackControls;
 }

@@ -16,6 +16,17 @@ function assignSampledValue<K extends keyof TransformState>(
   target[property] = value;
 }
 
+function firstIndexAtOrAfter(track: readonly { time: number }[], time: number): number {
+  let low = 0;
+  let high = track.length - 1;
+  while (low < high) {
+    const mid = (low + high) >> 1;
+    if (track[mid].time < time) low = mid + 1;
+    else high = mid;
+  }
+  return low;
+}
+
 export function createAnimationSampler(animationData: AnimationData): SampleAnimation {
   const sortedAnimationData: AnimationData = {};
 
@@ -43,7 +54,7 @@ export function createAnimationSampler(animationData: AnimationData): SampleAnim
         continue;
       }
 
-      const nextIndex = track.findIndex((keyframe) => keyframe.time >= time);
+      const nextIndex = firstIndexAtOrAfter(track, time);
       const from = track[nextIndex - 1];
       const to = track[nextIndex];
       if (!from || !to) continue;

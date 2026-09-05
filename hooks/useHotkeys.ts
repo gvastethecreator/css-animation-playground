@@ -3,12 +3,9 @@ import { useEffect, useRef } from 'react';
 type HotkeyCallback = (event: KeyboardEvent) => void;
 type HotkeyMap = { [key: string]: HotkeyCallback };
 
-export function useHotkeys(hotkeyMap: HotkeyMap, deps: unknown[] = []) {
+export function useHotkeys(hotkeyMap: HotkeyMap) {
   const hotkeyMapRef = useRef(hotkeyMap);
-
-  useEffect(() => {
-    hotkeyMapRef.current = hotkeyMap;
-  }, [hotkeyMap, ...deps]);
+  hotkeyMapRef.current = hotkeyMap;
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -31,11 +28,16 @@ export function useHotkeys(hotkeyMap: HotkeyMap, deps: unknown[] = []) {
         const ctrl = parts.includes('ctrl');
         const shift = parts.includes('shift');
         const alt = parts.includes('alt');
+        // '?' and other shifted glyphs already appear in event.key; Shift+/
+        // sets shiftKey true even though the binding is just '?'.
+        const keyIsShiftedSymbol =
+          event.shiftKey && requiredKey.length === 1 && requiredKey.toLowerCase() === requiredKey.toUpperCase();
+        const shiftMatches = shift === event.shiftKey || (!shift && keyIsShiftedSymbol);
 
         if (
           meta === (event.metaKey || event.ctrlKey) &&
           (meta || ctrl === event.ctrlKey) &&
-          shift === event.shiftKey &&
+          shiftMatches &&
           alt === event.altKey
         ) {
           event.preventDefault();

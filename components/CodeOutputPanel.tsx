@@ -20,7 +20,6 @@ interface CodeOutputPanelProps {
   onHeightChange: (height: number) => void;
   animationData: AnimationData;
   timelineState: TimelineDocumentState;
-  calculateAnimatedValues: (time: number) => Partial<TransformState>;
   trackControls: Partial<Record<keyof TransformState, TrackControlState>>;
   stageElement: StageElement;
   engine: AnimationEngine;
@@ -32,7 +31,6 @@ const CodeOutputPanel: React.FC<CodeOutputPanelProps> = ({
   onHeightChange,
   animationData,
   timelineState,
-  calculateAnimatedValues,
   trackControls,
   stageElement,
   engine,
@@ -60,7 +58,7 @@ const CodeOutputPanel: React.FC<CodeOutputPanelProps> = ({
         transforms,
         animationData,
         timelineState,
-        calculateAnimatedValues,
+        trackControls,
         activeAnimatedProperties,
       });
       setGeneratedCode(code);
@@ -68,7 +66,7 @@ const CodeOutputPanel: React.FC<CodeOutputPanelProps> = ({
     }, 50);
 
     return () => clearTimeout(timerId);
-  }, [isOpen, engine, transforms, animationData, timelineState, calculateAnimatedValues, activeAnimatedProperties]);
+  }, [isOpen, engine, transforms, animationData, timelineState, trackControls, activeAnimatedProperties]);
 
   const handleCopy = () => {
     if (isGenerating) return;

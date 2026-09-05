@@ -26,9 +26,18 @@ const transformKeys = new Set<keyof TransformState>(Object.keys(defaultTransform
 export interface HistoryStack {
   entries: HistoryState[];
   index: number;
+  gestureActive: boolean;
+  gesturePushed: boolean;
 }
 
-type HistoryAction = { type: 'PUSH'; state: HistoryState } | { type: 'UNDO' } | { type: 'REDO' } | { type: 'RESET' };
+type HistoryAction =
+  | { type: 'PUSH'; state: HistoryState }
+  | { type: 'PATCH'; state: HistoryState }
+  | { type: 'BEGIN_GESTURE' }
+  | { type: 'COMMIT_GESTURE' }
+  | { type: 'UNDO' }
+  | { type: 'REDO' }
+  | { type: 'RESET' };
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -141,21 +150,47 @@ export function restoreHistoryState(serializedState: string | null): HistoryStat
 }
 
 export function createHistoryStack(initialState: HistoryState): HistoryStack {
-  return { entries: [initialState], index: 0 };
+  return { entries: [initialState], index: 0, gestureActive: false, gesturePushed: false };
+}
+
+function pushState(
+  stack: HistoryStack,
+  state: HistoryState,
+  gesture: Pick<HistoryStack, 'gestureActive' | 'gesturePushed'>,
+): HistoryStack {
+  const entries = stack.entries.slice(0, stack.index + 1);
+  entries.push(state);
+  if (entries.length > MAX_HISTORY) entries.shift();
+  return { entries, index: entries.length - 1, ...gesture };
 }
 
 export function historyReducer(stack: HistoryStack, action: HistoryAction): HistoryStack {
   switch (action.type) {
-    case 'PUSH': {
-      const entries = stack.entries.slice(0, stack.index + 1);
-      entries.push(action.state);
-      if (entries.length > MAX_HISTORY) entries.shift();
-      return { entries, index: entries.length - 1 };
+    case 'PUSH':
+      return pushState(stack, action.state, { gestureActive: false, gesturePushed: false });
+    case 'BEGIN_GESTURE':
+      return { ...stack, gestureActive: true, gesturePushed: false };
+    case 'PATCH': {
+      if (!stack.gestureActive) {
+        return pushState(stack, action.state, { gestureActive: false, gesturePushed: false });
+      }
+      if (!stack.gesturePushed) {
+        return pushState(stack, action.state, { gestureActive: true, gesturePushed: true });
+      }
+      const entries = stack.entries.slice();
+      entries[stack.index] = action.state;
+      return { ...stack, entries };
     }
+    case 'COMMIT_GESTURE':
+      return { ...stack, gestureActive: false, gesturePushed: false };
     case 'UNDO':
-      return stack.index > 0 ? { ...stack, index: stack.index - 1 } : stack;
+      return stack.index > 0
+        ? { ...stack, index: stack.index - 1, gestureActive: false, gesturePushed: false }
+        : { ...stack, gestureActive: false, gesturePushed: false };
     case 'REDO':
-      return stack.index < stack.entries.length - 1 ? { ...stack, index: stack.index + 1 } : stack;
+      return stack.index < stack.entries.length - 1
+        ? { ...stack, index: stack.index + 1, gestureActive: false, gesturePushed: false }
+        : { ...stack, gestureActive: false, gesturePushed: false };
     case 'RESET':
       return createHistoryStack(createDefaultHistoryState());
   }

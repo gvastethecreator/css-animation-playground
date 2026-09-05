@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vite-plus/test';
-import { renderHook } from '@testing-library/react';
+import { act, renderHook } from '@testing-library/react';
 import { useAnimationPlayer } from '../hooks/useAnimationPlayer';
 import { defaultTransformState, type AnimationData, type TrackControlState } from '../types';
 
@@ -54,7 +54,7 @@ describe('useAnimationPlayer', () => {
 
     expect(result.current.calculateAnimatedValues(500).translateX).toBe(50);
     expect(result.current.animatedTransforms.translateX).toBe(50);
-    expect(result.current.willChangeString).toBe('transform, opacity, filter');
+    expect(result.current.willChangeString).toBe('transform');
   });
 
   it('respects muted and soloed track controls in calculations', () => {
@@ -104,5 +104,47 @@ describe('useAnimationPlayer', () => {
 
     expect(soloResult.current.calculateAnimatedValues(500).translateX).toBe(50);
     expect(soloResult.current.calculateAnimatedValues(500).rotateZ).toBeUndefined();
+  });
+
+  it('updates sampled transforms while playing', () => {
+    const rafCallbacks = new Map<number, FrameRequestCallback>();
+    let rafId = 1;
+    vi.spyOn(globalThis, 'requestAnimationFrame').mockImplementation((callback: FrameRequestCallback) => {
+      const id = rafId++;
+      rafCallbacks.set(id, callback);
+      return id;
+    });
+    vi.spyOn(globalThis, 'cancelAnimationFrame').mockImplementation((id: number) => {
+      rafCallbacks.delete(id);
+    });
+
+    const animationData: AnimationData = {
+      translateX: [
+        { id: 'a', time: 0, value: 0, easing: 'linear' },
+        { id: 'b', time: 1000, value: 100, easing: 'linear' },
+      ],
+    };
+
+    const { result } = renderHook(() =>
+      useAnimationPlayer(
+        defaultTransformState,
+        animationData,
+        makeTimelineState({ currentTime: 0, isPlaying: true, duration: 1000 }),
+        vi.fn(),
+        {},
+      ),
+    );
+
+    act(() => {
+      Array.from(rafCallbacks.values()).forEach((callback) => callback(0));
+    });
+    const start = result.current.animatedTransforms.translateX;
+
+    act(() => {
+      Array.from(rafCallbacks.values()).forEach((callback) => callback(500));
+    });
+
+    expect(result.current.animatedTransforms.translateX).toBeGreaterThan(start ?? 0);
+    expect(result.current.animatedTransforms.translateX).toBe(50);
   });
 });

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vite-plus/test';
-import { getTransformString, getFilterString } from '../utils/styleUtils';
+import { getTransformString, getFilterString, getWillChangeString } from '../utils/styleUtils';
 import { defaultTransformState } from '../types';
 
 describe('getTransformString', () => {
@@ -85,5 +85,17 @@ describe('getFilterString', () => {
     const result = getFilterString(state);
     expect(result).toContain('blur(5.000px)');
     expect(result).toContain('contrast(2.000)');
+  });
+});
+
+describe('getWillChangeString', () => {
+  it('returns auto when nothing is animated', () => {
+    expect(getWillChangeString([])).toBe('auto');
+  });
+
+  it('lists only the layers the active properties need', () => {
+    expect(getWillChangeString(['translateX'])).toBe('transform');
+    expect(getWillChangeString(['opacity'])).toBe('opacity');
+    expect(getWillChangeString(['blur', 'translateY'])).toBe('filter, transform');
   });
 });

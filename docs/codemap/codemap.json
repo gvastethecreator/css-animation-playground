@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-08-29T18:00:00Z",
-  "generated_from_commit": "8d3b41cd6ea26d2360870619d7d2e94ba6aac75a",
+  "generated_at": "2026-09-05T05:10:38Z",
+  "generated_from_commit": "548ef5e21110e8298af7ff8396b0feef13e0a99c",
   "scope": [
     "."
   ],
@@ -641,11 +641,11 @@
           },
           {
             "path": "App.tsx",
-            "symbol": "./utils/timelineState"
+            "symbol": "./utils/trackControls"
           },
           {
             "path": "App.tsx",
-            "symbol": "./utils/timelineMath"
+            "symbol": "./utils/timelineState"
           }
         ]
       }

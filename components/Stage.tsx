@@ -75,6 +75,7 @@ interface StageProps {
   gizmoMode: GizmoMode;
   onGizmoModeChange: (mode: GizmoMode) => void;
   onElementClick: () => void;
+  onAnimationEngineChange: (engine: AnimationEngine) => void;
 }
 
 function Stage({
@@ -122,6 +123,7 @@ function Stage({
   gizmoMode,
   onGizmoModeChange,
   onElementClick,
+  onAnimationEngineChange,
 }: StageProps) {
   const { perspective, perspectiveOriginX, perspectiveOriginY } = transforms;
 
@@ -192,7 +194,14 @@ function Stage({
           />
         );
       case 'model':
-        return <StageModel {...cssElementProps} modelDataUrl={modelDataUrl} onFileChange={onFileChange} />;
+        return (
+          <StageModel
+            {...cssElementProps}
+            modelDataUrl={modelDataUrl}
+            onFileChange={onFileChange}
+            onSwitchToThreeJs={() => onAnimationEngineChange('threejs')}
+          />
+        );
       default:
         return <StageCard {...cssElementProps} style={stageStyle.card} imageDataUrl={imageDataUrl} />;
     }

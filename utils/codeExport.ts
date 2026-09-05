@@ -7,17 +7,19 @@ import type {
   TimelineDocumentState,
   TransformState,
 } from '../types';
+import { createAnimationSampler } from './animationSampling';
+import { getFilterString, getTransformString } from './styleUtils';
+import { documentPropertyToThreeGsap } from './threeTransform';
+import { getActiveAnimationProperties, type TrackControls } from './trackControls';
 
 export interface CodeExportInput {
   engine: AnimationEngine;
   transforms: TransformState;
   animationData: AnimationData;
   timelineState: TimelineDocumentState;
-  calculateAnimatedValues: (time: number) => Partial<TransformState>;
-  activeAnimatedProperties: readonly (keyof TransformState)[];
+  trackControls?: TrackControls;
+  activeAnimatedProperties?: readonly (keyof TransformState)[];
 }
-
-const degreesToRadians = (degrees: number) => (degrees * Math.PI) / 180;
 
 const getUnit = (key: keyof TransformState): string => {
   if (
@@ -53,27 +55,22 @@ const formatJsValue = (key: keyof TransformState, value: any): string => {
   return String(value);
 };
 
-const getTransformString = (props: Partial<TransformState>): string => {
-  const t = (key: keyof TransformState, fallback: number) => ((props[key] as number) ?? fallback).toFixed(3);
-  return [
-    `translate3d(${t('translateX', 0)}px, ${t('translateY', 0)}px, ${t('translateZ', 0)}px)`,
-    `rotateX(${t('rotateX', 0)}deg) rotateY(${t('rotateY', 0)}deg) rotateZ(${t('rotateZ', 0)}deg)`,
-    `scale3d(${t('scaleX', 1)}, ${t('scaleY', 1)}, ${t('scaleZ', 1)})`,
-    `skew(${t('skewX', 0)}deg, ${t('skewY', 0)}deg)`,
-  ].join(' ');
-};
-
-const getFilterString = (props: Partial<TransformState>): string => {
-  const filters = [];
-  if (props.dropShadowEnabled)
-    filters.push(
-      `drop-shadow(${(props.dropShadowX ?? 0).toFixed(2)}px ${(props.dropShadowY ?? 0).toFixed(2)}px ${(props.dropShadowBlur ?? 0).toFixed(2)}px ${props.dropShadowColor})`,
-    );
-  if (props.blurEnabled) filters.push(`blur(${(props.blur ?? 0).toFixed(2)}px)`);
-  if (props.brightnessEnabled) filters.push(`brightness(${((props.brightness ?? 100) / 100).toFixed(2)})`);
-  if (props.contrastEnabled) filters.push(`contrast(${((props.contrast ?? 100) / 100).toFixed(2)})`);
-  return filters.length > 0 ? filters.join(' ') : 'none';
-};
+function assignThreeGsapProp(
+  key: keyof TransformState,
+  value: unknown,
+  main: Record<string, unknown>,
+  pivot: Record<string, unknown>,
+  opacityEnabled: boolean,
+) {
+  if (key === 'opacity' && opacityEnabled) {
+    pivot['material.opacity'] = value;
+    return;
+  }
+  if (typeof value !== 'number') return;
+  const binding = documentPropertyToThreeGsap(key, value);
+  if (!binding) return;
+  (binding.group === 'main' ? main : pivot)[binding.property] = binding.value;
+}
 
 const getEasingNameForLib = (easing: EasingValue, lib: 'gsap' | 'anime' | 'css'): string => {
   if (typeof easing === 'string' && easing.startsWith('cubic-bezier')) {
@@ -126,12 +123,17 @@ export function generateCodeExport({
   transforms,
   animationData,
   timelineState,
-  calculateAnimatedValues,
+  trackControls = {},
   activeAnimatedProperties,
 }: CodeExportInput): string {
   const { perspective, perspectiveOriginX, perspectiveOriginY, transformOriginX, transformOriginY, transformOriginZ } =
     transforms;
-  const hasAnimation = activeAnimatedProperties.length > 0;
+  const resolvedActiveProperties =
+    activeAnimatedProperties ?? getActiveAnimationProperties(animationData, trackControls);
+  const sampleAnimation = createAnimationSampler(animationData);
+  const calculateAnimatedValues = (time: number) =>
+    sampleAnimation(time, timelineState.easing, resolvedActiveProperties);
+  const hasAnimation = resolvedActiveProperties.length > 0;
   const durationSec = timelineState.duration / 1000;
   const globalEase = timelineState.easing;
 
@@ -154,7 +156,7 @@ export function generateCodeExport({
   }
 
   const allTimes = new Set<number>([0, timelineState.duration]);
-  activeAnimatedProperties.forEach((property) =>
+  resolvedActiveProperties.forEach((property) =>
     animationData[property]?.forEach((keyframe) => allTimes.add(keyframe.time)),
   );
   const sortedTimes = Array.from(allTimes)
@@ -168,19 +170,19 @@ export function generateCodeExport({
         const propsAtTime = { ...transforms, ...calculateAnimatedValues(time) };
         let frame = `  ${percentage.toFixed(2)}% {\n`;
         frame += `    transform: ${getTransformString(propsAtTime)};\n`;
-        if (activeAnimatedProperties.some((property) => property.startsWith('opacity')))
+        if (resolvedActiveProperties.some((property) => property.startsWith('opacity')))
           frame += `    opacity: ${propsAtTime.opacityEnabled ? propsAtTime.opacity.toFixed(3) : 1};\n`;
         if (
-          activeAnimatedProperties.some((property) =>
+          resolvedActiveProperties.some((property) =>
             ['blur', 'brightness', 'contrast', 'dropShadow'].some((filter) => property.startsWith(filter)),
           )
         )
           frame += `    filter: ${getFilterString(propsAtTime)};\n`;
-        if (activeAnimatedProperties.some((property) => property.startsWith('borderRadius')))
+        if (resolvedActiveProperties.some((property) => property.startsWith('borderRadius')))
           frame += `    border-radius: ${propsAtTime.borderRadiusEnabled ? `${propsAtTime.borderRadius.toFixed(2)}px` : '0px'};\n`;
-        if (activeAnimatedProperties.includes('fontSize'))
+        if (resolvedActiveProperties.includes('fontSize'))
           frame += `    font-size: ${propsAtTime.fontSize.toFixed(2)}px;\n`;
-        if (activeAnimatedProperties.includes('letterSpacing'))
+        if (resolvedActiveProperties.includes('letterSpacing'))
           frame += `    letter-spacing: ${propsAtTime.letterSpacing.toFixed(2)}px;\n`;
         frame += `  }`;
         return frame;
@@ -222,7 +224,7 @@ ${keyframesCSS}
     fontWeight: { gsap: 'fontWeight', anime: 'fontWeight' },
   };
 
-  const isFilterAnimated = activeAnimatedProperties.some((property) =>
+  const isFilterAnimated = resolvedActiveProperties.some((property) =>
     ['blur', 'brightness', 'contrast', 'dropShadow'].some((filter) => property.startsWith(filter)),
   );
 
@@ -263,17 +265,10 @@ ${keyframesCSS}
 
     if (!isThree) setPropsDOM.transformOrigin = `'${transformOriginX}% ${transformOriginY}% ${transformOriginZ}px'`;
 
-    activeAnimatedProperties.forEach((key) => {
+    resolvedActiveProperties.forEach((key) => {
       const value = initialProps[key] ?? transforms[key];
       if (isThree) {
-        if (key === 'translateX') setPropsMain['position.x'] = value;
-        if (key === 'translateY') setPropsMain['position.y'] = -(value as number);
-        if (key === 'translateZ') setPropsMain['position.z'] = -(value as number);
-        if (key === 'rotateX') setPropsPivot['rotation.x'] = degreesToRadians(-(value as number));
-        if (key === 'rotateY') setPropsPivot['rotation.y'] = degreesToRadians(value as number);
-        if (key === 'rotateZ') setPropsPivot['rotation.z'] = degreesToRadians(value as number);
-        if (key.startsWith('scale')) setPropsPivot[key.toLowerCase()] = value;
-        if (key === 'opacity' && transforms.opacityEnabled) setPropsPivot['material.opacity'] = value;
+        assignThreeGsapProp(key, value, setPropsMain, setPropsPivot, transforms.opacityEnabled);
       } else {
         const libraryKey = propertyMap[key]?.gsap;
         if (libraryKey) setPropsDOM[libraryKey] = formatJsValue(key, value);
@@ -310,7 +305,7 @@ ${keyframesCSS}
       const toPropsDOM: Record<string, any> = { duration: segmentDuration.toFixed(3) };
 
       let segmentEase = globalEase;
-      for (const property of activeAnimatedProperties) {
+      for (const property of resolvedActiveProperties) {
         const keyframe = animationData[property]?.find((candidate) => candidate.time === time);
         if (keyframe?.easing) {
           segmentEase = keyframe.easing;
@@ -329,18 +324,11 @@ ${keyframesCSS}
         toPropsMain.duration = segmentDuration.toFixed(3);
       }
 
-      activeAnimatedProperties.forEach((key) => {
+      resolvedActiveProperties.forEach((key) => {
         if (targetProps[key] === undefined) return;
         const value = targetProps[key];
         if (isThree) {
-          if (key === 'translateX') toPropsMain['position.x'] = value;
-          if (key === 'translateY') toPropsMain['position.y'] = -(value as number);
-          if (key === 'translateZ') toPropsMain['position.z'] = -(value as number);
-          if (key === 'rotateX') toPropsPivot['rotation.x'] = degreesToRadians(-(value as number));
-          if (key === 'rotateY') toPropsPivot['rotation.y'] = degreesToRadians(value as number);
-          if (key === 'rotateZ') toPropsPivot['rotation.z'] = degreesToRadians(value as number);
-          if (key.startsWith('scale')) toPropsPivot[key.toLowerCase()] = value;
-          if (key === 'opacity' && transforms.opacityEnabled) toPropsPivot['material.opacity'] = value;
+          assignThreeGsapProp(key, value, toPropsMain, toPropsPivot, transforms.opacityEnabled);
         } else {
           const libraryKey = propertyMap[key]?.gsap;
           if (libraryKey) toPropsDOM[libraryKey] = formatJsValue(key, value);
@@ -348,8 +336,9 @@ ${keyframesCSS}
       });
 
       if (isThree) {
-        const hasMain = Object.keys(toPropsMain).length > 2;
-        const hasPivot = Object.keys(toPropsPivot).length > 2;
+        const isTweenMeta = (key: string) => key === 'duration' || key === 'ease';
+        const hasMain = Object.keys(toPropsMain).some((key) => !isTweenMeta(key));
+        const hasPivot = Object.keys(toPropsPivot).some((key) => !isTweenMeta(key));
 
         if (hasMain && hasPivot) {
           code += `tl.to(mainGroup, { ${Object.entries(toPropsMain)
@@ -386,7 +375,7 @@ ${keyframesCSS}
     animationProperties.push(`  easing: ${getEasingNameForLib(globalEase, 'anime')}`);
     animationProperties.push(`  transformOrigin: '${transformOriginX}% ${transformOriginY}% ${transformOriginZ}px'`);
 
-    activeAnimatedProperties.forEach((key) => {
+    resolvedActiveProperties.forEach((key) => {
       const track = animationData[key];
       if (!track || track.length < 1) return;
 

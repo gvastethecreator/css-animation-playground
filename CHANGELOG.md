@@ -9,6 +9,11 @@ application surface allows.
 
 ### Added
 
+- Confirm dialog before Reset scene. Media errors show in the header chrome
+  instead of `alert`. Engine selector states that CSS and Three.js preview the
+  stage while GSAP and Anime.js change export only. Model placeholder can
+  switch to Three.js. Keyboard help is a dialog, lists Ctrl on non-Mac, and
+  opens with `?`.
 - Responsive compact editor layout, reduced-motion handling, and accessible
   names for icon-only camera, timeline, history, and tooltip controls.
 - Safe `clean` command and dependency maintenance VS Code tasks.
@@ -22,6 +27,9 @@ application surface allows.
 
 ### Changed
 
+- Test runner is Vitest 5 (`vp test` / `vite-plus/test`) via pnpm overrides
+  while Vite+ 0.3.0 still vendors Vitest 4.1.11.
+- `lucide-react` 1.40.0, `@types/node` 26.4.1, `@types/react-dom` 19.2.7.
 - `packageManager` pin is `pnpm@12.0.0`.
 - All direct dependencies moved to their latest releases, including
   TypeScript 7, Vite+ 0.3.0, Three r185, jsdom 30, and jest-dom 7.0.1.
@@ -29,7 +37,7 @@ application surface allows.
   toolchain; `pnpm-workspace.yaml` keeps Vite core and Vite+ aligned.
 - The development server now binds to `127.0.0.1` by default.
 - The Node.js requirement is now `>=22.22.2` for the current test stack.
-- README and `architecture.md` translated to English.
+- README and remaining live docs translated to English.
 - Header "View source on GitHub" link now points to
   `https://github.com/gvastethecreator/css-animation-playground`.
 - `.vscode/settings.json` no longer carries a personal local path.
@@ -39,12 +47,10 @@ application surface allows.
   alongside CSS, GSAP, and Three.js. The "legacy" framing in `README.md`
   is dropped; the open scope decision has been removed from
   `TECH-DEBT.md`.
-- Cross-cutting docs (`architecture.md`, `code-rules.md`, `design.md`,
-  `design-system.md`, `prd.md`) consolidated into `docs/`. The
-  `docs/README.md` index, `README.md`, `AGENTS.md`, and `CONTRIBUTING.md`
-  were updated to point at the new locations. Historical references in
-  `CHANGELOG.md` remain in English. Dated operator reviews left the
-  tracked tree.
+- Cross-cutting operator docs were stripped from the public tree. Live
+  docs stay in `docs/` (`README.md`, `USAGE.md`, `DEPENDENCIES.md`,
+  `codemap/`). Historical English notes in this changelog remain. Dated
+  operator reviews left the tracked tree.
 
 ### Fixed
 

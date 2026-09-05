@@ -1,12 +1,7 @@
 import { describe, expect, it } from 'vite-plus/test';
 import { defaultTransformState, type AnimationData } from '../types';
-import {
-  deleteKeyframe,
-  toggleKeyframe,
-  toggleTrackControl,
-  updateKeyframe,
-  updateMultipleKeyframes,
-} from '../utils/animationEditing';
+import { deleteKeyframe, toggleKeyframe, updateKeyframe, updateMultipleKeyframes } from '../utils/animationEditing';
+import { toggleTrackControl } from '../utils/trackControls';
 
 const sourceAnimation: AnimationData = {
   translateX: [

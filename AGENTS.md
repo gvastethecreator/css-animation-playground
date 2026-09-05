@@ -21,7 +21,7 @@ Act as a careful senior frontend engineer. Add features, refactor, and fix bugs.
 - Stage element and media: `useStageElementManager` (`hooks/useStageElementManager.ts`). Owns the selected stage element and upload/persistence of images, video, and `.glb` / `.gltf` models.
 - Ephemeral UI and runtime: Zustand at `store/useAppStore.ts` (panel sizes, gizmo mode, selected engine, scene offsets, zoom helpers, playhead). Do not put document state here.
 - Reusable UI lives in `components/`. Timeline lives in `components/timeline/`.
-- Deterministic policy lives in `utils/`. Effectful hooks and UI adapters call those modules.
+- Deterministic policy lives in `utils/`. Effectful hooks and UI adapters call those modules. Playback time mapping is `utils/playbackClock.ts`. Document-to-Three pose is `utils/threeTransform.ts`. Transform/filter CSS strings are `utils/styleUtils.ts`.
 - `.glb` / `.gltf` visualization is correct only in Three.js mode. `ThreeCanvas` loads on demand.
 
 ## Code rules
@@ -45,6 +45,6 @@ Act as a careful senior frontend engineer. Add features, refactor, and fix bugs.
 
 - Format: `pnpm run format` (oxfmt).
 - Lint: `pnpm run lint` (oxlint `--deny-warnings`).
-- Tests: `pnpm run test` (Vitest + Testing Library + jsdom). Add or update tests when behavior changes. For new export branches, extend the nearest `CodeOutputPanel` test.
+- Tests: `pnpm run test` (Vitest 5 + Testing Library + jsdom). Add or update tests when behavior changes. For new export branches, extend the nearest `CodeOutputPanel` test.
 - Typecheck: `pnpm run typecheck` (`tsc --noEmit`).
 - Build: `pnpm run build`.

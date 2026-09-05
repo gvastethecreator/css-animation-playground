@@ -23,6 +23,7 @@ export function useStageElementManager() {
   const [modelDataUrl, setModelDataUrl] = useState<string | null>(null);
   const [mediaType, setMediaType] = useState<StageMediaType | null>(null);
   const [isLoadingModel, setIsLoadingModel] = useState(false);
+  const [mediaError, setMediaError] = useState<string | null>(null);
 
   const applyMedia = useCallback((media: StoredMedia) => {
     const projection = projectStageMedia(media);
@@ -38,10 +39,11 @@ export function useStageElementManager() {
       try {
         localStorage.setItem(MEDIA_STORAGE_KEY, JSON.stringify(mediaToStore));
         applyMedia(mediaToStore);
+        setMediaError(null);
       } catch (error) {
         reportRuntimeIssue('stage-media.save', error, 'Error saving media to localStorage.');
-        alert(
-          `Failed to save file. It might be too large for local storage (limit is ~5MB).\n\nError: ${getErrorMessage(error)}`,
+        setMediaError(
+          `Unable to save the file. It may be larger than local storage allows (${getErrorMessage(error)}).`,
         );
       }
     },
@@ -59,18 +61,28 @@ export function useStageElementManager() {
   }, [applyMedia]);
 
   const handleFileChange = (file: File) => {
+    const mediaType = classifyStageMediaFile(file);
+    if (!mediaType) {
+      setMediaError('Use an image, a WebM video, or a .glb / .gltf model.');
+      return;
+    }
+
     const reader = new FileReader();
     reader.onload = (e) => {
       const result = e.target?.result as string;
       if (result) {
-        setMedia(result, classifyStageMediaFile(file));
+        setMedia(result, mediaType);
       }
+    };
+    reader.onerror = () => {
+      setMediaError('Unable to read that file.');
     };
     reader.readAsDataURL(file);
   };
 
   const handleLoadRandomModel = useCallback(async () => {
     setIsLoadingModel(true);
+    setMediaError(null);
     try {
       const randomUrl = SAMPLE_MODELS[Math.floor(Math.random() * SAMPLE_MODELS.length)];
       const response = await fetch(randomUrl);
@@ -78,17 +90,19 @@ export function useStageElementManager() {
         throw new Error(`Failed to fetch model: ${response.statusText}`);
       }
       const blob = await response.blob();
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-        if (result) {
-          setMedia(result, 'model');
-        }
-      };
-      reader.readAsDataURL(blob);
+      await new Promise<void>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const result = e.target?.result as string;
+          if (result) setMedia(result, 'model');
+          resolve();
+        };
+        reader.onerror = () => reject(new Error('Unable to read the sample model.'));
+        reader.readAsDataURL(blob);
+      });
     } catch (error) {
       reportRuntimeIssue('stage-media.sample-model', error, 'Error loading random model.');
-      alert(`Failed to load sample model. Please check your internet connection.\n\nError: ${getErrorMessage(error)}`);
+      setMediaError(`Unable to load the sample model. Check your connection (${getErrorMessage(error)}).`);
     } finally {
       setIsLoadingModel(false);
     }
@@ -115,5 +129,7 @@ export function useStageElementManager() {
     handleLoadRandomModel,
     hasMedia: !!imageDataUrl || !!modelDataUrl,
     isLoadingModel,
+    mediaError,
+    clearMediaError: () => setMediaError(null),
   };
 }

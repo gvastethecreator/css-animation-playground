@@ -12,13 +12,8 @@ import { useStageViewport } from './hooks/useStageViewport';
 import { useHotkeys } from './hooks/useHotkeys';
 import { usePreviewAnimator } from './hooks/usePreviewAnimator';
 import { useAppStore } from './store/useAppStore';
-import {
-  deleteKeyframe,
-  toggleKeyframe,
-  toggleTrackControl,
-  updateKeyframe,
-  updateMultipleKeyframes,
-} from './utils/animationEditing';
+import { deleteKeyframe, toggleKeyframe, updateKeyframe, updateMultipleKeyframes } from './utils/animationEditing';
+import { toggleTrackControl } from './utils/trackControls';
 import { getTimelineDocumentState, getTimelineHistoryPatch } from './utils/timelineState';
 import { stepTimelineFrame } from './utils/timelineMath';
 import {
@@ -35,8 +30,19 @@ import {
 } from './types';
 
 export default function App() {
-  const { currentState, saveStateToHistory, handleUndo, handleRedo, resetHistory, canUndo, canRedo, isRestoring } =
-    useHistoryManager();
+  const {
+    currentState,
+    saveStateToHistory,
+    beginHistoryGesture,
+    patchHistory,
+    commitHistoryGesture,
+    handleUndo,
+    handleRedo,
+    resetHistory,
+    canUndo,
+    canRedo,
+    isRestoring,
+  } = useHistoryManager();
   const {
     transforms,
     animationData,
@@ -59,6 +65,8 @@ export default function App() {
     handleLoadRandomModel,
     hasMedia,
     isLoadingModel,
+    mediaError,
+    clearMediaError,
   } = useStageElementManager();
   const {
     uiState,
@@ -101,7 +109,7 @@ export default function App() {
     setTimelineState((prev) => ({ ...prev, isPlaying: false }));
   }, []);
 
-  const { animatedTransforms, calculateAnimatedValues, willChangeString } = useAnimationPlayer(
+  const { animatedTransforms, willChangeString } = useAnimationPlayer(
     transforms,
     animationData,
     timelineState,
@@ -114,6 +122,13 @@ export default function App() {
 
   const currentStateRef = useRef(currentState);
   currentStateRef.current = currentState;
+  const animationDataRef = useRef(animationData);
+  animationDataRef.current = animationData;
+  const transformsRef = useRef(transforms);
+  transformsRef.current = transforms;
+  const timelineStateRef = useRef(timelineState);
+  timelineStateRef.current = timelineState;
+  const isAdjustingRef = useRef(false);
 
   const commitChanges = useCallback(
     (newState: Partial<HistoryState>) => {
@@ -124,18 +139,13 @@ export default function App() {
 
   const handleChange = useCallback(
     (updates: Partial<TransformState>) => {
-      const newTransforms = { ...transforms, ...updates };
-      commitChanges({ transforms: newTransforms });
+      const newTransforms = { ...transformsRef.current, ...updates };
+      const nextState = { ...currentStateRef.current, transforms: newTransforms };
+      if (isAdjustingRef.current) patchHistory(nextState);
+      else saveStateToHistory(nextState);
     },
-    [transforms, commitChanges],
+    [patchHistory, saveStateToHistory],
   );
-
-  const animationDataRef = useRef(animationData);
-  animationDataRef.current = animationData;
-  const transformsRef = useRef(transforms);
-  transformsRef.current = transforms;
-  const timelineStateRef = useRef(timelineState);
-  timelineStateRef.current = timelineState;
 
   const onKeyframeToggle = useCallback(
     (property: keyof TransformState) => {
@@ -269,25 +279,23 @@ export default function App() {
     handleTimelineStateChange((prev) => ({ ...prev, isPlaying: false, currentTime: 0 }));
   }, [handleTimelineStateChange]);
 
-  useHotkeys(
-    {
-      ' ': (e) => {
-        e.preventDefault();
-        handleTimelineStateChange((s) => ({ ...s, isPlaying: !s.isPlaying }));
-      },
-      'meta+z': handleUndoAction,
-      'meta+shift+z': handleRedoAction,
-      'meta+y': handleRedoAction,
-      arrowleft: () => handleFrameStep('prev'),
-      ',': () => handleFrameStep('prev'),
-      arrowright: () => handleFrameStep('next'),
-      '.': () => handleFrameStep('next'),
-      home: () => handleGoToStart(),
-      end: () => handleGoToEnd(),
-      l: () => handleToggleLoop(),
+  useHotkeys({
+    ' ': (e) => {
+      e.preventDefault();
+      handleTimelineStateChange((s) => ({ ...s, isPlaying: !s.isPlaying }));
     },
-    [handleUndoAction, handleRedoAction, handleFrameStep, handleGoToStart, handleGoToEnd, handleToggleLoop],
-  );
+    'meta+z': handleUndoAction,
+    'meta+shift+z': handleRedoAction,
+    'meta+y': handleRedoAction,
+    '?': () => setUiState((s) => ({ ...s, showHelp: true })),
+    arrowleft: () => handleFrameStep('prev'),
+    ',': () => handleFrameStep('prev'),
+    arrowright: () => handleFrameStep('next'),
+    '.': () => handleFrameStep('next'),
+    home: () => handleGoToStart(),
+    end: () => handleGoToEnd(),
+    l: () => handleToggleLoop(),
+  });
 
   useEffect(() => {
     if (!isRestoring.current) {
@@ -312,8 +320,24 @@ export default function App() {
   const handleShowHelp = useCallback(() => setUiState((s) => ({ ...s, showHelp: true })), [setUiState]);
   const handleCloseHelp = useCallback(() => setUiState((s) => ({ ...s, showHelp: false })), [setUiState]);
   const handleClearPreview = useCallback(() => setPreviewPresetName(null), []);
-  const handleAdjustStart = useCallback(() => setIsAdjusting(true), []);
-  const handleAdjustEnd = useCallback(() => setIsAdjusting(false), []);
+  const handleAdjustStart = useCallback(() => {
+    isAdjustingRef.current = true;
+    setIsAdjusting(true);
+    beginHistoryGesture();
+  }, [beginHistoryGesture]);
+  const handleAdjustEnd = useCallback(() => {
+    isAdjustingRef.current = false;
+    setIsAdjusting(false);
+    commitHistoryGesture();
+  }, [commitHistoryGesture]);
+  const handleHistoryGestureStart = useCallback(() => {
+    isAdjustingRef.current = true;
+    beginHistoryGesture();
+  }, [beginHistoryGesture]);
+  const handleHistoryGestureEnd = useCallback(() => {
+    isAdjustingRef.current = false;
+    commitHistoryGesture();
+  }, [commitHistoryGesture]);
   const handleShowGridChange = useCallback(
     (val: boolean) => setUiState((s) => ({ ...s, showGrid: val })),
     [setUiState],
@@ -368,9 +392,14 @@ export default function App() {
         newValues: Partial<Keyframe>;
       }>,
     ) => {
-      commitChanges({ animationData: updateMultipleKeyframes(animationDataRef.current, updates) });
+      const nextState = {
+        ...currentStateRef.current,
+        animationData: updateMultipleKeyframes(animationDataRef.current, updates),
+      };
+      if (isAdjustingRef.current) patchHistory(nextState);
+      else saveStateToHistory(nextState);
     },
-    [commitChanges],
+    [patchHistory, saveStateToHistory],
   );
 
   const handleTrackControlChange = useCallback(
@@ -402,6 +431,8 @@ export default function App() {
         isLoadingModel={isLoadingModel}
         animationEngine={animationEngine}
         onAnimationEngineChange={setAnimationEngine}
+        mediaError={mediaError}
+        onDismissMediaError={clearMediaError}
       />
 
       <div className="workspace-shell flex flex-1 min-h-0">
@@ -473,6 +504,7 @@ export default function App() {
             gizmoMode={gizmoMode}
             onGizmoModeChange={setGizmoMode}
             onElementClick={handleStageElementClick}
+            onAnimationEngineChange={setAnimationEngine}
           />
           <CodeOutputPanel
             transforms={transforms}
@@ -480,7 +512,6 @@ export default function App() {
             onHeightChange={handleCodePanelHeightChange}
             animationData={animationData}
             timelineState={timelineStateForPanel}
-            calculateAnimatedValues={calculateAnimatedValues}
             trackControls={trackControls}
             stageElement={stageElement}
             engine={animationEngine}
@@ -506,6 +537,8 @@ export default function App() {
         onSelectedKeyframeIdsChange={setSelectedKeyframeIds}
         timelinePlayOnClick={timelinePlayOnClick}
         onPlayOnClickToggle={handlePlayOnClickToggle}
+        onGestureStart={handleHistoryGestureStart}
+        onGestureEnd={handleHistoryGestureEnd}
       />
       {uiState.showHelp && <ShortcutHelp onClose={handleCloseHelp} />}
     </div>

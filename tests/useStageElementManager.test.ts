@@ -6,6 +6,7 @@ function mockFileReader() {
   const reader = {
     readAsDataURL: vi.fn(),
     onload: null as ((e: ProgressEvent<FileReader>) => void) | null,
+    onerror: null as ((e: ProgressEvent<FileReader>) => void) | null,
   };
 
   const FileReaderMock = vi.fn(function MockFileReader() {
@@ -61,6 +62,19 @@ describe('useStageElementManager', () => {
     expect(result.current.imageDataUrl).toBe(fakeDataUrl);
     expect(result.current.stageElement).toBe('image');
     expect(result.current.hasMedia).toBe(true);
+  });
+
+  it('rejects unsupported files without treating them as images', () => {
+    const { result } = renderHook(() => useStageElementManager());
+    const file = new File(['nope'], 'notes.pdf', { type: 'application/pdf' });
+
+    act(() => {
+      result.current.handleFileChange(file);
+    });
+
+    expect(result.current.mediaError).toMatch(/image/i);
+    expect(result.current.imageDataUrl).toBeNull();
+    expect(result.current.stageElement).toBe('card');
   });
 
   it('handleFileChange reads model file (.glb)', async () => {
@@ -176,6 +190,13 @@ describe('useStageElementManager', () => {
     });
     vi.stubGlobal('fetch', fetchMock);
     vi.spyOn(Math, 'random').mockReturnValue(0);
+    reader.readAsDataURL.mockImplementation(() => {
+      queueMicrotask(() => {
+        reader.onload?.({
+          target: { result: 'data:application/octet-stream;base64,sample' },
+        } as ProgressEvent<FileReader>);
+      });
+    });
     const { result } = renderHook(() => useStageElementManager());
 
     await act(async () => {
@@ -186,12 +207,6 @@ describe('useStageElementManager', () => {
       'https://cdn.jsdelivr.net/gh/mrdoob/three.js/examples/models/gltf/Parrot.glb',
     );
     expect(reader.readAsDataURL).toHaveBeenCalledWith(blob);
-
-    act(() => {
-      reader.onload?.({
-        target: { result: 'data:application/octet-stream;base64,sample' },
-      } as ProgressEvent<FileReader>);
-    });
 
     expect(result.current.modelDataUrl).toBe('data:application/octet-stream;base64,sample');
     expect(result.current.stageElement).toBe('model');

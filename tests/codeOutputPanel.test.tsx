@@ -36,37 +36,6 @@ const buildAnimationData = (specs: Partial<Record<keyof TransformState, Animated
   return data;
 };
 
-const buildInterpolator = (animationData: AnimationData) => {
-  return (time: number): Partial<TransformState> => {
-    const result: Partial<TransformState> = {};
-    for (const [key, track] of Object.entries(animationData) as [
-      keyof TransformState,
-      NonNullable<AnimationData[keyof TransformState]>,
-    ][]) {
-      if (!track || track.length === 0) continue;
-      const sorted = [...track].sort((a, b) => a.time - b.time);
-      if (time <= sorted[0].time) {
-        (result as any)[key] = sorted[0].value;
-        continue;
-      }
-      if (time >= sorted[sorted.length - 1].time) {
-        (result as any)[key] = sorted[sorted.length - 1].value;
-        continue;
-      }
-      for (let i = 0; i < sorted.length - 1; i++) {
-        const a = sorted[i];
-        const b = sorted[i + 1];
-        if (time >= a.time && time <= b.time) {
-          const t = (time - a.time) / (b.time - a.time);
-          (result as any)[key] = (a.value as number) + ((b.value as number) - (a.value as number)) * t;
-          break;
-        }
-      }
-    }
-    return result;
-  };
-};
-
 interface PanelRenderOptions {
   engine: AnimationEngine;
   stageElement?: StageElement;
@@ -80,7 +49,6 @@ interface PanelRenderOptions {
 
 const renderPanel = (options: PanelRenderOptions) => {
   const animationData = options.animationData ?? buildAnimationData({ translateX: { from: 0, to: 100 } });
-  const calculateAnimatedValues = buildInterpolator(animationData);
   const props = {
     transforms: { ...defaultTransformState },
     height: options.height ?? 400,
@@ -92,7 +60,6 @@ const renderPanel = (options: PanelRenderOptions) => {
       direction: options.direction ?? ('normal' as AnimationDirection),
       easing: options.easing ?? ('easeInOutCubic' as EasingValue),
     },
-    calculateAnimatedValues,
     trackControls: options.trackControls ?? {},
     stageElement: options.stageElement ?? ('card' as StageElement),
     engine: options.engine,
@@ -209,7 +176,7 @@ describe('CodeOutputPanel', () => {
     expect(code).toContain('repeat: -1');
   });
 
-  it('generates three.js code with pivotGroup for rotations and inverted Y/Z translation', async () => {
+  it('generates three.js code with pivotGroup for rotations and inverted Y translation', async () => {
     const { container } = renderPanel({
       engine: 'threejs',
       animationData: buildAnimationData({

@@ -1,9 +1,10 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { TransformState, AnimationData, TimelineRuntimeState, TrackControlState } from '../types';
-import { getTransformString, getFilterString } from '../utils/styleUtils';
+import { getTransformString, getFilterString, getWillChangeString } from '../utils/styleUtils';
 import { useAppStore } from '../store/useAppStore';
 import { createAnimationSampler } from '../utils/animationSampling';
 import { getActiveAnimationProperties } from '../utils/trackControls';
+import { mapElapsedToTimelineTime } from '../utils/playbackClock';
 
 type PlaybackTimelineState = Omit<TimelineRuntimeState, 'fps'>;
 
@@ -79,10 +80,7 @@ export function useAnimationPlayer(
     return getActiveAnimationProperties(animationData, trackControls);
   }, [animationData, trackControls]);
 
-  const willChangeString = useMemo(() => {
-    if (activeAnimatedProperties.length === 0) return 'auto';
-    return 'transform, opacity, filter';
-  }, [activeAnimatedProperties]);
+  const willChangeString = useMemo(() => getWillChangeString(activeAnimatedProperties), [activeAnimatedProperties]);
 
   const calculateAnimatedValues = useCallback((time: number): Partial<TransformState> => {
     const currentAnimationData = animationDataRef.current;
@@ -111,7 +109,7 @@ export function useAnimationPlayer(
       return;
     }
 
-    let lastUpdate = 0;
+    let lastUpdate = -1;
 
     const animate = (timestamp: number) => {
       if (startTimeRef.current === undefined) {
@@ -119,55 +117,39 @@ export function useAnimationPlayer(
       }
 
       const { duration, isLooping, direction } = stateRef.current;
-      const absoluteElapsed = timestamp - startTimeRef.current;
-      let effectiveTime = absoluteElapsed;
-      let shouldStop = false;
-
-      if (duration > 0) {
-        if (isLooping) {
-          const cycleTime = absoluteElapsed % duration;
-          if (direction === 'alternate') {
-            const loopCount = Math.floor(absoluteElapsed / duration);
-            const isReversed = loopCount % 2 !== 0;
-            effectiveTime = isReversed ? duration - cycleTime : cycleTime;
-          } else {
-            effectiveTime = cycleTime;
-          }
-        } else {
-          if (absoluteElapsed >= duration) {
-            effectiveTime = duration;
-            shouldStop = true;
-          }
-        }
-      }
+      const { time: effectiveTime, shouldStop } = mapElapsedToTimelineTime(
+        timestamp - startTimeRef.current,
+        duration,
+        isLooping,
+        direction,
+      );
 
       lastTimeRef.current = effectiveTime;
 
-      // Direct DOM update for 60fps performance
-      if (stageElementRef?.current) {
-        const animatedValues = calculateAnimatedValues(effectiveTime);
-        const currentTransforms = { ...initialTransformsRef.current, ...animatedValues };
+      const animatedValues = calculateAnimatedValues(effectiveTime);
+      const currentTransforms = { ...initialTransformsRef.current, ...animatedValues };
 
-        const targetStyle = {
+      if (stageElementRef?.current) {
+        Object.assign(stageElementRef.current.style, {
           transform: getTransformString(currentTransforms),
           transformOrigin: `${currentTransforms.transformOriginX}% ${currentTransforms.transformOriginY}% ${currentTransforms.transformOriginZ}px`,
           opacity: currentTransforms.opacityEnabled ? currentTransforms.opacity : 1,
           filter: getFilterString(currentTransforms),
           borderRadius: currentTransforms.borderRadiusEnabled ? `${currentTransforms.borderRadius}px` : '0px',
-        };
-
-        Object.assign(stageElementRef.current.style, targetStyle);
+        });
       }
 
-      // Throttle React state updates to ~15fps to keep UI somewhat in sync without killing performance
-      if (timestamp - lastUpdate > 66) {
-        useAppStore.getState().setTimelineState({ currentTime: effectiveTime });
+      if (timestamp - lastUpdate > 66 || shouldStop || lastUpdate < 0) {
+        setAnimatedTransforms(currentTransforms);
+        useAppStore.getState().setTimelineState({
+          currentTime: effectiveTime,
+          ...(shouldStop ? { isPlaying: false } : {}),
+        });
         lastUpdate = timestamp;
       }
 
       if (shouldStop) {
         startTimeRef.current = undefined;
-        useAppStore.getState().setTimelineState({ currentTime: effectiveTime, isPlaying: false });
         if (onPlaybackCompleteRef.current) onPlaybackCompleteRef.current();
       } else {
         requestRef.current = requestAnimationFrame(animate);

@@ -1,7 +1,7 @@
 # Code map · css-animation-playground
 
-generated: 2026-08-29T18:00:00Z
-commit: 8d3b41cd6ea2
+generated: 2026-09-05T05:10:38Z
+commit: 548ef5e21110
 scope: .
 
 counts: 13 nodes · 27 edges · 0 flows · 0 unknown

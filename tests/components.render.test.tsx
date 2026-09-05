@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vite-plus/test';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import ActivationSwitch from '../components/ActivationSwitch';
 import ToggleControl from '../components/ToggleControl';
 import StageElementSelector from '../components/StageElementSelector';
@@ -14,6 +14,9 @@ import EngineSelector from '../components/EngineSelector';
 import PositionGrid from '../components/PositionGrid';
 import FrameCounter from '../components/FrameCounter';
 import ShortcutHelp from '../components/ShortcutHelp';
+import Header from '../components/Header';
+import StageModel from '../components/StageModel';
+import { defaultTransformState } from '../types';
 
 vi.mock('../components/Tooltip', () => ({
   default: ({ children }: { children: React.ReactNode }) => <>{children}</>,
@@ -241,6 +244,12 @@ describe('EngineSelector', () => {
     fireEvent.click(screen.getByText('gsap'));
     expect(onChange).toHaveBeenCalledWith('gsap');
   });
+
+  it('marks the active engine with aria-pressed', () => {
+    render(<EngineSelector engine="gsap" onEngineChange={vi.fn()} />);
+    expect(screen.getByText('gsap')).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByText('css')).toHaveAttribute('aria-pressed', 'false');
+  });
 });
 
 describe('PositionGrid', () => {
@@ -299,7 +308,7 @@ describe('ShortcutHelp', () => {
   it('renders all shortcut sections', () => {
     const onClose = vi.fn();
     render(<ShortcutHelp onClose={onClose} />);
-    expect(screen.getByText('Keyboard Shortcuts')).toBeInTheDocument();
+    expect(screen.getByRole('dialog', { name: 'Keyboard Shortcuts' })).toBeInTheDocument();
     expect(screen.getByText('Playback')).toBeInTheDocument();
     expect(screen.getByText('Timeline')).toBeInTheDocument();
     expect(screen.getByText('General')).toBeInTheDocument();
@@ -308,9 +317,7 @@ describe('ShortcutHelp', () => {
   it('calls onClose when clicking the close button', () => {
     const onClose = vi.fn();
     render(<ShortcutHelp onClose={onClose} />);
-    // Find the close button (X icon button)
-    const closeBtn = screen.getAllByRole('button')[0];
-    fireEvent.click(closeBtn);
+    fireEvent.click(screen.getByRole('button', { name: 'Close' }));
     expect(onClose).toHaveBeenCalledOnce();
   });
 
@@ -319,5 +326,72 @@ describe('ShortcutHelp', () => {
     render(<ShortcutHelp onClose={onClose} />);
     fireEvent.keyDown(window, { key: 'Escape' });
     expect(onClose).toHaveBeenCalledOnce();
+  });
+});
+
+describe('Header reset confirm', () => {
+  const headerProps = {
+    onUndo: vi.fn(),
+    canUndo: false,
+    onRedo: vi.fn(),
+    canRedo: false,
+    onReset: vi.fn(),
+    onShowHelp: vi.fn(),
+    onAnimationPresetClick: vi.fn(),
+    onPresetHoverStart: vi.fn(),
+    onPresetHoverEnd: vi.fn(),
+    onFileChange: vi.fn(),
+    onFileRemove: vi.fn(),
+    onLoadRandomModel: vi.fn(),
+    hasMedia: false,
+    isLoadingModel: false,
+    animationEngine: 'css' as const,
+    onAnimationEngineChange: vi.fn(),
+    mediaError: null,
+    onDismissMediaError: vi.fn(),
+  };
+
+  it('explains which engines preview the stage', () => {
+    render(<Header {...headerProps} />);
+    expect(
+      screen.getByText('CSS and Three.js preview the stage. GSAP and Anime.js change export only.'),
+    ).toBeInTheDocument();
+  });
+
+  it('does not reset until the dialog is confirmed', () => {
+    render(<Header {...headerProps} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Reset scene' }));
+    expect(headerProps.onReset).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+    expect(headerProps.onReset).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'Reset scene' }));
+    fireEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Reset scene' }));
+    expect(headerProps.onReset).toHaveBeenCalledOnce();
+  });
+});
+
+describe('StageModel placeholder', () => {
+  const modelProps = {
+    transforms: { ...defaultTransformState },
+    isAdjusting: false,
+    isPlaying: false,
+    onFileChange: vi.fn(),
+    showStageUI: false,
+    willChangeString: 'auto',
+    isExploded: false,
+  };
+
+  it('calls onSwitchToThreeJs from the loaded-model placeholder', () => {
+    const onSwitchToThreeJs = vi.fn();
+    render(
+      <StageModel
+        {...modelProps}
+        modelDataUrl="data:model/gltf-binary;base64,abc"
+        onSwitchToThreeJs={onSwitchToThreeJs}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Switch to Three.js' }));
+    expect(onSwitchToThreeJs).toHaveBeenCalledOnce();
   });
 });
